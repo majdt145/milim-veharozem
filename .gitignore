@@ -1,0 +1,7 @@
+# generated output — rebuild with `python build.py`
+/dist/
+
+# os / editor cruft
+Thumbs.db
+.DS_Store
+*.tmp
