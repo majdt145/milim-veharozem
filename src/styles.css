@@ -245,4 +245,46 @@ footer.site a:hover{color:var(--gold)}
   .mbar{display:flex} body{padding-bottom:66px}
 }
 @media(max-width:520px){ footer.site .top{grid-template-columns:1fr} .team-grid{grid-template-columns:1fr} }
-@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto;animation:none!important}}
+
+/* ===== MOTION LAYER — activated by .anim on <html> (added pre-paint only when motion is allowed) ===== */
+@media (prefers-reduced-motion: no-preference){
+  /* scroll-reveal: pre-hidden by selector so there's no flash */
+  html.anim .sec-head,
+  html.anim .card, html.anim .step, html.anim .tst, html.anim .branch, html.anim .member,
+  html.anim .age-c, html.anim .why-item, html.anim .acc, html.anim .job, html.anim .prog .p,
+  html.anim .group-head, html.anim .partners, html.anim .ass-grid .pill{
+    opacity:0; transform:translateY(28px);
+    transition:opacity .6s ease, transform .7s cubic-bezier(.2,.75,.25,1);
+    will-change:opacity, transform;
+  }
+  html.anim .is-in{opacity:1 !important; transform:none !important}
+
+  /* hero entrance (above the fold, time-based) */
+  html.anim .hero .kicker, html.anim .hero h1, html.anim .hero .lead,
+  html.anim .hero-cta, html.anim .hero-meta{opacity:0; transform:translateY(22px); animation:hIn .8s cubic-bezier(.2,.75,.25,1) forwards}
+  html.anim .hero-art{opacity:0; transform:translateY(22px) scale(.97); animation:hInScale .9s cubic-bezier(.2,.75,.25,1) .2s forwards}
+  html.anim .hero .kicker{animation-delay:.05s}
+  html.anim .hero h1{animation-delay:.13s}
+  html.anim .hero .lead{animation-delay:.24s}
+  html.anim .hero-cta{animation-delay:.35s}
+  html.anim .hero-meta{animation-delay:.46s}
+  @keyframes hIn{to{opacity:1; transform:none}}
+  @keyframes hInScale{to{opacity:1; transform:none}}
+
+  /* floating hero badges */
+  html.anim .badge{animation:floaty 4.6s ease-in-out infinite}
+  html.anim .badge.b2{animation-delay:-2.3s}
+  @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+  /* playful icon pop on card hover */
+  html.anim .card .ic{transition:transform .28s cubic-bezier(.2,.75,.25,1)}
+  html.anim .card:hover .ic{transform:scale(1.1) rotate(-4deg)}
+
+  /* CTA background parallax (bg is oversized so it never gaps) */
+  html.anim .cta .bg{height:128%; top:-14%}
+
+  /* scroll progress bar (RTL: grows from the right) */
+  .scrollbar{position:fixed; top:0; inset-inline:0; height:3px; z-index:200;
+    background:linear-gradient(90deg, var(--gold), var(--teal)); transform:scaleX(0); transform-origin:right center}
+}
