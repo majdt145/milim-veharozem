@@ -32,10 +32,18 @@ def parse_meta(text):
 def build():
     layout = open(os.path.join(SRC, "layout.html"), encoding="utf-8").read()
 
-    # fresh dist
-    if os.path.isdir(DIST):
-        shutil.rmtree(DIST)
-    os.makedirs(DIST)
+    # fresh dist — clear CONTENTS (not the dir itself, which may be locked on Windows
+    # if a shell's cwd is inside it)
+    os.makedirs(DIST, exist_ok=True)
+    for entry in os.listdir(DIST):
+        p = os.path.join(DIST, entry)
+        if os.path.isdir(p):
+            shutil.rmtree(p, ignore_errors=True)
+        else:
+            try:
+                os.remove(p)
+            except OSError:
+                pass
 
     # static assets
     for fname in ("styles.css", "app.js"):

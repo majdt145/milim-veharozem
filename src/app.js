@@ -43,7 +43,53 @@
     }
 
     initMotion();
+    initCarousels();
   });
+
+  /* ===== testimonial carousel (vanilla port of the Magic component) ===== */
+  function initCarousels() {
+    var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    [].slice.call(document.querySelectorAll("[data-carousel]")).forEach(function (c) {
+      var track = c.querySelector(".carousel-track");
+      if (!track) return;
+      var slides = [].slice.call(track.children);
+      var dots = [].slice.call(c.querySelectorAll(".dot"));
+      var live = c.querySelector("[data-live]");
+      var n = slides.length, i = 0, timer = null, paused = false;
+
+      function render() {
+        track.style.transform = "translateX(" + (-i * 100) + "%)";
+        slides.forEach(function (s, k) { s.setAttribute("aria-hidden", k !== i ? "true" : "false"); });
+        dots.forEach(function (d, k) {
+          d.classList.toggle("on", k === i);
+          d.setAttribute("aria-selected", k === i ? "true" : "false");
+        });
+        if (live) live.textContent = "המלצה " + (i + 1) + " מתוך " + n;
+      }
+      function go(k) { i = (k + n) % n; render(); }
+
+      var nextBtn = c.querySelector("[data-next]"), prevBtn = c.querySelector("[data-prev]");
+      if (nextBtn) nextBtn.addEventListener("click", function () { go(i + 1); restart(); });
+      if (prevBtn) prevBtn.addEventListener("click", function () { go(i - 1); restart(); });
+      dots.forEach(function (d, k) { d.addEventListener("click", function () { go(k); restart(); }); });
+
+      c.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowLeft") { e.preventDefault(); go(i + 1); restart(); }   /* RTL: left = forward */
+        else if (e.key === "ArrowRight") { e.preventDefault(); go(i - 1); restart(); }
+      });
+
+      function start() { if (reduce || n < 2) return; stop(); timer = setInterval(function () { if (!paused) go(i + 1); }, 5000); }
+      function stop() { if (timer) { clearInterval(timer); timer = null; } }
+      function restart() { stop(); start(); }
+      c.addEventListener("mouseenter", function () { paused = true; });
+      c.addEventListener("mouseleave", function () { paused = false; });
+      c.addEventListener("focusin", function () { paused = true; });
+      c.addEventListener("focusout", function () { paused = false; });
+
+      render();
+      start();
+    });
+  }
 
   /* ===== motion layer: scroll-reveal, count-up, scroll bar, parallax ===== */
   function initMotion() {

@@ -12,6 +12,7 @@ body{font-family:'Heebo',sans-serif;color:var(--ink);background:var(--white);lin
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
 svg{display:block}
+[hidden]{display:none!important}
 .wrap{max-width:1140px;margin:0 auto;padding:0 22px}
 .bdi{unicode-bidi:plaintext}
 .btn{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:16px;white-space:nowrap;min-height:44px;
@@ -288,3 +289,78 @@ footer.site a:hover{color:var(--gold)}
   .scrollbar{position:fixed; top:0; inset-inline:0; height:3px; z-index:200;
     background:linear-gradient(90deg, var(--gold), var(--teal)); transform:scaleX(0); transform-origin:right center}
 }
+
+/* ===== testimonials carousel (Magic-generated interaction, our tokens) ===== */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.carousel{position:relative;max-width:780px;margin:0 auto}
+.carousel-viewport{overflow:hidden;border-radius:var(--radius)}
+.carousel-track{display:flex;direction:ltr;transition:transform .55s cubic-bezier(.2,.75,.25,1)}
+.tst-slide{flex:0 0 100%;direction:rtl;padding:6px}
+.tst-card{background:var(--cream);border:1px solid var(--line);border-radius:var(--radius);padding:38px 32px;text-align:center;box-shadow:var(--shadow-sm)}
+.tst-card .av-lg{width:78px;height:78px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:26px;box-shadow:inset 0 -11px 18px rgba(0,0,0,.16),inset 0 9px 14px rgba(255,255,255,.18)}
+.tst-card .stars{color:#e0a500;font-size:20px;letter-spacing:3px;margin-bottom:14px}
+.tst-card blockquote{font-size:19px;font-weight:600;line-height:1.7;color:#3f3338;max-width:46ch;margin:0 auto 18px}
+.tst-card .nm{font-size:18px;font-weight:800;color:var(--teal-d)}
+.tst-card .ro{font-size:14px;color:var(--muted);margin-top:2px}
+.carousel-controls{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:22px}
+.cbtn{width:46px;height:46px;border-radius:50%;border:2px solid var(--teal-l);background:#fff;color:var(--teal-d);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;flex-shrink:0}
+.cbtn:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
+.cbtn .ico{width:22px;height:22px}
+.dots{display:flex;gap:8px}
+.dot{width:11px;height:11px;border-radius:50%;border:none;background:#e3d3c4;cursor:pointer;padding:0;transition:width .3s,background .3s}
+.dot.on{background:var(--teal);width:26px;border-radius:6px}
+@media(prefers-reduced-motion:reduce){.carousel-track{transition:none}}
+
+/* ===== PUZZLE JOURNEY home (signature: the puzzle-heart logo becomes the layout) ===== */
+.phero-puzzle{position:relative;overflow:hidden;background:radial-gradient(135% 100% at 82% -12%, var(--peach), var(--cream) 50%, #fffdf9)}
+.phero-puzzle .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:26px;align-items:center;padding:58px 22px 54px;position:relative;z-index:2}
+.phero-puzzle h1{font-size:clamp(34px,5.4vw,58px);font-weight:900;line-height:1.1;letter-spacing:-.015em}
+.phero-puzzle h1 .hl{color:var(--teal-d)}
+.phero-puzzle .lead{font-size:19px;color:#544a4f;margin:18px 0 24px;max-width:44ch;font-weight:500}
+.hero-art-puzzle{position:relative;display:flex;justify-content:center;align-items:center;min-height:360px}
+.hero-heart{width:min(420px,90%);filter:drop-shadow(0 20px 32px rgba(154,56,84,.20));animation:heartPop 1s cubic-bezier(.2,.8,.2,1) both}
+@keyframes heartPop{from{opacity:0;transform:scale(.86) translateY(10px)}to{opacity:1;transform:none}}
+.float-piece{position:absolute;-webkit-mask:url(assets/piece.svg) center/contain no-repeat;mask:url(assets/piece.svg) center/contain no-repeat;opacity:.96;animation:floaty 5s ease-in-out infinite;box-shadow:0 8px 16px rgba(52,40,47,.12)}
+
+/* confetti / Memphis texture (their real brand shapes) */
+.confetti{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.confetti i{position:absolute;display:block;animation:floaty 6.5s ease-in-out infinite}
+.cf-dot{width:13px;height:13px;border-radius:50%}
+.cf-ring{width:18px;height:18px;border-radius:50%;border:3px solid currentColor}
+.cf-tri{width:0;height:0;border-inline:9px solid transparent;border-bottom:15px solid currentColor}
+.cf-x{font-weight:900;font-size:19px;line-height:1}
+.cf-bar{width:20px;height:6px;border-radius:4px;background:currentColor}
+
+/* services rendered as actual puzzle pieces */
+.puzzle-services{background:#fff}
+.puzzle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:720px;margin:0 auto}
+.piece-tile{aspect-ratio:1;-webkit-mask:url(assets/piece.svg) center/contain no-repeat;mask:url(assets/piece.svg) center/contain no-repeat;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;padding:19%;
+  transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.piece-tile:hover{transform:scale(1.06) rotate(-2deg)}
+.piece-tile .ico{width:30px;height:30px;stroke:#fff;stroke-width:2;margin-bottom:7px}
+.piece-tile b{font-size:14.5px;font-weight:800;line-height:1.15}
+.piece-tile span{font-size:11px;opacity:.92;margin-top:2px;font-weight:600}
+
+/* little puzzle-piece divider ornament */
+.puzzle-divider{display:flex;justify-content:center;gap:9px;margin-bottom:20px}
+.puzzle-divider i{width:24px;height:24px;-webkit-mask:url(assets/piece.svg) center/contain no-repeat;mask:url(assets/piece.svg) center/contain no-repeat}
+
+/* cohesion: step numbers become colored puzzle pieces (the "journey") */
+.steps .step .n{border-radius:0;width:52px;height:52px;font-size:18px;
+  -webkit-mask:url(assets/piece.svg) center/contain no-repeat;mask:url(assets/piece.svg) center/contain no-repeat}
+.steps-grid .step:nth-child(1) .n{background:var(--teal)}
+.steps-grid .step:nth-child(2) .n{background:#c85a6b}
+.steps-grid .step:nth-child(3) .n{background:#b07a00}
+
+/* soft confetti echo for non-hero sections (quiet, per house rule) */
+.team{position:relative;overflow:hidden}
+.confetti.soft i{opacity:.5}
+
+@media(max-width:900px){
+  .phero-puzzle .wrap{grid-template-columns:1fr;text-align:center}
+  .phero-puzzle .lead{margin-inline:auto}
+  .hero-art-puzzle{min-height:290px;margin-top:8px}
+  .puzzle-grid{max-width:430px}
+}
+@media(max-width:520px){.puzzle-grid{grid-template-columns:repeat(2,1fr);max-width:300px}}
