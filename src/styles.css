@@ -314,7 +314,7 @@ footer.site a:hover{color:var(--gold)}
 .hero-art-puzzle{position:relative;display:flex;justify-content:center;align-items:center;min-height:360px}
 .hero-heart{width:min(420px,90%);filter:drop-shadow(0 20px 32px rgba(154,56,84,.20));animation:heartPop 1s cubic-bezier(.2,.8,.2,1) both}
 @keyframes heartPop{from{opacity:0;transform:scale(.86) translateY(10px)}to{opacity:1;transform:none}}
-.float-piece{position:absolute;-webkit-mask:url(assets/piece.svg) center/contain no-repeat;mask:url(assets/piece.svg) center/contain no-repeat;opacity:.96;animation:floaty 5s ease-in-out infinite;box-shadow:0 8px 16px rgba(52,40,47,.12)}
+.float-piece{position:absolute;fill:currentColor;opacity:.96;animation:floaty 5s ease-in-out infinite;filter:drop-shadow(0 8px 14px rgba(52,40,47,.16))}
 
 /* confetti / Memphis texture (their real brand shapes) */
 .confetti{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
@@ -328,21 +328,20 @@ footer.site a:hover{color:var(--gold)}
 /* services rendered as actual puzzle pieces */
 .puzzle-services{background:#fff}
 .puzzle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:720px;margin:0 auto}
-.piece-tile{aspect-ratio:1;-webkit-mask:url(assets/piece.svg) center/contain no-repeat;mask:url(assets/piece.svg) center/contain no-repeat;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;padding:19%;
+.piece-tile{position:relative;aspect-ratio:1;display:flex;align-items:center;justify-content:center;
   transition:transform .25s cubic-bezier(.2,.8,.2,1)}
 .piece-tile:hover{transform:scale(1.06) rotate(-2deg)}
-.piece-tile .ico{width:30px;height:30px;stroke:#fff;stroke-width:2;margin-bottom:7px}
-.piece-tile b{font-size:14.5px;font-weight:800;line-height:1.15}
-.piece-tile span{font-size:11px;opacity:.92;margin-top:2px;font-weight:600}
+.piece-bg{position:absolute;inset:0;width:100%;height:100%;fill:currentColor;filter:drop-shadow(0 6px 12px rgba(52,40,47,.10))}
+.piece-tile .pc{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;padding:0 13%}
+.piece-tile .ico{width:30px;height:30px;stroke:#fff;stroke-width:2;margin-bottom:6px}
+.piece-tile .pc b{font-size:14.5px;font-weight:800;line-height:1.15;color:#fff}
 
 /* little puzzle-piece divider ornament */
 .puzzle-divider{display:flex;justify-content:center;gap:9px;margin-bottom:20px}
 .puzzle-divider i{width:24px;height:24px;-webkit-mask:url(assets/piece.svg) center/contain no-repeat;mask:url(assets/piece.svg) center/contain no-repeat}
 
-/* cohesion: step numbers become colored puzzle pieces (the "journey") */
-.steps .step .n{border-radius:0;width:52px;height:52px;font-size:18px;
-  -webkit-mask:url(assets/piece.svg) center/contain no-repeat;mask:url(assets/piece.svg) center/contain no-repeat}
+/* cohesion: colored step number badges (the "journey") */
+.steps .step .n{width:50px;height:50px;font-size:19px}
 .steps-grid .step:nth-child(1) .n{background:var(--teal)}
 .steps-grid .step:nth-child(2) .n{background:#c85a6b}
 .steps-grid .step:nth-child(3) .n{background:#b07a00}
