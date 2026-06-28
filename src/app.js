@@ -96,6 +96,10 @@
     var root = document.documentElement;
     if (!root.classList.contains("anim")) return;
     try {
+      /* play the hero video only when motion is allowed (reduced-motion users see the poster) */
+      var hv = document.querySelector(".hero-video");
+      if (hv) { var pr = hv.play(); if (pr && pr.catch) pr.catch(function () {}); }
+
       var SEL = ".sec-head,.card,.step,.tst,.branch,.member,.age-c,.why-item,.acc,.job,.prog .p,.group-head,.partners,.ass-grid .pill";
       var els = [].slice.call(document.querySelectorAll(SEL));
 

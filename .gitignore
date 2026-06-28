@@ -1,6 +1,9 @@
 # generated output — rebuild with `python build.py`
 /dist/
 
+# AI hero-video working files (intermediates); the deployed video lives in src/assets/
+/hero-video/
+
 # os / editor cruft
 Thumbs.db
 .DS_Store
