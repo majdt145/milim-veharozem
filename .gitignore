@@ -4,6 +4,9 @@
 # AI hero-video working files (intermediates); the deployed video lives in src/assets/
 /hero-video/
 
+# local tooling config (preview launch.json, etc.)
+/.claude/
+
 # os / editor cruft
 Thumbs.db
 .DS_Store

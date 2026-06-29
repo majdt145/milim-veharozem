@@ -248,7 +248,9 @@ footer.site a:hover{color:var(--gold)}
   .hero-art{margin-top:8px} .hero-art .ph{height:300px}
   .cards,.tst-grid,.branch-grid,.team-grid{grid-template-columns:1fr}
   .journey{grid-template-columns:1fr;gap:34px;max-width:340px;margin-inline:auto}
-  .journey::before{inset-inline:auto;inset-inline-start:calc(50% - 1.5px);top:44px;bottom:44px;height:auto;border-top:0;border-inline-start:3px dashed rgba(154,56,84,.28)}
+  /* drop the single full-height line; draw a segment per step so the path STOPS at the last node */
+  .journey::before{display:none}
+  .jstep:not(:last-child)::after{content:"";position:absolute;top:44px;inset-inline-start:calc(50% - 1.5px);width:0;height:calc(100% - 10px);border-inline-start:3px dashed rgba(154,56,84,.28);z-index:-1}
   .age-grid{grid-template-columns:repeat(2,1fr)}
   .why .wrap,.cta .wrap{grid-template-columns:1fr} .why img{height:260px}
   .schools .wrap{flex-direction:column;text-align:center}
@@ -388,3 +390,26 @@ footer.site a:hover{color:var(--gold)}
   .puzzle-grid{max-width:430px}
 }
 @media(max-width:520px){.puzzle-grid{grid-template-columns:repeat(2,1fr);max-width:300px}}
+
+/* ============================================
+   MOBILE HERO FIXES — phones (≤700px)
+   Desktop & tablet layouts above are untouched.
+   ============================================ */
+@media(max-width:700px){
+  .phero-puzzle .wrap{padding:34px 20px 28px}
+  /* headline scales with the viewport so it always wraps cleanly — even before the
+     Heebo webfont loads (the fallback font is wider and would otherwise clip). */
+  .phero-puzzle h1{font-size:clamp(24px,7vw,32px)}
+  .phero-puzzle .lead{font-size:16px}
+  .hero .kicker{font-size:13px}
+  .hero-cta .btn{font-size:15px;padding:11px 18px}
+  /* art: drop the wasted min-height and give the (square) logo a fuller, taller
+     stage instead of a short 16:9 strip with empty space around it. */
+  .hero-art-puzzle{min-height:0;margin-top:6px}
+  .puzzle-stage{aspect-ratio:4/3;width:min(340px,92%)}
+  .pz-logo{height:104%;max-width:100%}
+}
+@media(max-width:380px){
+  .phero-puzzle h1{font-size:23px}
+  .hero-cta .btn{padding:10px 14px;font-size:14px}
+}
