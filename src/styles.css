@@ -392,24 +392,31 @@ footer.site a:hover{color:var(--gold)}
 @media(max-width:520px){.puzzle-grid{grid-template-columns:repeat(2,1fr);max-width:300px}}
 
 /* ============================================
-   MOBILE HERO FIXES — phones (≤700px)
-   Desktop & tablet layouts above are untouched.
+   MOBILE HERO — phones (≤700px). Desktop & tablet layouts above are untouched.
+   Visual-first: the puzzle-heart logo LEADS, then a confident headline,
+   concise copy, comfortable actions, and tidy 2×2 stats (not a messy wrap row).
    ============================================ */
 @media(max-width:700px){
-  .phero-puzzle .wrap{padding:34px 20px 28px}
-  /* headline scales with the viewport so it always wraps cleanly — even before the
-     Heebo webfont loads (the fallback font is wider and would otherwise clip). */
-  .phero-puzzle h1{font-size:clamp(24px,7vw,32px)}
-  .phero-puzzle .lead{font-size:16px}
-  .hero .kicker{font-size:13px}
-  .hero-cta .btn{font-size:15px;padding:11px 18px}
-  /* art: drop the wasted min-height and give the (square) logo a fuller, taller
-     stage instead of a short 16:9 strip with empty space around it. */
-  .hero-art-puzzle{min-height:0;margin-top:6px}
-  .puzzle-stage{aspect-ratio:4/3;width:min(340px,92%)}
-  .pz-logo{height:104%;max-width:100%}
+  .phero-puzzle .wrap{padding:24px 20px 32px;gap:14px}
+  /* the brand animation leads the page on mobile (visual-first); text follows */
+  .hero-art-puzzle{order:-1;min-height:0}
+  .puzzle-stage{aspect-ratio:4/3;width:min(290px,80vw)}
+  .pz-logo{height:106%;max-width:104%}
+  /* a confident, readable headline — no more shrink-to-fit */
+  .phero-puzzle h1{font-size:clamp(27px,7.8vw,34px);line-height:1.14}
+  .hero .kicker{font-size:12.5px}
+  .phero-puzzle .lead{font-size:15.5px;line-height:1.6;max-width:36ch;margin:6px auto 16px}
+  /* actions: comfortable taps, no 300ms lag */
+  .hero-cta{gap:10px}
+  .hero-cta .btn{font-size:15px;padding:12px 18px;touch-action:manipulation}
+  /* stats: clean 2×2 grid instead of a ragged wrapping row */
+  .hero-meta{display:grid;grid-template-columns:1fr 1fr;gap:14px 10px;justify-items:center;
+    width:100%;max-width:300px;margin:22px auto 0}
+  .hero-meta>span{display:flex;flex-direction:column;align-items:center;gap:1px;
+    font-size:12.5px;line-height:1.25;text-align:center}
+  .hero-meta b{font-size:23px;color:var(--teal-d)}
 }
-@media(max-width:380px){
-  .phero-puzzle h1{font-size:23px}
-  .hero-cta .btn{padding:10px 14px;font-size:14px}
+@media(max-width:360px){
+  .phero-puzzle h1{font-size:25px}
+  .puzzle-stage{width:min(250px,74%)}
 }
