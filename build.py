@@ -7,7 +7,13 @@ fills <title>/<meta description>, and copies styles.css, app.js and assets/ to d
 
 Usage:  python build.py
 """
-import os, re, shutil, glob
+import os, re, shutil, glob, hashlib
+
+
+def _ver(path):
+    """Short content hash of an asset, for cache-busting ?v= stamps."""
+    h = hashlib.md5(open(path, "rb").read()).hexdigest()[:8]
+    return h
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(ROOT, "src")
@@ -45,9 +51,12 @@ def build():
             except OSError:
                 pass
 
-    # static assets
+    # static assets (+ content-hash versions for cache-busting)
+    ver = {}
     for fname in ("styles.css", "app.js"):
-        shutil.copy2(os.path.join(SRC, fname), os.path.join(DIST, fname))
+        src_file = os.path.join(SRC, fname)
+        shutil.copy2(src_file, os.path.join(DIST, fname))
+        ver[fname] = _ver(src_file)
     if os.path.isdir(os.path.join(SRC, "assets")):
         shutil.copytree(os.path.join(SRC, "assets"), os.path.join(DIST, "assets"))
 
@@ -59,6 +68,9 @@ def build():
         meta, body = parse_meta(raw)
 
         html = layout
+        # cache-bust asset refs so browsers never serve a stale CSS/JS
+        html = html.replace('href="styles.css"', 'href="styles.css?v=%s"' % ver["styles.css"])
+        html = html.replace('src="app.js"', 'src="app.js?v=%s"' % ver["app.js"])
         html = html.replace("{{TITLE}}", meta.get("title", "מילים וחרוזים"))
         html = html.replace("{{DESC}}", meta.get("desc", ""))
         html = html.replace("{{CONTENT}}", body)
