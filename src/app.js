@@ -146,7 +146,12 @@
           d.classList.toggle("on", k === i);
           d.setAttribute("aria-selected", k === i ? "true" : "false");
         });
-        if (live) live.textContent = "המלצה " + (i + 1) + " מתוך " + n;
+        if (live) {
+          var ar = document.documentElement.lang === "ar";
+          live.textContent = ar
+            ? "توصية " + (i + 1) + " من " + n
+            : "המלצה " + (i + 1) + " מתוך " + n;
+        }
       }
       function go(k) { i = (k + n) % n; render(); }
 
