@@ -10,6 +10,8 @@
 html{scroll-behavior:smooth}
 body{font-family:'Heebo',sans-serif;color:var(--ink);background:var(--white);line-height:1.7;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
+/* a11y: links inside running text must be distinguishable by more than color */
+p a,.row a,.legal a{text-decoration:underline;text-underline-offset:2px}
 img{display:block;max-width:100%}
 svg{display:block}
 [hidden]{display:none!important}

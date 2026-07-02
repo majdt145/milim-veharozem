@@ -19,7 +19,18 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(ROOT, "src")
 DIST = os.path.join(ROOT, "dist")
 
+# Content flags. TESTIMONIALS stays False until real consented parent quotes
+# arrive from the clinic — the placeholder section is then swapped for them
+# and this flips to True.
+FLAGS = {"TESTIMONIALS": False}
+
 META_RE = re.compile(r"^\s*<!--meta(.*?)-->", re.DOTALL)
+FLAG_RE = re.compile(r"<!--IF:(\w+)-->(.*?)<!--ENDIF:\1-->", re.DOTALL)
+
+
+def apply_flags(html):
+    """Keep or drop <!--IF:NAME--> ... <!--ENDIF:NAME--> blocks per FLAGS."""
+    return FLAG_RE.sub(lambda m: m.group(2) if FLAGS.get(m.group(1)) else "", html)
 
 
 def parse_meta(text):
@@ -66,6 +77,7 @@ def build():
         name = os.path.basename(path)
         raw = open(path, encoding="utf-8").read()
         meta, body = parse_meta(raw)
+        body = apply_flags(body)
 
         html = layout
         # cache-bust asset refs so browsers never serve a stale CSS/JS

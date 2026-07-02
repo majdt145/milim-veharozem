@@ -183,13 +183,14 @@ nav: home
   <a href="team.html" class="btn btn-teal" data-he="הכירו את כל הצוות ›" data-ar="تعرّفوا على كل الفريق ›">הכירו את כל הצוות ›</a>
 </div></section>
 
-<!-- testimonials -->
+<!--IF:TESTIMONIALS-->
+<!-- testimonials — the quotes below are STAND-INS; swap for real consented
+     parent quotes, then flip FLAGS["TESTIMONIALS"] in build.py -->
 <section><div class="wrap">
   <div class="sec-head">
     <div class="kicker" data-he="מה הורים מספרים" data-ar="ماذا يقول الأهل">מה הורים מספרים</div>
     <h2 data-he="משפחות שכבר בחרו בנו" data-ar="عائلات اختارتنا">משפחות שכבר בחרו בנו</h2>
   </div>
-  <p class="tst-note" data-he="◆ הדגמה בלבד — יש להחליף בהמלצות אמיתיות (באישור ההורים) לפני העלייה לאוויר." data-ar="◆ للعرض فقط — يجب استبدالها بتوصيات حقيقية (بموافقة الأهل) قبل النشر.">◆ הדגמה בלבד — יש להחליף בהמלצות אמיתיות (באישור ההורים) לפני העלייה לאוויר.</p>
   <div class="carousel" data-carousel>
     <div class="carousel-viewport">
       <div class="carousel-track">
@@ -217,17 +218,18 @@ nav: home
       </div>
     </div>
     <div class="carousel-controls">
-      <button class="cbtn" type="button" data-prev aria-label="המלצה קודמת"><svg class="ico" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
-      <div class="dots" role="tablist" aria-label="בחירת המלצה">
+      <button class="cbtn" type="button" data-prev aria-label="המלצה קודמת" data-aria-he="המלצה קודמת" data-aria-ar="التوصية السابقة"><svg class="ico" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+      <div class="dots" role="tablist" aria-label="בחירת המלצה" data-aria-he="בחירת המלצה" data-aria-ar="اختيار توصية">
         <button class="dot on" type="button" role="tab" aria-selected="true" aria-label="המלצה 1 מתוך 3"></button>
         <button class="dot" type="button" role="tab" aria-selected="false" aria-label="המלצה 2 מתוך 3"></button>
         <button class="dot" type="button" role="tab" aria-selected="false" aria-label="המלצה 3 מתוך 3"></button>
       </div>
-      <button class="cbtn" type="button" data-next aria-label="המלצה הבאה"><svg class="ico" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button class="cbtn" type="button" data-next aria-label="המלצה הבאה" data-aria-he="המלצה הבאה" data-aria-ar="التوصية التالية"><svg class="ico" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
     </div>
     <div class="sr-only" aria-live="polite" data-live></div>
   </div>
 </div></section>
+<!--ENDIF:TESTIMONIALS-->
 
 <!-- branches -->
 <section class="branches"><div class="wrap">

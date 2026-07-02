@@ -12,14 +12,14 @@
 <script>(function(){try{if(window.matchMedia&&!matchMedia('(prefers-reduced-motion:reduce)').matches){document.documentElement.className+=' anim';}}catch(e){}})();</script>
 </head>
 <body>
-<a class="skip" href="#main">דלג לתוכן</a>
+<a class="skip" href="#main" data-he="דלג לתוכן" data-ar="تخطَّ إلى المحتوى">דלג לתוכן</a>
 
 <!-- utility bar -->
 <div class="util"><div class="wrap">
   <span class="bdi"><span aria-hidden="true">📍</span> <span data-he="עכו · מזרעה · מג'דל שמס" data-ar="عكا · المزرعة · مجدل شمس">עכו · מזרעה · מג'דל שמס</span> &nbsp;|&nbsp; <span aria-hidden="true">☎️</span> <a href="tel:0506571203" dir="ltr">050-657-1203</a></span>
   <div class="lang" role="group" aria-label="שפה / لغة">
-    <button class="on" data-lang="he" onclick="setLang('he')">עברית</button>
-    <button data-lang="ar" onclick="setLang('ar')">عربي</button>
+    <button class="on" data-lang="he" aria-pressed="true" onclick="setLang('he')">עברית</button>
+    <button data-lang="ar" aria-pressed="false" onclick="setLang('ar')">عربي</button>
   </div>
 </div></div>
 
@@ -38,7 +38,7 @@
   <div class="head-cta">
     <a class="phone" href="tel:0506571203" dir="ltr">050-657-1203</a>
     <a href="contact.html" class="btn btn-gold" data-he="קביעת תור" data-ar="حجز موعد">קביעת תור</a>
-    <button class="hamb" aria-label="תפריט / القائمة" aria-expanded="false" aria-controls="mainmenu">☰</button>
+    <button class="hamb" aria-label="תפריט" data-aria-he="תפריט" data-aria-ar="القائمة" aria-expanded="false" aria-controls="mainmenu">☰</button>
   </div>
 </div></header>
 
@@ -68,7 +68,7 @@
   </div>
   <div class="legal">
     <span data-he="© 2026 מילים וחרוזים · כל הזכויות שמורות" data-ar="© 2026 ميليم وحاروزيم · جميع الحقوق محفوظة">© 2026 מילים וחרוזים · כל הזכויות שמורות</span>
-    <span data-he="תנאי שימוש · מדיניות פרטיות" data-ar="شروط الاستخدام · سياسة الخصوصية">תנאי שימוש · מדיניות פרטיות</span>
+    <span><a href="privacy.html" data-he="מדיניות פרטיות" data-ar="سياسة الخصوصية">מדיניות פרטיות</a> · <a href="accessibility.html" data-he="הצהרת נגישות" data-ar="إعلان إتاحة الوصول">הצהרת נגישות</a></span>
   </div>
 </div></footer>
 

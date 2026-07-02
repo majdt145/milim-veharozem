@@ -5,6 +5,7 @@
   function applyLang(l) {
     document.querySelectorAll(".lang button").forEach(function (b) {
       b.classList.toggle("on", b.dataset.lang === l);
+      b.setAttribute("aria-pressed", b.dataset.lang === l ? "true" : "false");
     });
     document.documentElement.lang = l === "ar" ? "ar" : "he";
     document.documentElement.dir = "rtl"; /* both He & Ar are RTL */
@@ -13,6 +14,9 @@
       // tel: links / nested spans in a container are never destroyed
       if (el.querySelector("[data-" + l + "]")) return;
       el.innerHTML = el.getAttribute("data-" + l);
+    });
+    document.querySelectorAll("[data-aria-" + l + "]").forEach(function (el) {
+      el.setAttribute("aria-label", el.getAttribute("data-aria-" + l));
     });
     try { localStorage.setItem("mvh_lang", l); } catch (e) {}
   }
