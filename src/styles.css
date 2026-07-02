@@ -63,6 +63,12 @@ section{padding:62px 0}
 /* hero */
 .hero{position:relative;background:linear-gradient(180deg,var(--cream) 0%,var(--cream) 82%,#fff 100%);overflow:hidden}
 .hero .wrap{max-width:1340px;display:flex;flex-wrap:wrap;gap:28px;align-items:center;padding:54px 22px 46px}
+/* consistency across screens: the hero fills exactly the first screen
+   (viewport minus header), capped so huge monitors don't get a stadium.
+   Desktop/tablet only — the mobile column flows naturally. */
+@media(min-width:701px){
+  .hero .wrap{min-height:min(calc(100svh - 186px),860px)}
+}
 .hero .wrap>div:first-child{flex:1 1 360px;min-width:0;max-width:440px} /* text column */
 .hero .wrap>.hero-art-puzzle{flex:2 1 520px;min-width:0}               /* video gets the rest */
 .hero h1{font-size:clamp(33px,5vw,54px);font-weight:900;line-height:1.14;letter-spacing:-.01em}
