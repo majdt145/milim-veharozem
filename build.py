@@ -127,11 +127,20 @@ def build():
             except OSError:
                 pass
 
-    # static assets (+ content-hash versions for cache-busting)
+    # static assets (+ content-hash versions for cache-busting).
+    # CSS/JS get a conservative slim: comments + indentation stripped, one
+    # declaration per line kept intact. Fail-open: any error ships the
+    # original file untouched.
     ver = {}
     for fname in ("styles.css", "app.js"):
         src_file = os.path.join(SRC, fname)
-        shutil.copy2(src_file, os.path.join(DIST, fname))
+        text = open(src_file, encoding="utf-8").read()
+        try:
+            slim = re.sub(r"/\*.*?\*/", "", text, flags=re.DOTALL)
+            slim = "\n".join(l.strip() for l in slim.splitlines() if l.strip())
+        except Exception:
+            slim = text
+        open(os.path.join(DIST, fname), "w", encoding="utf-8").write(slim)
         ver[fname] = _ver(src_file)
     if os.path.isdir(os.path.join(SRC, "assets")):
         shutil.copytree(os.path.join(SRC, "assets"), os.path.join(DIST, "assets"))
