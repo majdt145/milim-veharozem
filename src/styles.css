@@ -423,12 +423,14 @@ footer.site a:hover{color:var(--gold)}
 /* why us — puzzle-piece icons (brand-grounded, replaces the generic square chips) */
 .wpi{position:relative;width:58px;height:58px;flex-shrink:0}
 .wpi .piece{position:absolute;inset:0;width:100%;height:100%;fill:var(--c)}
-.wpi .ico{position:absolute;top:50%;inset-inline-start:50%;transform:translate(50%,-50%);width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.wpi .ico{position:absolute;top:50%;inset-inline-start:50%;transform:translate(50%,-50%);width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
 /* by age — growth staircase (cards rise with age, RTL: youngest right/shortest) */
 .age-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:end}
 .age-c{border-radius:var(--radius);padding:22px 20px;color:#fff;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
-.age-c .num{font-size:clamp(30px,3.6vw,44px);font-weight:900;line-height:1;letter-spacing:-.02em}
+/* number is a flex item with dir=ltr, so it start-aligns LEFT by default —
+   align it end (right) with the name so the watermark icon corner stays clear */
+.age-c .num{font-size:clamp(30px,3.6vw,44px);font-weight:900;line-height:1;letter-spacing:-.02em;text-align:end}
 .age-c h3{font-size:17px;font-weight:800;margin-top:6px}
 .age-c .big{position:absolute;inset-inline-end:12px;top:12px;opacity:.35}
 .age-c .big .ico{width:40px;height:40px;stroke:#fff;stroke-width:1.7;fill:none}
