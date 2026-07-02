@@ -328,7 +328,10 @@ footer.site a:hover{color:var(--gold)}
    shape (staggered, with a little bounce), then the real מילים וחרוזים logo settles in. The
    pieces only scale/rotate IN PLACE on a heart ring, so they can never leave the frame, and
    everything floats directly on the page — no box, no background. */
-.puzzle-stage{position:relative;width:min(620px,100%);margin-inline:auto;aspect-ratio:16/9;background:transparent}
+/* square stage that CONTAINS the (near-square) logo — the old 16:9 box +
+   120% logo overflow made the visual spill 40% past its layout box, so the
+   logo landed lower/higher depending on text height and zoom */
+.puzzle-stage{position:relative;width:min(480px,92%);margin-inline:auto;aspect-ratio:1;background:transparent}
 .pz{position:absolute;left:var(--x);top:var(--y);width:clamp(38px,11%,72px);aspect-ratio:1;
   background:var(--c);
   -webkit-mask:url(assets/piece.svg) center/contain no-repeat;mask:url(assets/piece.svg) center/contain no-repeat;
@@ -342,7 +345,7 @@ footer.site a:hover{color:var(--gold)}
 @keyframes pzOut{
   0%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(var(--r))}
   100%{opacity:0;transform:translate(-50%,-50%) scale(.62) rotate(var(--r))}}
-.pz-logo{position:absolute;left:50%;top:50%;height:120%;width:auto;max-width:108%;
+.pz-logo{position:absolute;left:50%;top:50%;width:100%;height:auto;
   filter:drop-shadow(0 16px 26px rgba(154,56,84,.16));
   transform:translate(-50%,-50%) scale(.82);opacity:0;
   animation:logoIn .6s cubic-bezier(.2,.8,.2,1) .82s forwards, logoFloat 6s ease-in-out 1.6s infinite}
@@ -399,8 +402,7 @@ footer.site a:hover{color:var(--gold)}
   .phero-puzzle .wrap{padding:24px 20px 32px;gap:14px}
   /* the brand animation leads the page on mobile (visual-first); text follows */
   .hero-art-puzzle{order:-1;min-height:0}
-  .puzzle-stage{aspect-ratio:4/3;width:min(290px,80vw)}
-  .pz-logo{height:106%;max-width:104%}
+  .puzzle-stage{width:min(270px,76vw)}
   /* a confident, readable headline — no more shrink-to-fit */
   .phero-puzzle h1{font-size:clamp(27px,7.8vw,34px);line-height:1.14}
   .hero .kicker{font-size:12.5px}
