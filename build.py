@@ -19,6 +19,12 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(ROOT, "src")
 DIST = os.path.join(ROOT, "dist")
 
+# Canonical origin for canonicals / OG / sitemap / robots. When the custom
+# domain (melimharozem.co.il) is connected in Vercel, flip this ONE line and
+# rebuild — see docs/launch.md. No hreflang: one URL serves He+Ar via the JS
+# toggle, so alternate-language URLs don't exist.
+SITE_URL = "https://milim-veharozem.vercel.app"
+
 # Content flags. TESTIMONIALS stays False until real consented parent quotes
 # arrive from the clinic — the placeholder section is then swapped for them
 # and this flips to True.
@@ -31,6 +37,65 @@ FLAG_RE = re.compile(r"<!--IF:(\w+)-->(.*?)<!--ENDIF:\1-->", re.DOTALL)
 def apply_flags(html):
     """Keep or drop <!--IF:NAME--> ... <!--ENDIF:NAME--> blocks per FLAGS."""
     return FLAG_RE.sub(lambda m: m.group(2) if FLAGS.get(m.group(1)) else "", html)
+
+
+# Structured data for Google: the organization + its three physical branches.
+# Injected on index + contact only (the pages that describe the clinic itself).
+# openingHours intentionally omitted until the clinic confirms real hours.
+def jsonld():
+    import json
+    org = {
+        "@type": "MedicalOrganization",
+        "@id": SITE_URL + "/#org",
+        "name": "מילים וחרוזים",
+        "alternateName": "Milim VeHaruzim",
+        "description": "יחידה להתפתחות הילד — אבחון וטיפול רב-תחומי לגיל הרך",
+        "url": SITE_URL + "/",
+        "logo": SITE_URL + "/assets/icons/icon-512.png",
+        "image": SITE_URL + "/assets/og.jpg",
+        "email": "melimharozem@gmail.com",
+        "telephone": "+972-50-657-1203",
+        "foundingDate": "2016",
+        "availableLanguage": ["he", "ar"],
+    }
+    def clinic(name, name_en, tel, street=None, locality=None):
+        c = {
+            "@type": "MedicalClinic",
+            "name": "מילים וחרוזים — " + name,
+            "alternateName": name_en,
+            "parentOrganization": {"@id": SITE_URL + "/#org"},
+            "telephone": tel,
+            "url": SITE_URL + "/contact.html",
+            "medicalSpecialty": ["SpeechPathology", "Physiotherapy", "Psychiatric"],
+            "availableLanguage": ["he", "ar"],
+        }
+        addr = {"@type": "PostalAddress", "addressCountry": "IL"}
+        if street: addr["streetAddress"] = street
+        if locality: addr["addressLocality"] = locality
+        c["address"] = addr
+        return c
+    graph = {"@context": "https://schema.org", "@graph": [
+        org,
+        clinic("עכו", "Milim VeHaruzim Akko", "+972-50-657-1203",
+               "קניון עזריאלי, קומה 4", "עכו"),
+        clinic("מזרעה", "Milim VeHaruzim Mazra'a", "+972-53-587-3804",
+               "רחוב אלאנביאא 11", "מזרעה"),
+        clinic("מג'דל שמס", "Milim VeHaruzim Majdal Shams", "+972-54-895-5099",
+               None, "מג'דל שמס"),
+    ]}
+    return '<script type="application/ld+json">%s</script>' % json.dumps(graph, ensure_ascii=False)
+
+
+def write_sitemap(pages):
+    urls = "".join(
+        "  <url><loc>%s/%s</loc></url>\n" % (SITE_URL, "" if p == "index.html" else p)
+        for p in sorted(pages)
+    )
+    xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % urls)
+    open(os.path.join(DIST, "sitemap.xml"), "w", encoding="utf-8").write(xml)
+    open(os.path.join(DIST, "robots.txt"), "w", encoding="utf-8").write(
+        "User-agent: *\nAllow: /\nSitemap: %s/sitemap.xml\n" % SITE_URL)
 
 
 def parse_meta(text):
@@ -83,8 +148,16 @@ def build():
         # cache-bust asset refs so browsers never serve a stale CSS/JS
         html = html.replace('href="styles.css"', 'href="styles.css?v=%s"' % ver["styles.css"])
         html = html.replace('src="app.js"', 'src="app.js?v=%s"' % ver["app.js"])
-        html = html.replace("{{TITLE}}", meta.get("title", "מילים וחרוזים"))
+        title = meta.get("title", "מילים וחרוזים")
+        html = html.replace("{{TITLE}}", title)
+        html = html.replace("{{TITLE_AR}}", meta.get("title_ar", title))
         html = html.replace("{{DESC}}", meta.get("desc", ""))
+        html = html.replace("{{DESC_AR}}", meta.get("desc_ar", meta.get("desc", "")))
+        html = html.replace("{{CANONICAL}}",
+                            SITE_URL + "/" + ("" if name == "index.html" else name))
+        html = html.replace("{{SITE_URL}}", SITE_URL)
+        html = html.replace("{{JSONLD}}",
+                            jsonld() if name in ("index.html", "contact.html") else "")
         html = html.replace("{{CONTENT}}", body)
 
         # active nav item
@@ -99,8 +172,10 @@ def build():
         open(out, "w", encoding="utf-8").write(html)
         built.append(name)
 
+    write_sitemap(built)
+
     print("Built %d page(s): %s" % (len(built), ", ".join(built)))
-    print("Output: %s" % DIST)
+    print("Output: %s (+ sitemap.xml, robots.txt)" % DIST)
 
 
 if __name__ == "__main__":

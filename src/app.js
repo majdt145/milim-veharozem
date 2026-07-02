@@ -18,6 +18,8 @@
     document.querySelectorAll("[data-aria-" + l + "]").forEach(function (el) {
       el.setAttribute("aria-label", el.getAttribute("data-aria-" + l));
     });
+    var md = document.querySelector('meta[name="description"]');
+    if (md && md.getAttribute("data-desc-" + l)) md.setAttribute("content", md.getAttribute("data-desc-" + l));
     try { localStorage.setItem("mvh_lang", l); } catch (e) {}
   }
 
