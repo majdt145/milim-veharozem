@@ -272,7 +272,7 @@ nav: home
         <a href="https://wa.me/972506571203" class="btn btn-wa"><span aria-hidden="true">💬</span> <span data-he="וואטסאפ" data-ar="واتساب">וואטסאפ</span></a>
       </div>
     </div>
-    <form class="form" onsubmit="event.preventDefault();this.querySelector('.done').hidden=false;">
+    <form class="form" data-form="callback">
       <label for="f-name" data-he="שם מלא" data-ar="الاسم الكامل">שם מלא</label>
       <input id="f-name" name="name" type="text" autocomplete="name" required>
       <label for="f-tel" data-he="טלפון" data-ar="هاتف">טלפון</label>
@@ -285,9 +285,11 @@ nav: home
       </select>
       <label for="f-msg" data-he="במה נוכל לעזור?" data-ar="كيف يمكننا المساعدة؟">במה נוכל לעזור?</label>
       <textarea id="f-msg" name="message" rows="2"></textarea>
+      <input type="text" name="website" value="" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;inset-inline-start:-9999px;height:0;width:0;border:0;padding:0">
       <button class="btn btn-gold" style="width:100%;justify-content:center" type="submit" data-he="שליחה" data-ar="إرسال">שליחה</button>
       <div class="micro"><span aria-hidden="true">🔒</span> <span data-he="פרטיות מלאה · ללא התחייבות · נחזור אליכם בהקדם" data-ar="خصوصية تامة · دون التزام · سنعود إليكم قريبًا">פרטיות מלאה · ללא התחייבות · נחזור אליכם בהקדם</span></div>
-      <div class="micro done" hidden style="color:var(--teal-d);font-weight:800;margin-top:8px" data-he="✓ תודה! קיבלנו את הפנייה (הדגמה)." data-ar="✓ شكرًا! استلمنا الطلب (عرض).">✓ תודה! קיבלנו את הפנייה (הדגמה).</div>
+      <div class="micro done" hidden role="status" style="color:var(--teal-d);font-weight:800;margin-top:8px" data-he="✓ תודה! קיבלנו את הפנייה ונחזור אליכם בהקדם." data-ar="✓ شكرًا! استلمنا طلبكم وسنعود إليكم قريبًا.">✓ תודה! קיבלנו את הפנייה ונחזור אליכם בהקדם.</div>
+      <div class="micro err" data-err="send" hidden role="alert" style="color:var(--burgundy);font-weight:800;margin-top:8px" data-he="✕ השליחה נכשלה. נסו שוב, או פנו אלינו בוואטסאפ / בטלפון." data-ar="✕ فشل الإرسال. حاولوا مجددًا أو تواصلوا عبر واتساب / الهاتف.">✕ השליחה נכשלה. נסו שוב, או פנו אלינו בוואטסאפ / בטלפון.</div>
     </form>
   </div>
 </section>

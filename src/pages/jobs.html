@@ -33,8 +33,7 @@ nav: jobs
 <!-- apply form -->
 <section><div class="wrap" style="max-width:620px">
   <div class="sec-head"><h2 data-he="שליחת מועמדות" data-ar="إرسال طلب توظيف">שליחת מועמדות</h2><p data-he="מלאו את הפרטים וצרפו קורות חיים ותעודות — ונחזור אליכם." data-ar="املؤوا التفاصيل وأرفقوا السيرة الذاتية والشهادات — وسنعود إليكم.">מלאו את הפרטים וצרפו קורות חיים ותעודות — ונחזור אליכם.</p></div>
-  <!-- NOTE: placeholder submit. Before launch, wire to Formspree/Netlify with file upload so it emails the clinic WITH the job title in the subject. -->
-  <form class="form" style="box-shadow:var(--shadow);border:1px solid var(--line)" onsubmit="event.preventDefault();this.querySelector('.done').hidden=false;">
+  <form class="form" style="box-shadow:var(--shadow);border:1px solid var(--line)" data-form="job">
     <label for="j-name" data-he="שם מלא" data-ar="الاسم الكامل">שם מלא</label>
     <input id="j-name" name="name" type="text" autocomplete="name" required>
     <label for="j-tel" data-he="טלפון" data-ar="هاتف">טלפון</label>
@@ -49,10 +48,13 @@ nav: jobs
       <option data-he="פיזיותרפיסט/ית" data-ar="معالج/ة طبيعي">פיזיותרפיסט/ית</option>
       <option data-he="גפ״ן / בתי ספר" data-ar="غِفِن / مدارس">גפ״ן / בתי ספר</option>
     </select>
-    <label for="j-cv" data-he="קורות חיים + תעודות (חובה)" data-ar="السيرة الذاتية + الشهادات (إلزامي)">קורות חיים + תעודות (חובה)</label>
+    <label for="j-cv" data-he="קורות חיים + תעודות (חובה, עד 3.5MB)" data-ar="السيرة الذاتية + الشهادات (إلزامي، حتى 3.5MB)">קורות חיים + תעודות (חובה, עד 3.5MB)</label>
     <input id="j-cv" name="cv" type="file" accept=".pdf,.doc,.docx,.jpg,.png" multiple required>
+    <input type="text" name="website" value="" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;inset-inline-start:-9999px;height:0;width:0;border:0;padding:0">
     <button class="btn btn-gold" style="width:100%;justify-content:center" type="submit" data-he="שליחת מועמדות" data-ar="إرسال الطلب">שליחת מועמדות</button>
     <div class="micro"><span aria-hidden="true">🔒</span> <span data-he="הפרטים נשלחים ישירות לצוות הגיוס שלנו." data-ar="تُرسَل التفاصيل مباشرة لطاقم التوظيف لدينا.">הפרטים נשלחים ישירות לצוות הגיוס שלנו.</span></div>
-    <div class="micro done" hidden style="color:var(--teal-d);font-weight:800;margin-top:8px" data-he="✓ תודה! קיבלנו את המועמדות (הדגמה)." data-ar="✓ شكرًا! استلمنا الطلب (عرض).">✓ תודה! קיבלנו את המועמדות (הדגמה).</div>
+    <div class="micro done" hidden role="status" style="color:var(--teal-d);font-weight:800;margin-top:8px" data-he="✓ תודה! המועמדות התקבלה — נחזור אליכם בהקדם." data-ar="✓ شكرًا! استلمنا طلب التوظيف — سنعود إليكم قريبًا.">✓ תודה! המועמדות התקבלה — נחזור אליכם בהקדם.</div>
+    <div class="micro err" data-err="send" hidden role="alert" style="color:var(--burgundy);font-weight:800;margin-top:8px" data-he="✕ השליחה נכשלה. נסו שוב, או שלחו קו״ח למייל melimharozemschools@gmail.com" data-ar="✕ فشل الإرسال. حاولوا مجددًا أو أرسلوا السيرة الذاتية إلى melimharozemschools@gmail.com">✕ השליחה נכשלה. נסו שוב, או שלחו קו״ח למייל melimharozemschools@gmail.com</div>
+    <div class="micro err" data-err="file" hidden role="alert" style="color:var(--burgundy);font-weight:800;margin-top:8px" data-he="✕ הקבצים גדולים מדי (עד 3.5MB) או בפורמט לא נתמך (PDF / Word / תמונה)." data-ar="✕ الملفات كبيرة جدًا (حتى 3.5MB) أو بصيغة غير مدعومة (PDF / Word / صورة).">✕ הקבצים גדולים מדי (עד 3.5MB) או בפורמט לא נתמך (PDF / Word / תמונה).</div>
   </form>
 </div></section>

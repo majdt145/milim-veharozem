@@ -44,7 +44,83 @@
 
     initMotion();
     initCarousels();
+    initForms();
   });
+
+  /* ===== forms: real submission to /api/form (Vercel function → Resend) ===== */
+  function initForms() {
+    var MAX_FILES_BYTES = 3.5 * 1024 * 1024;
+
+    function currentLang() {
+      try { return localStorage.getItem("mvh_lang") === "ar" ? "ar" : "he"; } catch (e) { return "he"; }
+    }
+    function show(form, sel) {
+      [].slice.call(form.querySelectorAll(".done,.err")).forEach(function (el) { el.hidden = true; });
+      var el = sel && form.querySelector(sel);
+      if (el) el.hidden = false;
+    }
+    function setBusy(form, busy) {
+      var btn = form.querySelector('button[type="submit"]');
+      if (!btn) return;
+      btn.disabled = busy;
+      btn.setAttribute("aria-busy", busy ? "true" : "false");
+      var l = currentLang();
+      btn.textContent = busy
+        ? (l === "ar" ? "جارٍ الإرسال…" : "שולח…")
+        : (btn.getAttribute("data-" + l) || btn.getAttribute("data-he"));
+    }
+    function readFiles(input) {
+      var files = [].slice.call(input.files || []);
+      var total = files.reduce(function (s, f) { return s + f.size; }, 0);
+      if (total > MAX_FILES_BYTES) return Promise.reject("toobig");
+      return Promise.all(files.map(function (f) {
+        return new Promise(function (resolve, reject) {
+          var r = new FileReader();
+          r.onload = function () { resolve({ filename: f.name, contentBase64: String(r.result).split(",")[1] }); };
+          r.onerror = function () { reject("readfail"); };
+          r.readAsDataURL(f);
+        });
+      }));
+    }
+
+    [].slice.call(document.querySelectorAll("form[data-form]")).forEach(function (form) {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var fields = {};
+        [].slice.call(form.elements).forEach(function (el) {
+          if (el.name && el.name !== "website" && el.type !== "file") fields[el.name] = el.value;
+        });
+        var fileInput = form.querySelector('input[type="file"]');
+        var body = {
+          formType: form.getAttribute("data-form"),
+          lang: currentLang(),
+          fields: fields,
+          website: (form.querySelector('input[name="website"]') || {}).value || "",
+        };
+        setBusy(form, true);
+        show(form, null);
+        (fileInput ? readFiles(fileInput) : Promise.resolve([]))
+          .then(function (attachments) {
+            body.attachments = attachments;
+            return fetch("/api/form", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body),
+            });
+          })
+          .then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
+          .then(function (data) {
+            if (data.ok) { show(form, ".done"); form.reset(); }
+            else if (data.error === "toobig" || data.error === "filetype") show(form, '.err[data-err="file"]');
+            else show(form, '.err[data-err="send"]');
+          })
+          .catch(function (why) {
+            show(form, why === "toobig" ? '.err[data-err="file"]' : '.err[data-err="send"]');
+          })
+          .then(function () { setBusy(form, false); });
+      });
+    });
+  }
 
   /* ===== testimonial carousel (vanilla port of the Magic component) ===== */
   function initCarousels() {
