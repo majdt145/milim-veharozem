@@ -54,21 +54,27 @@
     initSmartBar();
   });
 
-  /* ===== mobile action bar: hide while reading (scroll down), return on
-     scroll up or when scrolling stops ===== */
+  /* ===== mobile action bar: hidden over the hero (it has the same CTAs),
+     then: hide while reading (scroll down), return on scroll up / idle /
+     near the bottom contact zone ===== */
   function initSmartBar() {
     var bar = document.querySelector(".mbar");
     if (!bar) return;
+    var hero = document.querySelector(".hero");
+    function inHero() {
+      return hero ? (window.scrollY || 0) < hero.offsetTop + hero.offsetHeight - 140 : false;
+    }
     var lastY = window.scrollY || 0, idleTimer = null;
+    if (inHero()) bar.classList.add("hide"); /* initial state: hero shows its own buttons */
     window.addEventListener("scroll", function () {
       var y = window.scrollY || 0;
-      // near the top or bottom of the page: always show (CTA zone)
-      var nearEdge = y < 80 || y + window.innerHeight > document.documentElement.scrollHeight - 120;
-      if (!nearEdge && y > lastY + 6) bar.classList.add("hide");
-      else if (nearEdge || y < lastY - 6) bar.classList.remove("hide");
+      if (inHero()) { bar.classList.add("hide"); lastY = y; return; }
+      var nearBottom = y + window.innerHeight > document.documentElement.scrollHeight - 120;
+      if (!nearBottom && y > lastY + 6) bar.classList.add("hide");
+      else if (nearBottom || y < lastY - 6) bar.classList.remove("hide");
       lastY = y;
       if (idleTimer) clearTimeout(idleTimer);
-      idleTimer = setTimeout(function () { bar.classList.remove("hide"); }, 900);
+      idleTimer = setTimeout(function () { if (!inHero()) bar.classList.remove("hide"); }, 900);
     }, { passive: true });
   }
 
