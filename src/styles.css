@@ -63,12 +63,6 @@ section{padding:62px 0}
 /* hero */
 .hero{position:relative;background:linear-gradient(180deg,var(--cream) 0%,var(--cream) 82%,#fff 100%);overflow:hidden}
 .hero .wrap{max-width:1340px;display:flex;flex-wrap:wrap;gap:28px;align-items:center;padding:54px 22px 46px}
-/* consistency across screens: the hero fills exactly the first screen
-   (viewport minus header), capped so huge monitors don't get a stadium.
-   Desktop/tablet only — the mobile column flows naturally. */
-@media(min-width:701px){
-  .hero .wrap{min-height:min(calc(100svh - 186px),860px)}
-}
 .hero .wrap>div:first-child{flex:1 1 360px;min-width:0;max-width:440px} /* text column */
 .hero .wrap>.hero-art-puzzle{flex:2 1 520px;min-width:0}               /* video gets the rest */
 .hero h1{font-size:clamp(33px,5vw,54px);font-weight:900;line-height:1.14;letter-spacing:-.01em}
@@ -339,12 +333,17 @@ footer.site a:hover{color:var(--gold)}
    logo landed lower/higher depending on text height and zoom */
 .puzzle-stage{position:relative;width:min(480px,92%);margin-inline:auto;aspect-ratio:1;background:transparent}
 /* short viewports (1080p laptops at 125-150% Windows scaling => ~650-740px
-   CSS height): the text column is taller than the screen, so a vertically
-   centered logo sinks under the fold. Top-anchor it and cap its size by the
-   viewport HEIGHT so the whole logo is always visible. */
+   CSS height): shrink the WHOLE hero — type, buttons, spacing, logo — so the
+   full composition (logo + headline + CTAs + stats) fits on the first screen,
+   the same picture a tall monitor gets. */
 @media(min-width:701px) and (max-height:740px){
-  .hero-art-puzzle{align-self:flex-start;margin-top:10px}
-  .puzzle-stage{width:min(480px,92%,calc(100svh - 265px))} /* 265 = header 185 + hero pad 54 + margin 10 + 16 safety */
+  .hero .wrap{padding:28px 22px 24px}
+  .hero h1{font-size:clamp(30px,3vw,38px)}
+  .hero .lead{font-size:16px;margin:12px 0 16px}
+  .hero .kicker{font-size:12.5px}
+  .hero-cta .btn{padding:10px 18px;font-size:14.5px;min-height:40px}
+  .hero-meta{margin-top:14px;font-size:13px}
+  .puzzle-stage{width:min(480px,92%,calc(100svh - 250px))} /* 250 = header 185 + compact pads + safety */
 }
 .pz{position:absolute;left:var(--x);top:var(--y);width:clamp(38px,11%,72px);aspect-ratio:1;
   background:var(--c);
