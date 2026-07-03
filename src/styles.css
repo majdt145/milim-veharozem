@@ -252,8 +252,12 @@ footer.site a:hover{color:var(--gold)}
 @media(max-width:700px){.prog{grid-template-columns:1fr}}
 
 /* mobile sticky CTA */
-.mbar{display:none;position:fixed;bottom:0;inset-inline:0;z-index:80;background:#fff;border-top:1px solid var(--line);padding:9px 12px;gap:9px;box-shadow:0 -6px 20px rgba(52,40,47,.10)}
-.mbar a{flex:1;justify-content:center;padding-inline:10px}
+.mbar{display:none;position:fixed;bottom:0;inset-inline:0;z-index:80;background:#fff;border-top:1px solid var(--line);padding:6px 10px;gap:8px;box-shadow:0 -6px 20px rgba(52,40,47,.10);transition:transform .28s ease}
+.mbar a{flex:1;justify-content:center;padding:9px 8px;font-size:14.5px;min-height:40px}
+/* smart bar: slides away while reading (scroll down), returns on scroll up
+   or when scrolling stops — the call button never covers content for long */
+.mbar.hide{transform:translateY(110%)}
+@media(prefers-reduced-motion:reduce){.mbar{transition:none}}
 
 @media(max-width:900px){
   nav.main ul{display:none}
@@ -272,7 +276,7 @@ footer.site a:hover{color:var(--gold)}
   .why .wrap,.cta .wrap{grid-template-columns:1fr} .why img{height:260px}
   .schools .wrap{flex-direction:column;text-align:center}
   footer.site .top{grid-template-columns:1fr 1fr}
-  .mbar{display:flex} body{padding-bottom:66px}
+  .mbar{display:flex} body{padding-bottom:56px}
 }
 @media(max-width:520px){ footer.site .top{grid-template-columns:1fr} .team-grid{grid-template-columns:1fr} }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto;animation:none!important}}

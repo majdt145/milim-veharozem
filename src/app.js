@@ -51,7 +51,26 @@
     initMotion();
     initCarousels();
     initForms();
+    initSmartBar();
   });
+
+  /* ===== mobile action bar: hide while reading (scroll down), return on
+     scroll up or when scrolling stops ===== */
+  function initSmartBar() {
+    var bar = document.querySelector(".mbar");
+    if (!bar) return;
+    var lastY = window.scrollY || 0, idleTimer = null;
+    window.addEventListener("scroll", function () {
+      var y = window.scrollY || 0;
+      // near the top or bottom of the page: always show (CTA zone)
+      var nearEdge = y < 80 || y + window.innerHeight > document.documentElement.scrollHeight - 120;
+      if (!nearEdge && y > lastY + 6) bar.classList.add("hide");
+      else if (nearEdge || y < lastY - 6) bar.classList.remove("hide");
+      lastY = y;
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = setTimeout(function () { bar.classList.remove("hide"); }, 900);
+    }, { passive: true });
+  }
 
   /* ===== forms: real submission to /api/form (Vercel function → Resend) ===== */
   function initForms() {
