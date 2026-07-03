@@ -124,6 +124,16 @@ section{padding:62px 0}
 .ass{background:var(--cream)}
 .ass-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:880px;margin:0 auto}
 .ass-grid .pill{background:#fff;box-shadow:var(--shadow-sm);font-size:15px}
+/* phones: variable-width chips wrap into a ragged pile — snap both chip
+   sections into tidy 2-column grids of equal-width, centered chips */
+@media(max-width:700px){
+  .partners .wrap{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:16px 18px}
+  .partners .lbl{grid-column:1/-1;text-align:center;margin-bottom:2px}
+  .partners .chip{text-align:center;padding:9px 6px;font-size:13px}
+  .partners .chip:last-child{grid-column:1/-1;justify-self:center;padding-inline:22px}
+  .ass-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;max-width:360px}
+  .ass-grid .pill{text-align:center;padding:10px 6px;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}
 
 /* age */
 .a1{background:linear-gradient(140deg,#009683,#5fb6a8)} .a2{background:linear-gradient(140deg,#d96f80,#e89aa4)}
