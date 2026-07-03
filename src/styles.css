@@ -434,27 +434,33 @@ footer.site a:hover{color:var(--gold)}
    concise copy, comfortable actions, and tidy 2×2 stats (not a messy wrap row).
    ============================================ */
 @media(max-width:700px){
-  .phero-puzzle .wrap{padding:24px 20px 32px;gap:14px}
+  /* the global section{padding:62px 0} leaks onto the hero on TOP of the
+     wrap's own padding — a 62px dead band above the logo that pushed the
+     CTAs off the first screen. Zero it on mobile (the wrap owns spacing). */
+  .hero{padding:0}
+  /* tight vertical rhythm so the primary CTAs land above the fold on first
+     paint (even on ~690px-usable phones with the browser URL bar showing) */
+  .phero-puzzle .wrap{padding:10px 20px 20px;gap:6px}
   /* the brand animation leads the page on mobile (visual-first); text follows */
-  .hero-art-puzzle{order:-1;min-height:0}
-  .puzzle-stage{width:min(270px,76vw)}
+  .hero-art-puzzle{order:-1;min-height:0;margin-top:0}
+  .puzzle-stage{width:min(236px,64vw)}
   /* a confident, readable headline — no more shrink-to-fit */
-  .phero-puzzle h1{font-size:clamp(27px,7.8vw,34px);line-height:1.14}
+  .phero-puzzle h1{font-size:clamp(26px,7.2vw,32px);line-height:1.12}
   .hero .kicker{font-size:12.5px}
-  .phero-puzzle .lead{font-size:15.5px;line-height:1.6;max-width:36ch;margin:6px auto 16px}
+  .phero-puzzle .lead{font-size:15px;line-height:1.55;max-width:36ch;margin:4px auto 10px}
   /* actions: comfortable taps, no 300ms lag */
   .hero-cta{gap:10px}
-  .hero-cta .btn{font-size:15px;padding:12px 18px;touch-action:manipulation}
+  .hero-cta .btn{font-size:15px;padding:11px 18px;touch-action:manipulation}
   /* stats: clean 2×2 grid instead of a ragged wrapping row */
-  .hero-meta{display:grid;grid-template-columns:1fr 1fr;gap:14px 10px;justify-items:center;
-    width:100%;max-width:300px;margin:22px auto 0}
+  .hero-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px 10px;justify-items:center;
+    width:100%;max-width:300px;margin:16px auto 0}
   .hero-meta>span{display:flex;flex-direction:column;align-items:center;gap:1px;
     font-size:12.5px;line-height:1.25;text-align:center}
-  .hero-meta b{font-size:23px;color:var(--teal-d)}
+  .hero-meta b{font-size:22px;color:var(--teal-d)}
 }
 @media(max-width:360px){
-  .phero-puzzle h1{font-size:25px}
-  .puzzle-stage{width:min(250px,74%)}
+  .phero-puzzle h1{font-size:24px}
+  .puzzle-stage{width:min(210px,58vw)}
 }
 
 /* why us — puzzle-piece icons (brand-grounded, replaces the generic square chips) */
