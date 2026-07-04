@@ -210,7 +210,7 @@
     if (!root.classList.contains("anim")) return;
     try {
 
-      var SEL = ".sec-head,.card,.step,.tst,.branch,.member,.age-c,.why-item,.acc,.job,.prog .p,.group-head,.partners,.ass-grid .pill";
+      var SEL = ".sec-head,.svc-piece,.ws-flyer,.jb-badge,.ct-stop,.step,.tst,.age-c,.why-item,.acc,.group-head,.partners,.ass-grid .pill";
       var els = [].slice.call(document.querySelectorAll(SEL));
 
       /* scroll-based reveal — shows in-view content immediately; no IntersectionObserver dependency */
@@ -283,4 +283,176 @@
       root.classList.remove("anim");
     }
   }
+})();
+
+/* =========================================================================
+   Accessibility widget (aw-) + Cookie banner (ck-)
+   Self-contained IIFE with its own try/catch so a failure here can NEVER
+   break the site's core JS above. Fail-open: button just stays inert,
+   banner stays hidden (it's hidden-by-default in the HTML).
+   ========================================================================= */
+(function () {
+  "use strict";
+  try {
+    var KEY = "mv-a11y", CKEY = "mv-consent";
+    var DEFAULTS = { fs: 0, dark: false, gray: false, links: false, spacing: false, stopmotion: false };
+    var BOOL = ["dark", "gray", "links", "spacing", "stopmotion"];
+    var FS_PCT = ["100%", "112%", "125%"];
+
+    function read() {
+      try {
+        var s = JSON.parse(localStorage.getItem(KEY) || "{}");
+        var out = {}; for (var k in DEFAULTS) out[k] = (k in s) ? s[k] : DEFAULTS[k];
+        out.fs = Math.max(0, Math.min(2, out.fs | 0));
+        return out;
+      } catch (e) { var d = {}; for (var j in DEFAULTS) d[j] = DEFAULTS[j]; return d; }
+    }
+    function save(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
+
+    /* apply state → classes on <html>, keeping the pre-paint script in sync */
+    function apply(s) {
+      var h = document.documentElement;
+      h.classList.remove("aw-fs1", "aw-fs2", "aw-dark", "aw-gray", "aw-links", "aw-spacing", "aw-stopmotion");
+      if (s.fs === 1) h.classList.add("aw-fs1");
+      if (s.fs === 2) h.classList.add("aw-fs2");
+      if (s.dark) h.classList.add("aw-dark");
+      if (s.gray) h.classList.add("aw-gray");
+      if (s.links) h.classList.add("aw-links");
+      if (s.spacing) h.classList.add("aw-spacing");
+      if (s.stopmotion) {
+        h.classList.add("aw-stopmotion");
+        h.classList.remove("anim");   /* stop JS-gated motion too */
+        pauseMedia(true);
+      } else {
+        pauseMedia(false);
+      }
+    }
+
+    /* pause/resume any hero (or other) <video> when motion is stopped */
+    function pauseMedia(stop) {
+      try {
+        [].slice.call(document.querySelectorAll("video")).forEach(function (v) {
+          if (stop) { try { v.pause(); } catch (e) {} }
+          else if (v.autoplay && v.paused) { try { v.play().catch(function () {}); } catch (e) {} }
+        });
+      } catch (e) {}
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      try {
+        initWidget();
+        initCookie();
+      } catch (e) { /* fail-open: leave the page fully usable */ }
+    });
+
+    function initWidget() {
+      var btn = document.getElementById("aw-btn");
+      var panel = document.getElementById("aw-panel");
+      if (!btn || !panel) return;
+      var title = document.getElementById("aw-title");
+      var closeBtn = document.getElementById("aw-close");
+      var state = read();
+
+      /* reflect saved state into the panel controls + apply to <html> */
+      apply(state);
+      renderControls();
+
+      function renderControls() {
+        /* text-size stepper */
+        var val = document.getElementById("aw-fs-val");
+        if (val) val.textContent = FS_PCT[state.fs];
+        var dn = document.getElementById("aw-fs-dn"), up = document.getElementById("aw-fs-up");
+        if (dn) dn.disabled = state.fs <= 0;
+        if (up) up.disabled = state.fs >= 2;
+        /* switches */
+        [].slice.call(panel.querySelectorAll(".aw-switch")).forEach(function (sw) {
+          var k = sw.getAttribute("data-set");
+          sw.setAttribute("aria-checked", state[k] ? "true" : "false");
+        });
+      }
+
+      function commit() { save(state); apply(state); renderControls(); }
+
+      /* ---- open / close ---- */
+      var open = false;
+      function openPanel() {
+        panel.hidden = false;
+        btn.setAttribute("aria-expanded", "true");
+        open = true;
+        if (title) title.focus();
+        document.addEventListener("keydown", onKey);
+        document.addEventListener("mousedown", onOutside);
+      }
+      function closePanel(returnFocus) {
+        panel.hidden = true;
+        btn.setAttribute("aria-expanded", "false");
+        open = false;
+        document.removeEventListener("keydown", onKey);
+        document.removeEventListener("mousedown", onOutside);
+        if (returnFocus !== false) btn.focus();
+      }
+      function onKey(e) {
+        if (e.key === "Escape") { e.preventDefault(); closePanel(true); }
+      }
+      function onOutside(e) {
+        if (!open) return;
+        if (panel.contains(e.target) || btn.contains(e.target)) return;
+        closePanel(false);
+      }
+
+      btn.addEventListener("click", function () { open ? closePanel(true) : openPanel(); });
+      if (closeBtn) closeBtn.addEventListener("click", function () { closePanel(true); });
+
+      /* ---- text size ---- */
+      var dn = document.getElementById("aw-fs-dn"), up = document.getElementById("aw-fs-up");
+      if (dn) dn.addEventListener("click", function () { if (state.fs > 0) { state.fs--; commit(); } });
+      if (up) up.addEventListener("click", function () { if (state.fs < 2) { state.fs++; commit(); } });
+
+      /* ---- toggles ---- */
+      [].slice.call(panel.querySelectorAll(".aw-switch")).forEach(function (sw) {
+        sw.addEventListener("click", function () {
+          var k = sw.getAttribute("data-set");
+          state[k] = !state[k];
+          commit();
+        });
+      });
+
+      /* ---- reset ---- */
+      var reset = document.getElementById("aw-reset");
+      if (reset) reset.addEventListener("click", function () {
+        state = {}; for (var k in DEFAULTS) state[k] = DEFAULTS[k];
+        try { localStorage.removeItem(KEY); } catch (e) {}
+        /* restore motion class if the environment allows it */
+        try {
+          if (window.matchMedia && !matchMedia("(prefers-reduced-motion:reduce)").matches) {
+            document.documentElement.classList.add("anim");
+          }
+        } catch (e) {}
+        apply(state); renderControls();
+      });
+
+      /* re-render dynamic bits (fs %, switch states) after a language flip —
+         app.js's setLang only swaps data-he/data-ar text nodes, so the
+         numeric % + aria states need refreshing. Wrap setLang once. */
+      if (typeof window.setLang === "function" && !window.__awLangWrapped) {
+        var _setLang = window.setLang;
+        window.setLang = function (l) { _setLang(l); try { renderControls(); } catch (e) {} };
+        window.__awLangWrapped = true;
+      }
+    }
+
+    function initCookie() {
+      var banner = document.getElementById("ck-banner");
+      if (!banner) return;
+      var seen = false;
+      try { seen = !!localStorage.getItem(CKEY); } catch (e) { seen = true; /* no storage → don't nag */ }
+      if (seen) return;                       /* already consented → stay hidden */
+      banner.hidden = false;                  /* show only on first visit; no focus steal */
+      var accept = document.getElementById("ck-accept");
+      if (accept) accept.addEventListener("click", function () {
+        try { localStorage.setItem(CKEY, "1"); } catch (e) {}
+        banner.hidden = true;
+      });
+    }
+  } catch (e) { /* widget/banner disabled; site remains fully usable */ }
 })();

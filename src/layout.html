@@ -26,13 +26,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400..900&family=Noto+Sans+Arabic:wght@400..900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <script>(function(){try{if(window.matchMedia&&!matchMedia('(prefers-reduced-motion:reduce)').matches){document.documentElement.className+=' anim';}}catch(e){}})();</script>
+<!-- a11y prefs: apply saved accessibility classes BEFORE first paint (no flash) -->
+<script>(function(){try{var s=JSON.parse(localStorage.getItem('mv-a11y')||'{}'),h=document.documentElement,c=[];if(s.fs===1)c.push('aw-fs1');if(s.fs===2)c.push('aw-fs2');if(s.dark)c.push('aw-dark');if(s.gray)c.push('aw-gray');if(s.links)c.push('aw-links');if(s.spacing)c.push('aw-spacing');if(s.stopmotion){c.push('aw-stopmotion');h.className=h.className.replace(/(^|\s)anim(\s|$)/,' ');}if(c.length)h.className+=' '+c.join(' ');}catch(e){}})();</script>
 </head>
 <body>
 <a class="skip" href="#main" data-he="דלג לתוכן" data-ar="تخطَّ إلى المحتوى">דלג לתוכן</a>
 
 <!-- utility bar -->
 <div class="util"><div class="wrap">
-  <span class="bdi"><span aria-hidden="true">📍</span> <span data-he="עכו · מזרעה · מג'דל שמס" data-ar="عكا · المزرعة · مجدل شمس">עכו · מזרעה · מג'דל שמס</span><span class="util-tel"> &nbsp;|&nbsp; <span aria-hidden="true">☎️</span> <a href="tel:0506571203" dir="ltr">050-657-1203</a></span></span>
+  <span class="bdi"><svg viewBox="0 0 24 24" aria-hidden="true" style="display:inline-block;vertical-align:-2px;width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span data-he="עכו · מזרעה · מג'דל שמס" data-ar="عكا · المزرعة · مجدل شمس">עכו · מזרעה · מג'דל שמס</span><span class="util-tel"> &nbsp;|&nbsp; <svg viewBox="0 0 24 24" aria-hidden="true" style="display:inline-block;vertical-align:-2px;width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg> <a href="tel:0506571203" dir="ltr">050-657-1203</a></span></span>
   <div class="lang" role="group" aria-label="שפה / لغة">
     <button class="on" data-lang="he" data-i18n-exempt aria-pressed="true" onclick="setLang('he')">עברית</button>
     <button data-lang="ar" data-i18n-exempt aria-pressed="false" onclick="setLang('ar')">عربي</button>
@@ -78,9 +80,9 @@
       <a href="schools.html" data-he="גפ״ן ובתי ספר" data-ar="برامج المدارس">גפ״ן ובתי ספר</a>
       <a href="mailto:melimharozemschools@gmail.com">melimharozemschools@gmail.com</a></div>
     <div><h4 data-he="צור קשר" data-ar="اتصلوا بنا">צור קשר</h4>
-      <div class="row" dir="ltr" style="text-align:right"><span aria-hidden="true">☎️</span> 050-657-1203</div>
-      <div class="row"><span aria-hidden="true">✉️</span> melimharozem@gmail.com</div>
-      <div class="row"><span aria-hidden="true">📍</span> <span data-he="עכו · מזרעה · מג׳דל שמס" data-ar="عكا · المزرعة · مجدل شمس">עכו · מזרעה · מג׳דל שמס</span></div></div>
+      <div class="row" dir="ltr" style="text-align:right"><svg viewBox="0 0 24 24" aria-hidden="true" style="display:inline-block;vertical-align:-3px;width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 050-657-1203</div>
+      <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true" style="display:inline-block;vertical-align:-3px;width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg> melimharozem@gmail.com</div>
+      <div class="row"><svg viewBox="0 0 24 24" aria-hidden="true" style="display:inline-block;vertical-align:-3px;width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span data-he="עכו · מזרעה · מג׳דל שמס" data-ar="عكا · المزرعة · مجدل شمس">עכו · מזרעה · מג׳דל שמס</span></div></div>
   </div>
   <div class="legal">
     <span data-he="© 2026 מילים וחרוזים · כל הזכויות שמורות" data-ar="© 2026 ميليم وحاروزيم · جميع الحقوق محفوظة">© 2026 מילים וחרוזים · כל הזכויות שמורות</span>
@@ -90,9 +92,99 @@
 
 <!-- mobile sticky bar -->
 <div class="mbar">
-  <a href="tel:0506571203" class="btn btn-teal"><span aria-hidden="true">☎️</span> <span data-he="חייגו" data-ar="اتصلوا">חייגו</span></a>
-  <a href="https://wa.me/972506571203" class="btn btn-wa"><span aria-hidden="true">💬</span> <span data-he="וואטסאפ" data-ar="واتساب">וואטסאפ</span></a>
+  <a href="tel:0506571203" class="btn btn-teal"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg> <span data-he="חייגו" data-ar="اتصلوا">חייגו</span></a>
+  <a href="https://wa.me/972506571203" class="btn btn-wa"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.3 8.4 8.4 0 0 1-3.8-.9L3 21l2.1-5.2A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/></svg> <span data-he="וואטסאפ" data-ar="واتساب">וואטסאפ</span></a>
   <a href="contact.html" class="btn btn-gold" data-he="קביעת תור" data-ar="حجز موعد">קביעת תור</a>
+</div>
+
+<!-- ===================== Accessibility widget ===================== -->
+<button class="aw-btn" id="aw-btn" type="button" aria-expanded="false" aria-controls="aw-panel"
+        aria-label="תפריט נגישות" data-aria-he="תפריט נגישות" data-aria-ar="قائمة إتاحة الوصول">
+  <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+    <circle cx="12" cy="3.6" r="2.1"/>
+    <path d="M20 6.5c0 .7-.5 1.2-1.2 1.3L15 8.3v3.1l1.9 6.6c.2.8-.2 1.5-1 1.7-.8.2-1.5-.2-1.7-1l-1.6-5.6h-1.2l-1.6 5.6c-.2.8-.9 1.2-1.7 1-.8-.2-1.2-.9-1-1.7L9 11.4V8.3l-3.8-.5C4.5 7.7 4 7.2 4 6.5c0-.8.7-1.4 1.5-1.3L12 6l6.5-.8C19.3 5.1 20 5.7 20 6.5z"/>
+  </svg>
+</button>
+<div class="aw-panel" id="aw-panel" role="dialog" aria-modal="false" aria-labelledby="aw-title" hidden>
+  <div class="aw-head">
+    <h2 class="aw-title" id="aw-title" tabindex="-1">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><circle cx="12" cy="3.6" r="2.1"/><path d="M20 6.5c0 .7-.5 1.2-1.2 1.3L15 8.3v3.1l1.9 6.6c.2.8-.2 1.5-1 1.7-.8.2-1.5-.2-1.7-1l-1.6-5.6h-1.2l-1.6 5.6c-.2.8-.9 1.2-1.7 1-.8-.2-1.2-.9-1-1.7L9 11.4V8.3l-3.8-.5C4.5 7.7 4 7.2 4 6.5c0-.8.7-1.4 1.5-1.3L12 6l6.5-.8C19.3 5.1 20 5.7 20 6.5z"/></svg>
+      <span data-he="נגישות" data-ar="إتاحة الوصول">נגישות</span>
+    </h2>
+    <button class="aw-x" id="aw-close" type="button" aria-label="סגירה" data-aria-he="סגירה" data-aria-ar="إغلاق">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <!-- Text size -->
+  <div class="aw-row">
+    <span class="aw-label" data-he="גודל טקסט" data-ar="حجم النص">גודל טקסט</span>
+    <div class="aw-step">
+      <button type="button" id="aw-fs-dn" aria-label="הקטנת טקסט" data-aria-he="הקטנת טקסט" data-aria-ar="تصغير النص">−</button>
+      <span class="aw-val" id="aw-fs-val" aria-live="polite">100%</span>
+      <button type="button" id="aw-fs-up" aria-label="הגדלת טקסט" data-aria-he="הגדלת טקסט" data-aria-ar="تكبير النص">+</button>
+    </div>
+  </div>
+
+  <!-- Dark contrast -->
+  <div class="aw-row">
+    <span class="aw-label" id="aw-l-dark" data-he="ניגודיות כהה" data-ar="تباين داكن">ניגודיות כהה</span>
+    <button type="button" class="aw-switch" data-set="dark" role="switch" aria-checked="false" aria-labelledby="aw-l-dark">
+      <span class="aw-knob"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></span>
+    </button>
+  </div>
+
+  <!-- Grayscale -->
+  <div class="aw-row">
+    <span class="aw-label" id="aw-l-gray" data-he="גווני אפור" data-ar="درجات الرمادي">גווני אפור</span>
+    <button type="button" class="aw-switch" data-set="gray" role="switch" aria-checked="false" aria-labelledby="aw-l-gray">
+      <span class="aw-knob"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></span>
+    </button>
+  </div>
+
+  <!-- Highlight links -->
+  <div class="aw-row">
+    <span class="aw-label" id="aw-l-links" data-he="הדגשת קישורים" data-ar="إبراز الروابط">הדגשת קישורים</span>
+    <button type="button" class="aw-switch" data-set="links" role="switch" aria-checked="false" aria-labelledby="aw-l-links">
+      <span class="aw-knob"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></span>
+    </button>
+  </div>
+
+  <!-- Text spacing -->
+  <div class="aw-row">
+    <span class="aw-label" id="aw-l-spacing" data-he="מרווח טקסט" data-ar="تباعد النص">מרווח טקסט</span>
+    <button type="button" class="aw-switch" data-set="spacing" role="switch" aria-checked="false" aria-labelledby="aw-l-spacing">
+      <span class="aw-knob"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></span>
+    </button>
+  </div>
+
+  <!-- Stop animations -->
+  <div class="aw-row">
+    <span class="aw-label" id="aw-l-motion" data-he="עצירת אנימציות" data-ar="إيقاف الحركات">עצירת אנימציות</span>
+    <button type="button" class="aw-switch" data-set="stopmotion" role="switch" aria-checked="false" aria-labelledby="aw-l-motion">
+      <span class="aw-knob"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg></span>
+    </button>
+  </div>
+
+  <button class="aw-reset" id="aw-reset" type="button" data-he="איפוס הגדרות" data-ar="إعادة التعيين">איפוס הגדרות</button>
+
+  <div class="aw-foot">
+    <a href="accessibility.html">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+      <span data-he="הצהרת נגישות" data-ar="إعلان إتاحة الوصول">הצהרת נגישות</span>
+    </a>
+  </div>
+</div>
+
+<!-- ===================== Cookie consent banner (hidden until JS shows it) ===================== -->
+<div class="ck-banner" id="ck-banner" role="region" aria-label="הודעת עוגיות" data-aria-he="הודעת עוגיות" data-aria-ar="إشعار ملفات تعريف الارتباط" hidden>
+  <p class="ck-text">
+    <span data-he="האתר משתמש בעוגיות ובאחסון מקומי חיוניים בלבד — לשמירת העדפות כמו שפה והגדרות נגישות. ללא עוגיות פרסום או מעקב." data-ar="يستخدم الموقع ملفات تعريف الارتباط والتخزين المحلي الضرورية فقط — لحفظ تفضيلات مثل اللغة وإعدادات الإتاحة. دون ملفات إعلان أو تتبّع.">האתר משתמש בעוגיות ובאחסון מקומי חיוניים בלבד — לשמירת העדפות כמו שפה והגדרות נגישות. ללא עוגיות פרסום או מעקב.</span>
+    <a href="privacy.html" data-he="מדיניות פרטיות" data-ar="سياسة الخصوصية">מדיניות פרטיות</a>
+  </p>
+  <div class="ck-actions">
+    <button class="ck-accept" id="ck-accept" type="button" data-he="הבנתי, תודה" data-ar="فهمت، شكرًا">הבנתי, תודה</button>
+  </div>
 </div>
 
 <script src="app.js"></script>
