@@ -2105,3 +2105,23 @@ html.anim .ck-banner{animation:ck-rise .28s cubic-bezier(.2,.75,.25,1) both}
    needed (it lives in body and inverts with everything — verified legible),
    but ensure the panel border stays visible in dark mode */
 html.aw-dark .aw-panel,html.aw-dark .ck-banner{border-color:#333}
+
+/* ============================================================
+   Scroll-aware transparent header (JS: initNav in app.js).
+   The hero always sits BEHIND the header (negative margin + matching
+   top padding), so toggling the header's background never shifts the
+   layout. Without JS the header stays solid = a normal header/hero.
+   ============================================================ */
+:root{--nav-h:76px}
+
+/* pull each page's hero up so its background fills behind the nav */
+.hero{margin-top:calc(-1 * var(--nav-h));padding-top:calc(var(--nav-h) + 6px)}
+.phero{margin-top:calc(-1 * var(--nav-h));padding-top:calc(var(--nav-h) + 38px)}
+
+/* JS-managed transparency (fail-safe: no .js-nav → header keeps its solid default) */
+html.js-nav header.site{background:transparent;border-bottom-color:transparent;box-shadow:none;
+  transition:background .3s ease,border-color .3s ease,box-shadow .3s ease}
+html.js-nav header.site.scrolled{background:#fff;border-bottom-color:var(--line);
+  box-shadow:0 6px 20px rgba(52,40,47,.07)}
+/* suppress the one-time fade when transparency is first applied on load */
+html.nav-no-anim header.site{transition:none!important}

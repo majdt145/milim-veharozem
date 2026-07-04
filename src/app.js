@@ -51,7 +51,43 @@
     initMotion();
     initCarousels();
     initForms();
+    initNav();
   });
+
+  /* ===== scroll-aware header: transparent ONLY at rest, solid the instant you
+     scroll — so the nav never overlaps the hero text sliding underneath. The
+     "hero sits behind the header" geometry lives in CSS and is always on, so we
+     only toggle the header BACKGROUND here — never the layout. Fail-safe: if the
+     header is missing we bail and it keeps its solid CSS default. */
+  function initNav() {
+    try {
+      var root = document.documentElement;
+      var header = document.querySelector("header.site");
+      if (!header) return;
+
+      function measure() { root.style.setProperty("--nav-h", header.offsetHeight + "px"); }
+      measure();
+      window.addEventListener("resize", measure, { passive: true });
+
+      /* enable transparency, but suppress the one-time fade on first paint */
+      root.classList.add("js-nav", "nav-no-anim");
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { root.classList.remove("nav-no-anim"); });
+      });
+
+      /* solid as soon as the page moves off the very top (>8px); transparent at rest */
+      var solid = null;
+      function onScroll() {
+        var y = window.scrollY || root.scrollTop || document.body.scrollTop || 0;
+        var next = y > 8;
+        if (next !== solid) { solid = next; header.classList.toggle("scrolled", next); }
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    } catch (e) {
+      document.documentElement.classList.remove("js-nav");
+    }
+  }
 
   /* ===== forms: real submission to /api/form (Vercel function → Resend) ===== */
   function initForms() {
