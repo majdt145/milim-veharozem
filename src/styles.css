@@ -233,12 +233,18 @@ footer.site a:hover{color:var(--gold)}
   .hero .lead{margin-inline:auto} .hero-cta,.hero-meta{justify-content:center}
   .hero-art{margin-top:8px} .hero-art .ph{height:300px}
   .tst-grid{grid-template-columns:1fr}
-  .journey{grid-template-columns:1fr;gap:34px;max-width:340px;margin-inline:auto}
-  /* drop the single full-height line; draw a segment per step so the path STOPS at the last node */
+  /* journey: COMPACT vertical path — smaller nodes + tighter gap */
+  .journey{grid-template-columns:1fr;gap:20px;max-width:320px;margin-inline:auto}
   .journey::before{display:none}
-  .jstep:not(:last-child)::after{content:"";position:absolute;top:44px;inset-inline-start:calc(50% - 1.5px);width:0;height:calc(100% - 10px);border-inline-start:3px dashed rgba(154,56,84,.28);z-index:-1}
+  .jnode{width:62px;height:62px;margin-bottom:10px}
+  .jnode .ico{width:26px;height:26px}
+  .jbadge{width:24px;height:24px;font-size:12px}
+  .jstep h3{font-size:16.5px;margin-bottom:3px}
+  .jstep p{font-size:13px;max-width:30ch}
+  .jstep:not(:last-child)::after{content:"";position:absolute;top:34px;inset-inline-start:calc(50% - 1.5px);width:0;height:calc(100% - 8px);border-inline-start:3px dashed rgba(154,56,84,.28);z-index:-1}
   .age-grid{grid-template-columns:repeat(2,1fr)}
-  .why .wrap,.cta .wrap{grid-template-columns:1fr} .why img{height:260px}
+  .why .wrap{grid-template-columns:1fr;gap:20px} .why img{height:200px}
+  .cta .wrap{grid-template-columns:1fr;gap:22px;padding:34px 18px}
   .schools .wrap{flex-direction:column;text-align:center}
   footer.site .top{grid-template-columns:1fr 1fr}
   .mbar{display:flex} body{padding-bottom:56px}
@@ -395,9 +401,13 @@ footer.site a:hover{color:var(--gold)}
    concise copy, comfortable actions, and tidy 2×2 stats (not a messy wrap row).
    ============================================ */
 @media(max-width:700px){
-  /* the global section{padding:62px 0} leaks onto the hero on TOP of the
-     wrap's own padding — a 62px dead band above the logo that pushed the
-     CTAs off the first screen. Zero it on mobile (the wrap owns spacing). */
+  /* COMPACT: trim the generous 62px section rhythm on phones so every
+     section fits tighter (hero zeroed separately below — its wrap owns spacing). */
+  section{padding:40px 0}
+  .sec-head{margin-bottom:24px}
+  /* the global section padding leaks onto the hero on TOP of the wrap's own
+     padding — a dead band above the logo that pushed the CTAs off the first
+     screen. Zero it on mobile (the wrap owns spacing). */
   .hero{padding:0}
   /* tight vertical rhythm so the primary CTAs land above the fold on first
      paint (even on ~690px-usable phones with the browser URL bar showing) */
@@ -544,22 +554,33 @@ footer.site a:hover{color:var(--gold)}
   .svc-piece:nth-child(odd) .svc-tab{bottom:-16px;inset-inline-end:28px;transform:rotate(-6deg)}
   .svc-piece:nth-child(even) .svc-tab{top:-16px;inset-inline-start:28px;transform:rotate(7deg)}
 }
+/* phones: COMPACT — keep TWO puzzle pieces per row (denser board) with
+   smaller chips + text, so the six treatments read in 3 tidy rows. */
 @media(max-width:700px){
-  .svc-board{grid-template-columns:1fr;gap:26px;max-width:440px}
-  .svc-piece:nth-child(even),.svc-piece:nth-child(odd){transform:none}
-  .svc-piece:nth-child(odd){transform:rotate(-.7deg)}
-  .svc-piece:nth-child(even){transform:rotate(.7deg)}
+  .svc-board{grid-template-columns:repeat(2,1fr);gap:16px 12px;max-width:none}
+  .svc-piece{padding:16px 14px 15px}
+  .svc-piece:nth-child(n){transform:none}
+  .svc-piece:nth-child(even){transform:translateY(10px)}
+  .svc-piece:nth-child(odd){transform:rotate(-.5deg)}
   .svc-piece:hover{transform:translateY(-3px) rotate(0)}
-  /* vertical stack: tabs alternate sides down the column, pointing down
-     to the next piece so the chain still reads as connected */
-  .svc-piece .svc-tab{top:auto!important;bottom:-17px!important}
-  .svc-piece:nth-child(odd) .svc-tab{inset-inline-start:30px!important;inset-inline-end:auto!important;transform:rotate(6deg)}
-  .svc-piece:nth-child(even) .svc-tab{inset-inline-end:30px!important;inset-inline-start:auto!important;transform:rotate(-6deg)}
-  .svc-piece:last-child .svc-tab{display:none} /* nothing below the last */
+  .svc-ic{width:44px;height:44px;border-radius:12px;margin-bottom:9px}
+  .svc-ic .ico{width:23px;height:23px}
+  .svc-piece h3{font-size:15px;margin-bottom:4px;line-height:1.2}
+  .svc-piece p{font-size:12.5px;line-height:1.45;min-height:0}
+  .svc-age{margin-top:10px;font-size:11.5px;padding:4px 11px}
+  .svc-tab{width:30px;height:30px}
+  .svc-piece:nth-child(3n+1) .svc-tab,.svc-piece:nth-child(3n+2) .svc-tab,.svc-piece:nth-child(3n) .svc-tab{inset:auto}
+  .svc-piece:nth-child(odd) .svc-tab{bottom:-13px;inset-inline-end:22px;transform:rotate(-6deg)}
+  .svc-piece:nth-child(even) .svc-tab{top:-13px;inset-inline-start:22px;transform:rotate(7deg)}
 }
 @media(max-width:520px){
-  .svc-board{max-width:340px}
-  .svc-piece{padding:22px 20px 20px}
+  .svc-board{gap:14px 10px}
+  .svc-piece{padding:14px 12px 13px}
+  .svc-tab{width:26px;height:26px}
+}
+@media(max-width:360px){
+  .svc-piece h3{font-size:14px}
+  .svc-piece p{font-size:12px}
 }
 
 /* soft tints per treatment hue — tint fill + saturated icon chip + accent.
@@ -603,15 +624,6 @@ footer.site a:hover{color:var(--gold)}
 @media(max-width:520px){
   .svc-acc>summary{padding-inline-start:54px}
   .svc-idx{inset-inline-start:16px;font-size:13.5px;min-width:20px}
-}
-
-/* ---------------------------------------------------------------
-   3) CTA — WhatsApp glyph is inline SVG (matches .ico stroke style)
-   --------------------------------------------------------------- */
-.svc-wa-ico{
-  width:20px;height:20px;flex-shrink:0;
-  stroke:currentColor;fill:none;stroke-width:2;
-  stroke-linecap:round;stroke-linejoin:round;
 }
 
 /* ============================================================
@@ -743,21 +755,27 @@ html.anim .tm-member{opacity:1}
   html.anim .tm-cluster > .tm-member:nth-child(2n){animation-delay:.1s}
 }
 
-/* Single column ≤700px — flatten the stagger entirely */
+/* ≤700px — COMPACT: two members per row, avatar-over-text mini-cards,
+   so the roster reads dense (2 per row) instead of 19 tall stacked rows. */
 @media (max-width:700px){
-  .tm-cluster{grid-template-columns:1fr;row-gap:32px}
+  .tm-cluster{grid-template-columns:repeat(2,1fr);column-gap:16px;row-gap:22px}
   .tm-cluster > .tm-member{margin-block-start:0 !important}
-  .tm-body p{max-width:46ch}
-  .tm-divide{width:min(260px,72%);margin:34px auto 30px}
+  .tm-member{flex-direction:column;align-items:center;text-align:center;gap:9px}
+  .tm-avatar{width:62px;height:62px}
+  .tm-member[data-lg] .tm-avatar{width:70px;height:70px}
+  .tm-initials{font-size:19px}
+  .tm-member[data-lg] .tm-initials{font-size:21px}
+  .tm-body{padding-block-start:0}
+  .tm-body h3{font-size:15.5px;line-height:1.2}
+  .tm-role{font-size:12px;margin:3px 0 5px}
+  .tm-body p{font-size:12.5px;line-height:1.5;max-width:32ch;margin-inline:auto}
+  .tm-divide{width:min(220px,80%);margin:24px auto 20px}
+  .tm-page .group-head{margin:24px 0 16px}
 }
 
-@media (max-width:520px){
-  .tm-member{gap:14px}
-  .tm-avatar{width:76px;height:76px}
-  .tm-member[data-lg] .tm-avatar{width:88px;height:88px}
-  .tm-initials{font-size:22px}
-  .tm-member[data-lg] .tm-initials{font-size:25px}
-  .tm-page .group-head{margin:26px 0 20px}
+@media (max-width:360px){
+  .tm-cluster{column-gap:12px}
+  .tm-body p{font-size:12px}
 }
 
 /* ============================================================
@@ -907,23 +925,31 @@ html.anim .ws-flyer:hover{
   .ws-f4{margin-block-start:-10px}
   .ws-f3{margin-block-start:20px}
 }
-/* phones: single column, rotations halved, no negative offsets, readable */
+/* phones: COMPACT — keep a 2-col board so the two small flyers sit side by
+   side; the featured poster + the last flyer span full width for rhythm. */
 @media(max-width:700px){
-  .ws-board{grid-template-columns:1fr;gap:24px;max-width:420px;padding-top:8px}
-  .ws-f1{grid-column:auto}
-  .ws-f3,.ws-f4{margin-block-start:0}
-  .ws-f1{--rot:-1.1deg} .ws-f2{--rot:.8deg}
-  .ws-f3{--rot:-.6deg} .ws-f4{--rot:1deg}
-  /* the featured flyer stacks like the rest on a narrow screen */
-  .ws-f1{display:block;padding:30px 24px 26px}
-  .ws-f1 .ws-ic{width:70px;height:70px;grid-row:auto;margin-bottom:16px}
-  .ws-f1 .ws-ic .ico{width:34px;height:34px}
-  .ws-f1 h3{font-size:21px} .ws-f1 p{font-size:15px}
+  .ws-board{grid-template-columns:1fr 1fr;gap:15px 13px;max-width:none;padding:8px 2px 4px}
+  .ws-f1,.ws-f4{grid-column:1 / -1}
+  .ws-f3{margin-block-start:12px}
+  .ws-f4{margin-block-start:0}
+  .ws-f1{--rot:-1.1deg} .ws-f2{--rot:.8deg} .ws-f3{--rot:-.6deg} .ws-f4{--rot:1deg}
+  .ws-flyer{padding:16px 15px 15px}
+  .ws-ic{width:50px;height:50px;border-radius:14px;margin-bottom:10px}
+  .ws-ic .ico{width:26px;height:26px}
+  .ws-flyer h3{font-size:16px;margin-bottom:5px}
+  .ws-flyer p{font-size:12.5px;line-height:1.45}
+  .ws-age{margin-top:10px;font-size:11.5px;padding:7px 12px}
+  .ws-tape{width:74px;height:24px}
+  /* featured (f1) + f4 span full width, stay vertical but a touch bigger */
+  .ws-f1{display:block;padding:18px 18px 16px}
+  .ws-f1 .ws-ic{width:56px;height:56px;grid-row:auto;margin-bottom:12px}
+  .ws-f1 .ws-ic .ico{width:30px;height:30px}
+  .ws-f1 h3{font-size:19px} .ws-f1 p{font-size:14px}
   .ws-sheet{transform:rotate(0deg)}
 }
-@media(max-width:520px){
-  .ws-board{max-width:340px}
-  .ws-tape{width:92px}
+@media(max-width:360px){
+  .ws-flyer h3{font-size:15px}
+  .ws-flyer p{font-size:12px}
 }
 
 /* ============================================================
@@ -1078,41 +1104,55 @@ html.anim .ct-stop:hover .ct-pin{
   .ct-card{max-width:26ch}
 }
 
-/* phones: the route runs VERTICALLY down the page — pins stacked,
-   a dashed line connecting each stop to the next. */
+/* phones: COMPACT horizontal timeline — a small pin on the start side with
+   the text beside it, so all three stops fit on ONE screen together.
+   A dashed line runs down through the pin centres connecting the stops. */
 @media (max-width:700px){
   .ct-stops{
     grid-template-columns:1fr;
-    gap:30px;
-    max-width:360px;
-    padding-top:6px;
+    gap:16px;
+    max-width:440px;
+    padding-top:4px;
   }
-  .ct-stops::before{display:none}   /* horizontal line off; per-stop connectors on */
+  .ct-stops::before{display:none}   /* horizontal desktop line off */
 
-  /* reset the desktop height-nudges; give a gentle side sway instead */
+  /* reset desktop nudges; every stop becomes a compact horizontal row */
   .ct-s1,.ct-s2,.ct-s3{margin-block-start:0}
-  .ct-s1 .ct-pin{--pin:96px}
-  .ct-s2 .ct-pin{--pin:88px}
-  .ct-s3 .ct-pin{--pin:92px}
+  .ct-stop{
+    flex-direction:row;
+    align-items:flex-start;
+    text-align:start;
+    gap:14px;
+  }
+  .ct-s1 .ct-pin,.ct-s2 .ct-pin,.ct-s3 .ct-pin{--pin:58px}
+  .ct-pin{margin-bottom:0}
+  .ct-pin::after{inset:6px}
+  .ct-num{width:23px;height:23px;font-size:12px;border-width:2px;top:-3px;inset-inline-end:-3px}
 
-  /* vertical dashed connector from each stop's pin down to the next */
+  /* text column beside the pin, tightened up */
+  .ct-card{flex:1;max-width:none;min-width:0;padding-top:2px}
+  .ct-card h3{font-size:19px;margin-bottom:4px}
+  .ct-row{font-size:14px;margin-bottom:3px}
+  .ct-wa{margin-top:9px;padding-block:8px;padding-inline:16px;font-size:14px}
+
+  /* dashed connector down the pin column (start side), pin centre = 29px */
   .ct-stop:not(:last-child)::after{
     content:"";
     position:absolute;
-    top:48px;                         /* ~pin centre */
-    inset-inline-start:calc(50% - 1.5px);
+    top:60px;                          /* just below this pin */
+    inset-inline-start:27px;           /* ~pin centre (58/2) */
     width:0;
-    height:calc(100% + 30px);         /* span the gap to the next pin */
+    height:calc(100% - 44px);          /* reach the next pin's top (gap 16) */
     border-inline-start:3px dashed rgba(154,56,84,.26);
     z-index:-1;
   }
 }
 
 @media (max-width:520px){
-  .ct-stops{gap:26px;max-width:320px}
-  .ct-card h3{font-size:20px}
-  .ct-row{font-size:14.5px}
-  .ct-stop:not(:last-child)::after{top:44px}
+  .ct-stops{gap:14px;max-width:none}
+  .ct-stop{gap:12px}
+  .ct-card h3{font-size:18px}
+  .ct-row{font-size:13.5px}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -1319,22 +1359,32 @@ html.anim .jb-badge{opacity:1}
   .jb-rack > .jb-badge:nth-child(even){margin-block-start:22px}
 }
 
-/* phones: single column, no vertical offset, rotations halved for legibility */
+/* phones: COMPACT — keep TWO badges per row (denser board), smaller band +
+   text, gentle rotations. The apply form (jb-board) stays full width below. */
 @media (max-width:700px){
-  .jb-rack{grid-template-columns:1fr;gap:24px;max-width:440px;margin-inline:auto}
-  .jb-rack > .jb-badge:nth-child(even){margin-block-start:0}
+  .jb-rack{grid-template-columns:1fr 1fr;gap:16px 13px;padding:10px 2px 4px}
+  .jb-rack > .jb-badge:nth-child(even){margin-block-start:14px}
   .jb-c1{--rot:-.8deg} .jb-c2{--rot:.7deg} .jb-c3{--rot:-.6deg} .jb-c4{--rot:.9deg}
   .jb-c5{--rot:-1deg}  .jb-c6{--rot:.6deg} .jb-c7{--rot:-.7deg} .jb-c8{--rot:1deg}
+  .jb-badge{padding-bottom:15px}
+  .jb-band{height:38px}
+  .jb-clip{inset-inline-start:15px;width:25px;height:21px;top:-8px}
+  .jb-body{padding:11px 13px 0}
+  .jb-eyebrow{font-size:9.5px;letter-spacing:.07em;padding-bottom:4px}
+  .jb-body h3{font-size:14.5px;line-height:1.22;padding-bottom:7px}
+  .jb-body .meta{font-size:11.5px;margin-top:7px;line-height:1.4}
+  .jb-loc{font-size:11px;padding:5px 9px;margin-top:9px}
 }
 
 @media (max-width:520px){
-  .jb-rack{max-width:340px;padding-inline:0}
-  .jb-badge{border-radius:14px}
-  .jb-band{height:46px}
-  .jb-body{padding:14px 18px 0}
-  .jb-body h3{font-size:17.5px}
+  .jb-rack{gap:14px 11px}
   .jb-board{padding:16px 10px 12px}
   .jb-metal-clip{width:104px;inset-inline-start:calc(50% - 52px)}
+}
+
+@media (max-width:360px){
+  .jb-body h3{font-size:13.5px}
+  .jb-body .meta{font-size:11px}
 }
 
 /* ============================================================
@@ -1546,11 +1596,12 @@ html.anim .sc-line{transition:transform .2s cubic-bezier(.2,.75,.25,1)}
     align-items:center;          /* wrap-friendly on narrow screens */
   }
   .sc-sticker{min-width:50px;font-size:12.5px;padding:6px 8px}
-  .sc-entry b{font-size:15.5px}
-  .sc-desc{font-size:13.5px}
+  .sc-entry b{font-size:15px}
+  .sc-desc{font-size:13px}
   .sc-prev.acc{width:auto;margin-inline-start:0}
   .sc-paper .prose.sc-prose{padding-inline-start:16px}
-  .sc-lead{font-size:17px}
+  .sc-lead{font-size:15.5px;line-height:1.5}
+  .sc-prose p{font-size:14.5px;line-height:1.55;margin-bottom:11px}
 }
 
 @media (max-width:520px){
