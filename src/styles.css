@@ -216,14 +216,6 @@ footer.site a:hover{color:var(--gold)}
 
 /* program list */
 
-/* mobile sticky CTA */
-.mbar{display:none;position:fixed;bottom:0;inset-inline:0;z-index:80;background:#fff;border-top:1px solid var(--line);padding:6px 10px;gap:8px;box-shadow:0 -6px 20px rgba(52,40,47,.10);transition:transform .28s ease}
-.mbar a{flex:1;justify-content:center;padding:9px 8px;font-size:14.5px;min-height:40px}
-/* smart bar: slides away while reading (scroll down), returns on scroll up
-   or when scrolling stops — the call button never covers content for long */
-.mbar.hide{transform:translateY(110%)}
-@media(prefers-reduced-motion:reduce){.mbar{transition:none}}
-
 @media(max-width:900px){
   nav.main ul{display:none}
   nav.main ul.open{display:flex;flex-direction:column;position:absolute;inset-inline:0;top:100%;background:#fff;border-bottom:1px solid var(--line);padding:16px 22px;gap:14px;box-shadow:var(--shadow);font-size:17px}
@@ -247,7 +239,6 @@ footer.site a:hover{color:var(--gold)}
   .cta .wrap{grid-template-columns:1fr;gap:22px;padding:34px 18px}
   .schools .wrap{flex-direction:column;text-align:center}
   footer.site .top{grid-template-columns:1fr 1fr}
-  .mbar{display:flex} body{padding-bottom:56px}
 }
 @media(max-width:520px){ footer.site .top{grid-template-columns:1fr} }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto;animation:none!important}}
@@ -1940,7 +1931,7 @@ html.anim .pv-contact-row:hover{transform:translateY(-2px);box-shadow:var(--shad
 /* =========================================================================
    מילים וחרוזים — Accessibility widget (aw-) + Cookie banner (ck-)
    Site-wide add-on. Prefixed, RTL-safe (logical props), own media queries.
-   z-index: skip-link 200 > widget 90 > banner 85 > mbar 80 > header 60.
+   z-index: skip-link 200 > widget 90 > banner 85 > header 60.
    ========================================================================= */
 
 /* ---- html-level preference classes (applied pre-paint + by JS) ---------- */
@@ -1950,17 +1941,23 @@ html.aw-fs2 body{zoom:1.25}
 
 /* Dark contrast + grayscale — composed so BOTH can be on together.
    Photos/media are re-inverted so they stay natural under dark mode. */
-html.aw-dark body{filter:invert(1) hue-rotate(180deg);background:#000}
-html.aw-gray body{filter:grayscale(1)}
-html.aw-dark.aw-gray body{filter:invert(1) hue-rotate(180deg) grayscale(1);background:#000}
-html.aw-dark body img,
-html.aw-dark body video,
-html.aw-dark body picture,
-html.aw-dark body [style*="background-image"]{filter:invert(1) hue-rotate(180deg)}
-html.aw-dark.aw-gray body img,
-html.aw-dark.aw-gray body video,
-html.aw-dark.aw-gray body picture,
-html.aw-dark.aw-gray body [style*="background-image"]{filter:invert(1) hue-rotate(180deg) grayscale(1)}
+/* Contrast/grayscale filters go on the .aw-page WRAPPER, never on <body>:
+   a filter on an ancestor becomes the containing block for position:fixed
+   descendants, which would rip the a11y button/panel + cookie banner out of
+   the viewport and drop them at the end of the page. The fixed controls live
+   OUTSIDE .aw-page, so they stay put (and readable in their own colours). */
+html.aw-dark body{background:#000}
+html.aw-dark .aw-page{filter:invert(1) hue-rotate(180deg)}
+html.aw-gray .aw-page{filter:grayscale(1)}
+html.aw-dark.aw-gray .aw-page{filter:invert(1) hue-rotate(180deg) grayscale(1)}
+html.aw-dark .aw-page img,
+html.aw-dark .aw-page video,
+html.aw-dark .aw-page picture,
+html.aw-dark .aw-page [style*="background-image"]{filter:invert(1) hue-rotate(180deg)}
+html.aw-dark.aw-gray .aw-page img,
+html.aw-dark.aw-gray .aw-page video,
+html.aw-dark.aw-gray .aw-page picture,
+html.aw-dark.aw-gray .aw-page [style*="background-image"]{filter:invert(1) hue-rotate(180deg) grayscale(1)}
 
 /* Highlight links */
 html.aw-links a:not(.btn){text-decoration:underline!important;text-underline-offset:2px;
@@ -2090,10 +2087,10 @@ html.anim .ck-banner{animation:ck-rise .28s cubic-bezier(.2,.75,.25,1) both}
   .aw-panel{width:320px}
 }
 @media(max-width:700px){
-  /* sit ABOVE the sticky bottom bar (~56px) */
-  .aw-btn{bottom:68px;inset-inline-end:14px}
-  .aw-panel{bottom:132px;inset-inline-end:14px}
-  .ck-banner{bottom:64px;width:calc(100vw - 24px);padding:14px 16px}
+  .aw-btn{bottom:16px;inset-inline-end:14px}
+  .aw-panel{bottom:80px;inset-inline-end:14px}
+  /* keep the banner clear of the floating widget button (bottom-inline-end) */
+  .ck-banner{bottom:16px;width:calc(100vw - 24px);padding:14px 16px;padding-inline-end:76px}
 }
 @media(max-width:520px){
   .aw-btn{width:52px;height:52px}
