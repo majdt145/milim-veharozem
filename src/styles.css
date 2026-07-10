@@ -1431,20 +1431,24 @@ html.anim .jb-badge{opacity:1}
   opacity:.7;
 }
 
-/* ---- spiral punch-holes running down the binding edge ---- */
-.sc-spiral{
+/* ---- spiral punch-holes running down the binding edge ----
+   Drawn as a REPEATING CSS pattern (fixed-size cells), never a stretched
+   SVG — so the holes stay perfect circles at every sheet height, every
+   screen size and in every tab/panel. The old inline SVG is hidden. */
+.sc-spiral,.sc7-spiral{
   position:absolute;
   inset-block:0;
   inset-inline-start:8px;
   width:18px;
-  color:var(--peach);
+  background-image:radial-gradient(circle closest-side at center,
+      #f4e3d5 0 4.4px,
+      rgba(52,40,47,.16) 4.4px 5.4px,
+      transparent 5.9px);
+  background-size:18px 60px;      /* one hole per fixed 60px cell */
+  background-repeat:repeat-y;
+  background-position:center top 18px;
 }
-.sc-spiral svg{width:18px;height:100%}
-.sc-spiral circle{
-  fill:#f4e3d5;
-  stroke:rgba(52,40,47,.16);
-  stroke-width:1.4;
-}
+.sc-spiral svg,.sc7-spiral svg{display:none}
 
 /* ---- the ruled entries: sit ON the lines, no individual boxes ---- */
 .sc-lines{list-style:none;margin:0;padding:0}
@@ -1545,8 +1549,10 @@ html.anim .sc-line{transition:transform .2s cubic-bezier(.2,.75,.25,1)}
         180deg, transparent 0 51px, rgba(0,150,131,.13) 51px 52px);
   }
   .sc-sheet::before{inset-inline-start:38px}
-  .sc-spiral{inset-inline-start:6px;width:14px}
-  .sc-spiral svg{width:14px}
+  .sc-spiral{inset-inline-start:6px;width:14px;
+    background-image:radial-gradient(circle closest-side at center,
+        #f4e3d5 0 3.5px, rgba(52,40,47,.16) 3.5px 4.4px, transparent 4.9px);
+    background-size:14px 52px;background-position:center top 16px}
   .sc-line{
     gap:11px;
     min-height:52px;
@@ -1563,8 +1569,10 @@ html.anim .sc-line{transition:transform .2s cubic-bezier(.2,.75,.25,1)}
 @media (max-width:520px){
   .sc-sheet{padding-inline:42px 14px}
   .sc-sheet::before{inset-inline-start:32px}
-  .sc-spiral{inset-inline-start:5px;width:12px}
-  .sc-spiral svg{width:12px}
+  .sc-spiral{inset-inline-start:5px;width:12px;
+    background-image:radial-gradient(circle closest-side at center,
+        #f4e3d5 0 3px, rgba(52,40,47,.16) 3px 3.9px, transparent 4.4px);
+    background-size:12px 48px;background-position:center top 14px}
   .sc-sticker{min-width:46px}
   .sc-entry b{font-size:15px}
 }
@@ -2551,20 +2559,8 @@ html.anim .rvs-cta:hover{
   background:var(--pink);
   opacity:.7;
 }
-/* spiral punch-holes down the binding edge */
-.sc7-spiral{
-  position:absolute;
-  inset-block:0;
-  inset-inline-start:8px;
-  width:18px;
-  color:var(--peach);
-}
-.sc7-spiral svg{width:18px;height:100%}
-.sc7-spiral circle{
-  fill:#f4e3d5;
-  stroke:rgba(52,40,47,.16);
-  stroke-width:1.4;
-}
+/* spiral punch-holes: shared fixed-cell CSS pattern defined with .sc-spiral
+   (see the notebook section) — no stretched SVG, circles stay round. */
 
 /* ---- stage sub-headers (h3): a small label written across the sheet ---- */
 .sc7-stage{
@@ -2770,8 +2766,10 @@ html.anim .sc7-tab{transition:background .18s ease,color .18s ease,transform .18
   .sc7-tab{min-height:38px;padding:8px 15px 13px;font-size:13.5px}
   .sc7-sheet{padding:14px 48px 18px 18px}
   .sc7-sheet::before{inset-inline-start:38px}
-  .sc7-spiral{inset-inline-start:6px;width:14px}
-  .sc7-spiral svg{width:14px}
+  .sc7-spiral{inset-inline-start:6px;width:14px;
+    background-image:radial-gradient(circle closest-side at center,
+        #f4e3d5 0 3.5px, rgba(52,40,47,.16) 3.5px 4.4px, transparent 4.9px);
+    background-size:14px 52px;background-position:center top 16px}
   .sc7-line{gap:11px;min-height:50px}
   .sc7-sticker{min-width:52px;font-size:12.5px;padding:6px 8px}
   .sc7-entry b{font-size:15px}
@@ -2789,8 +2787,10 @@ html.anim .sc7-tab{transition:background .18s ease,color .18s ease,transform .18
   .sc7-tab{padding:8px 12px 12px;font-size:12.5px}
   .sc7-sheet{padding-inline:42px 14px}
   .sc7-sheet::before{inset-inline-start:32px}
-  .sc7-spiral{inset-inline-start:5px;width:12px}
-  .sc7-spiral svg{width:12px}
+  .sc7-spiral{inset-inline-start:5px;width:12px;
+    background-image:radial-gradient(circle closest-side at center,
+        #f4e3d5 0 3px, rgba(52,40,47,.16) 3px 3.9px, transparent 4.4px);
+    background-size:12px 48px;background-position:center top 14px}
   .sc7-sticker{min-width:48px}
   .sc7-entry b{font-size:15px}
   .sc7-note{padding:24px 16px 18px}
