@@ -2170,3 +2170,406 @@ html.nav-no-anim header.site{transition:none!important}
   .tm-photo{box-shadow:0 0 0 2px var(--g,var(--line)),
                        0 5px 12px rgba(52,40,47,.14)}
 }
+
+/* ============================================================
+   V2 (Mostafa review): floating parent-message band ("מסר צף")
+   Placed AFTER each domain page's hero; sticks under the header
+   while the page scrolls. Slim, calm, dismissible-free.
+   ============================================================ */
+.slg-band{position:sticky;top:var(--nav-h,76px);z-index:50;text-align:center;
+  background:linear-gradient(90deg,var(--cream),#fff 50%,var(--cream));
+  border-block:1px solid var(--line);padding:9px 16px;
+  font-weight:800;font-size:15px;color:var(--burgundy)}
+.slg-band svg{display:inline-block;vertical-align:-3px;width:16px;height:16px;
+  stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+  margin-inline-end:7px}
+@media(max-width:700px){.slg-band{font-size:13.5px;padding:8px 12px}}
+
+/* ============================================================
+   V2 review-a — index.html hero, 4-stop route, partners, WA float
+   All new classes prefixed rv-. Appended AFTER src/styles.css so
+   these rules win on equal/greater specificity.
+   ============================================================ */
+
+/* ---- Task 2: hero trust chips (slim row above the h1) ---- */
+.rv-trust{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:14px 0 6px;
+}
+.rv-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:var(--cream);
+  color:var(--ink);              /* dark ink on cream ≫ 4.5:1 */
+  border-radius:30px;
+  padding:6px 13px;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.25;
+}
+.rv-chip svg{
+  width:14px;
+  height:14px;
+  flex-shrink:0;
+  fill:none;
+  stroke:var(--teal-d);
+  stroke-width:2.5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+@media (max-width:520px){
+  .rv-trust{gap:6px;margin:12px 0 4px}
+  .rv-chip{font-size:12px;padding:5px 11px}
+}
+
+/* ---- Task 3: homepage route with a 4th stop ---- */
+.ct-stops.rv-four{grid-template-columns:repeat(4,1fr)}
+.ct-stops.rv-four::before{inset-inline:12.5%}   /* line spans between outer pins of 4 */
+/* new gold stop — small hand-placed nudge + pin size */
+.ct-stops.rv-four .rv-s4{margin-block-start:20px}
+.ct-stops.rv-four .rv-s4 .ct-pin{--pin:94px}
+
+/* tablet: keep 4 across, shrink the new pin to match the others */
+@media (max-width:900px){
+  .ct-stops.rv-four .rv-s4{margin-block-start:16px}
+  .ct-stops.rv-four .rv-s4 .ct-pin{--pin:84px}
+}
+
+/* phones ≤700: force the existing vertical single-column route.
+   (.ct-stops.rv-four has higher specificity than the site's
+   `@media(max-width:700px) .ct-stops{grid-template-columns:1fr}`,
+   so without this override it would stay 4-across and overflow.) */
+@media (max-width:700px){
+  .ct-stops.rv-four{grid-template-columns:1fr}
+  .ct-stops.rv-four .rv-s4{margin-block-start:0}
+  .ct-stops.rv-four .rv-s4 .ct-pin{--pin:58px}   /* match connector maths (inset 27px) */
+}
+
+/* ---- Task 4: partner strip — link chips get affordance ---- */
+.partners a.chip{
+  color:var(--burgundy);
+  text-decoration:none;
+  cursor:pointer;
+}
+html.anim .partners a.chip{transition:background .2s ease}
+.partners a.chip:hover{background:#f6dcc4;text-decoration:underline}
+.partners a.chip:focus-visible{
+  outline:2px solid var(--burgundy);
+  outline-offset:2px;
+}
+/* many chips now — trim padding a touch so rows wrap tidily on mobile 2-col */
+@media (max-width:700px){
+  .partners .chip{padding:8px 6px;font-size:12.5px}
+}
+
+/* ---- Task 7: site-wide floating WhatsApp button ---- */
+.rv-wa{
+  position:fixed;
+  bottom:16px;
+  inset-inline-start:16px;        /* opposite corner from the a11y circle */
+  z-index:88;
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:#1fae53;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 6px 20px rgba(52,40,47,.28);
+  -webkit-tap-highlight-color:transparent;
+}
+.rv-wa svg{
+  width:30px;
+  height:30px;
+  fill:currentColor;
+}
+html.anim .rv-wa{transition:transform .2s ease, box-shadow .2s ease}
+html.anim .rv-wa:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 26px rgba(52,40,47,.34);
+}
+.rv-wa:focus-visible{
+  outline:3px solid var(--gold);
+  outline-offset:3px;
+}
+@media (max-width:700px){
+  .rv-wa{width:52px;height:52px;bottom:16px}
+  .rv-wa svg{width:28px;height:28px}
+  /* clear the cookie-banner text past the WA button (mirrors the site's
+     padding-inline-end:76px reservation for the a11y button) */
+  .ck-banner{padding-inline-start:76px}
+}
+
+/* ============================================================
+   Review-B (V2, Mostafa review) — services page parent-marketing.
+   Owner: review-b agent. New classes prefixed `rvs-`.
+   Appended to dist/styles.css at build time (do NOT touch src/styles.css).
+   Depends on per-tile tokens already in styles.css: --pc, --tint.
+   ============================================================ */
+
+/* --- Task 2: "למי זה מתאים?" fit-line inside each puzzle piece ---
+   NB: `.svc-piece p` in styles.css is (0,1,1) and sets 14.5px + min-height:44px,
+   so the fit-line rules are scoped `.svc-piece .rvs-fit` (0,2,0) to win. */
+.svc-piece .rvs-fit{
+  font-size:13.5px;
+  color:#4a3e44;              /* ≥8:1 on every tile tint */
+  line-height:1.5;
+  min-height:0;               /* cancel .svc-piece p min-height */
+  margin-top:4px;
+}
+.svc-piece .rvs-fit b{
+  font-weight:800;
+  color:var(--pc,var(--burgundy));   /* piece accent lead-in */
+  margin-inline-end:3px;
+}
+
+/* --- Task 3: per-piece CTA — compact accent pill, white text ---
+   inline-flex so it rides inside the rotated tile; ≥44px touch target.
+   All six --pc give white-on-pc ≥4.60:1 (verified). */
+.rvs-cta{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  min-height:44px;
+  max-width:100%;
+  margin-top:10px;
+  padding:8px 16px;
+  border-radius:24px;
+  background:var(--pc,var(--burgundy));
+  color:#fff;
+  font-weight:800;
+  font-size:13px;
+  line-height:1.2;
+  text-align:center;
+  text-decoration:none;
+  border:1px solid rgba(52,40,47,.06);
+  box-shadow:0 6px 15px rgba(52,40,47,.14);
+  box-sizing:border-box;
+}
+.rvs-cta,.rvs-cta:visited{color:#fff}
+
+/* hover lift — fail-open, only under html.anim (matches site convention) */
+html.anim .rvs-cta{
+  transition:transform .18s cubic-bezier(.2,.75,.25,1),box-shadow .18s;
+}
+html.anim .rvs-cta:hover{
+  transform:translateY(-2px);
+  box-shadow:0 11px 22px rgba(52,40,47,.2);
+}
+
+/* --- compact board responsive: keep both new bits tidy on phones --- */
+@media(max-width:700px){
+  .svc-piece .rvs-fit{font-size:12px;line-height:1.45;margin-top:3px}
+  .rvs-cta{
+    display:flex;              /* full-width in the narrow tile — no overflow */
+    width:100%;
+    white-space:normal;        /* let the label wrap instead of overflowing */
+    font-size:12px;
+    padding:8px 12px;
+    margin-top:9px;
+  }
+}
+@media(max-width:360px){
+  .svc-piece .rvs-fit{font-size:11.5px}
+  .rvs-cta{font-size:11.5px}
+}
+
+/* AA fix: darken the bold fit-line lead-in on the two tiles where --pc
+   fell under 4.5:1 against the tile tint (pink 4.38, coral 3.70) */
+.svc-t-pink .rvs-fit b{color:#8f3949}
+.svc-t-coral .rvs-fit b{color:#96410a}
+
+/* ============================================================
+   V2 review-c — schools GPN table · jobs why-us + WA · contact
+   4th branch + nav links. All new classes prefixed rvc-.
+   Appended to dist/styles.css after build. RTL / logical props.
+   ============================================================ */
+
+/* ===== SCHOOLS — GPN תשפ״ז table on the notebook sheet ===== */
+.rvc-nb{position:relative}
+
+/* white paper sheet holding the table + CTAs (matches .sc-sheet feel) */
+.rvc-sheet{
+  position:relative;
+  background:#fffdfb;
+  border-radius:4px 4px 10px 10px;
+  box-shadow:0 14px 34px rgba(52,40,47,.12),0 1px 0 rgba(255,255,255,.7) inset;
+  padding:20px 22px 22px;
+}
+/* horizontal-scroll safety net so the table never overflows the page */
+.rvc-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+.rvc-gpn{
+  width:100%;
+  border-collapse:collapse;
+  text-align:start;
+  color:var(--ink);
+  font-size:15.5px;
+}
+.rvc-gpn thead th{
+  background:var(--teal-d);
+  color:#fff;
+  font-weight:800;
+  font-size:14.5px;
+  text-align:start;
+  padding:12px 14px;
+  white-space:nowrap;
+  border-inline-end:1px solid rgba(255,255,255,.20);
+}
+.rvc-gpn thead th:last-child{border-inline-end:0}
+.rvc-gpn tbody td{
+  padding:12px 14px;
+  border-block-end:1px solid var(--line);
+  vertical-align:middle;
+  line-height:1.4;
+  font-weight:600;
+}
+/* faint zebra within each stage group for scan-ability */
+.rvc-gpn tbody tr:nth-child(even) td{background:rgba(252,238,224,.4)}
+/* a stronger rule between the two stage groups (2nd tbody) */
+.rvc-gpn tbody + tbody{border-block-start:2px solid var(--teal-l)}
+
+/* program code — bold dark-teal, kept LTR-neat, shrink to content */
+.rvc-code{
+  font-weight:900;
+  font-size:14.5px;
+  color:#00695c;                 /* darker teal → ≥4.5:1 on paper */
+  unicode-bidi:plaintext;
+  white-space:nowrap;
+  width:1%;
+}
+/* pending name (client to supply) */
+.rvc-pending{color:var(--muted);font-weight:700}
+
+/* educational-stage cell (rowspan, groups the rows) */
+.rvc-stage{
+  background:var(--cream);
+  color:var(--burgundy);
+  font-weight:800;
+  font-size:14.5px;
+  text-align:center;
+  vertical-align:middle;
+  line-height:1.35;
+  padding:12px;
+  border-inline-start:1px solid var(--line);
+  min-width:9ch;
+}
+.rvc-gpn tbody tr:nth-child(even) td.rvc-stage{background:var(--cream)}
+
+/* the two CTAs under the table */
+.rvc-cta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:18px;
+}
+
+/* one-sentence blurb, styled like the page prose (start-edge accent) */
+.rvc-blurb{
+  max-width:72ch;
+  margin:4px auto 30px;
+  font-size:16.5px;
+  line-height:1.7;
+  color:#473b41;
+  padding-inline-start:22px;
+  border-inline-start:3px solid var(--gold);
+}
+
+/* ===== JOBS — "why work with us" open row + WA quick-apply ===== */
+.rvc-why{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:12px 26px;
+}
+.rvc-why li{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:17px;
+  font-weight:700;
+  color:var(--ink);
+  padding-block:6px;
+}
+.rvc-why-ic{
+  flex-shrink:0;
+  width:28px;height:28px;
+  padding:6px;
+  border-radius:50%;
+  background:#d9f3ef;
+  color:var(--teal-d);
+  stroke:currentColor;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;
+}
+/* WA quick-apply button beside the apply-form heading (sec-head is centred) */
+.rvc-quick{margin-top:16px;display:flex;justify-content:center}
+
+/* ===== CONTACT — 4th branch (שעב) + 4-col route + nav links ===== */
+/* new stop follows the .ct-sN pattern: hand-placed nudge + pin size */
+.ct-s4{margin-block-start:22px}
+.ct-s4 .ct-pin{--pin:94px}
+
+/* 4-column route line-up when the 4th branch is present.
+   (duplicated from the concurrent global rule so this page verifies alone) */
+.ct-stops.rv-four{grid-template-columns:repeat(4,1fr)}
+.ct-stops.rv-four::before{inset-inline:12.5%}
+
+/* nav links row (Waze / Google Maps) under an address */
+.rvc-nav{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  gap:6px 12px;
+  margin-top:8px;
+  font-size:14px;
+}
+.rvc-nav-lbl{color:var(--muted);font-weight:700}
+.rvc-nav a{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  color:var(--teal-d);
+  font-weight:800;
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+.rvc-nav a:hover{color:#00695c}
+.rvc-nav-ic{
+  flex-shrink:0;
+  width:15px;height:15px;
+  stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+}
+
+/* ---- contact responsive: tablet keeps 4 across but tighter ---- */
+@media (max-width:900px){
+  .ct-stops.rv-four{gap:12px}
+  .ct-stops.rv-four .ct-pin{--pin:74px}   /* spec 0,3,0 beats .ct-sN .ct-pin */
+  .ct-stops.rv-four .ct-card{max-width:20ch}
+  .ct-s4{margin-block-start:16px}
+}
+/* phones: fall BACK to the site's single-column vertical timeline.
+   Must out-specify the 900 rv-four rules — same specificity, later in source. */
+@media (max-width:700px){
+  .ct-stops.rv-four{grid-template-columns:1fr;gap:16px}
+  .ct-stops.rv-four .ct-pin{--pin:58px}
+  .ct-s4{margin-block-start:0}
+}
+
+/* ===== shared small-screen tuning for the schools table + jobs ===== */
+@media (max-width:700px){
+  .rvc-sheet{padding:16px 14px 18px}
+  .rvc-gpn{font-size:14.5px}
+  .rvc-gpn thead th,.rvc-gpn tbody td{padding:10px 9px}
+  .rvc-code{font-size:13.5px}
+  .rvc-stage{padding:10px 6px;font-size:12.5px;min-width:7ch}
+  .rvc-blurb{font-size:14.5px;line-height:1.55;padding-inline-start:14px}
+  .rvc-why li{font-size:15.5px}
+  .rvc-why{gap:8px 20px}
+}

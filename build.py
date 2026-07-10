@@ -47,7 +47,7 @@ def jsonld():
     org = {
         "@type": "MedicalOrganization",
         "@id": SITE_URL + "/#org",
-        "name": "מילים וחרוזים",
+        "name": "מילים וחרוזים בע״מ",
         "alternateName": "Milim VeHaruzim",
         "description": "יחידה להתפתחות הילד — אבחון וטיפול רב-תחומי לגיל הרך",
         "url": SITE_URL + "/",
