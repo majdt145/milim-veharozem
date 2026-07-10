@@ -12,126 +12,165 @@ nav: schools
   <p data-he="מילים וחרוזים פועלת כארגון יוזם ופורץ דרך — תוכניות, יוזמות ומרחבי למידה ברמה המקומית והארצית." data-ar="ميليم وحاروزيم تعمل كمنظّمة مبادِرة ورائدة — برامج ومبادرات وفضاءات تعلّم على المستوى المحلي والقطري.">מילים וחרוזים פועלת כארגון יוזם ופורץ דרך — תוכניות, יוזמות ומרחבי למידה ברמה המקומית והארצית.</p>
 </div></section>
 
-<!-- GPN programs — ruled notebook sheet -->
+<!-- GPN programs — ONE ruled notebook, three school-year folder tabs (CSS-only) -->
 <section class="sc-nb-sec"><div class="wrap" style="max-width:880px">
   <div class="group-head"><span class="gi i-teal"><svg class="ico" viewBox="0 0 24 24"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5"/></svg></span><h2 data-he="תוכניות בגפ״ן" data-ar="برامج غِفِن">תוכניות בגפ״ן</h2></div>
 
-  <!-- ===== V2: GPN תשפ״ז — newest year on top, clean table on the sheet ===== -->
-  <div class="sc-nb rvc-nb">
-    <span class="sc-tab" data-he="תשפ״ז" data-ar="السنة الدراسية 2026/27">תשפ״ז</span>
-    <div class="rvc-sheet">
-      <div class="rvc-scroll">
-        <table class="rvc-gpn">
-          <thead>
-            <tr>
-              <th scope="col" data-he="מספר תוכנית" data-ar="رقم البرنامج">מספר תוכנית</th>
-              <th scope="col" data-he="שם התוכנית" data-ar="اسم البرنامج">שם התוכנית</th>
-              <th scope="col" data-he="שלב חינוכי" data-ar="المرحلة التعليمية">שלב חינוכי</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="rvc-code">5592</td>
-              <td data-he="הוראה מותאמת" data-ar="تعليم مُكيَّف">הוראה מותאמת</td>
-              <td class="rvc-stage" rowspan="6" data-he="יסודי" data-ar="ابتدائي">יסודי</td>
-            </tr>
-            <tr>
-              <td class="rvc-code">4336</td>
-              <td data-he="בית ספר חסין" data-ar="مدرسة صامدة">בית ספר חסין</td>
-            </tr>
-            <tr>
-              <td class="rvc-code">33108</td>
-              <td data-he="גרפומוטוריקה — ריפוי בעיסוק" data-ar="الكتابة — علاج وظيفي">גרפומוטוריקה — ריפוי בעיסוק</td>
-            </tr>
-            <tr>
-              <td class="rvc-code">3636</td>
-              <td class="rvc-pending" data-he="שם התוכנית בהמתנה" data-ar="اسم البرنامج قيد الانتظار">—</td>
-            </tr>
-            <tr>
-              <td class="rvc-code">24218</td>
-              <td class="rvc-pending" data-he="שם התוכנית בהמתנה" data-ar="اسم البرنامج قيد الانتظار">—</td>
-            </tr>
-            <tr>
-              <td class="rvc-code">31095</td>
-              <td class="rvc-pending" data-he="שם התוכנית בהמתנה" data-ar="اسم البرنامج قيد الانتظار">—</td>
-            </tr>
-          </tbody>
-          <tbody>
-            <tr>
-              <td class="rvc-code">19274</td>
-              <td class="rvc-pending" data-he="שם התוכנית בהמתנה" data-ar="اسم البرنامج قيد الانتظار">—</td>
-              <td class="rvc-stage" rowspan="5" data-he="חטיבת ביניים וחטיבה עליונה" data-ar="إعدادي وثانوي">חטיבת ביניים וחטיבה עליונה</td>
-            </tr>
-            <tr>
-              <td class="rvc-code">20457</td>
-              <td class="rvc-pending" data-he="שם התוכנית בהמתנה" data-ar="اسم البرنامج قيد الانتظار">—</td>
-            </tr>
-            <tr>
-              <td class="rvc-code">20440</td>
-              <td class="rvc-pending" data-he="שם התוכנית בהמתנה" data-ar="اسم البرنامج قيد الانتظار">—</td>
-            </tr>
-            <tr>
-              <td class="rvc-code">3480</td>
-              <td class="rvc-pending" data-he="שם התוכנית בהמתנה" data-ar="اسم البرنامج قيد الانتظار">—</td>
-            </tr>
-            <tr>
-              <td class="rvc-code">31095</td>
-              <td class="rvc-pending" data-he="שם התוכנית בהמתנה" data-ar="اسم البرنامج قيد الانتظار">—</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  <!-- ===== ONE notebook, three folder tabs. Radios switch panels with pure CSS.
+       Fail-open: if the tab CSS is absent, the three panels simply stack
+       תשפ״ז → תשפ״ו → תשפ״ה. Radios are natively focusable / arrow-switchable. ===== -->
+  <div class="sc7-nb">
+    <input class="sc7-radio" type="radio" name="sc7-year" id="sc7-y27" checked>
+    <input class="sc7-radio" type="radio" name="sc7-year" id="sc7-y26">
+    <input class="sc7-radio" type="radio" name="sc7-year" id="sc7-y25">
 
-      <div class="rvc-cta">
-        <a class="btn btn-gold" href="mailto:melimharozemschools@gmail.com" data-he="לקבלת הצעת מחיר לבית ספר / רשות ›" data-ar="للحصول على عرض سعر لمدرسة / سلطة ›">לקבלת הצעת מחיר לבית ספר / רשות ›</a>
-        <a class="btn btn-wa" href="https://wa.me/972506571203"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:19px;height:19px;fill:currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> <span data-he="וואטסאפ" data-ar="واتساب">וואטסאפ</span></a>
+    <div class="sc7-tabs" role="tablist" aria-label="שנת לימודים" data-aria-he="בחירת שנת לימודים" data-aria-ar="اختيار السنة الدراسية">
+      <label class="sc7-tab" for="sc7-y27" data-he="תשפ״ז" data-ar="السنة الدراسية 2026/27">תשפ״ז</label>
+      <label class="sc7-tab" for="sc7-y26" data-he="תשפ״ו" data-ar="السنة الدراسية 2025/26">תשפ״ו</label>
+      <label class="sc7-tab" for="sc7-y25" data-he="תשפ״ה" data-ar="السنة الدراسية 2024/25">תשפ״ה</label>
+    </div>
+
+    <!-- ===== PANEL תשפ״ז — a register sheet, two stage groups ===== -->
+    <div class="sc7-panel sc7-p27">
+      <div class="sc7-sheet">
+        <span class="sc7-spiral" aria-hidden="true">
+          <svg viewBox="0 0 18 460" preserveAspectRatio="none" focusable="false">
+            <circle cx="9" cy="34" r="5"/><circle cx="9" cy="94" r="5"/><circle cx="9" cy="154" r="5"/>
+            <circle cx="9" cy="214" r="5"/><circle cx="9" cy="274" r="5"/><circle cx="9" cy="334" r="5"/>
+            <circle cx="9" cy="394" r="5"/><circle cx="9" cy="454" r="5"/>
+          </svg>
+        </span>
+
+        <h3 class="sc7-stage">
+          <span class="sc7-stage-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg></span>
+          <span data-he="יסודי" data-ar="ابتدائي">יסודי</span>
+        </h3>
+        <ul class="sc7-lines">
+          <li class="sc7-line">
+            <span class="sc7-sticker">5592</span>
+            <span class="sc7-entry"><b data-he="הוראה מותאמת" data-ar="تعليم مُكيَّف">הוראה מותאמת</b></span>
+          </li>
+          <li class="sc7-line">
+            <span class="sc7-sticker">4336</span>
+            <span class="sc7-entry"><b data-he="בית ספר חסין" data-ar="مدرسة صامدة">בית ספר חסין</b></span>
+          </li>
+          <li class="sc7-line">
+            <span class="sc7-sticker">33108</span>
+            <span class="sc7-entry"><b data-he="גרפומוטוריקה — ריפוי בעיסוק" data-ar="الكتابة — علاج وظيفي">גרפומוטוריקה — ריפוי בעיסוק</b></span>
+          </li>
+          <li class="sc7-line">
+            <span class="sc7-sticker">3636</span>
+            <span class="sc7-entry"><span class="sc7-pending" data-he="השם המלא יעודכן בקרוב" data-ar="الاسم الكامل سيُحدَّث قريبًا">השם המלא יעודכן בקרוב</span></span>
+          </li>
+          <li class="sc7-line">
+            <span class="sc7-sticker">24218</span>
+            <span class="sc7-entry"><span class="sc7-pending" data-he="השם המלא יעודכן בקרוב" data-ar="الاسم الكامل سيُحدَّث قريبًا">השם המלא יעודכן בקרוב</span></span>
+          </li>
+          <li class="sc7-line">
+            <span class="sc7-sticker">31095</span>
+            <span class="sc7-entry"><span class="sc7-pending" data-he="השם המלא יעודכן בקרוב" data-ar="الاسم الكامل سيُحدَّث قريبًا">השם המלא יעודכן בקרוב</span></span>
+          </li>
+        </ul>
+
+        <h3 class="sc7-stage">
+          <span class="sc7-stage-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5"/></svg></span>
+          <span data-he="חטיבת ביניים וחטיבה עליונה" data-ar="إعدادي وثانوي">חטיבת ביניים וחטיבה עליונה</span>
+        </h3>
+        <ul class="sc7-lines">
+          <li class="sc7-line">
+            <span class="sc7-sticker">19274</span>
+            <span class="sc7-entry"><span class="sc7-pending" data-he="השם המלא יעודכן בקרוב" data-ar="الاسم الكامل سيُحدَّث قريبًا">השם המלא יעודכן בקרוב</span></span>
+          </li>
+          <li class="sc7-line">
+            <span class="sc7-sticker">20457</span>
+            <span class="sc7-entry"><span class="sc7-pending" data-he="השם המלא יעודכן בקרוב" data-ar="الاسم الكامل سيُحدَّث قريبًا">השם המלא יעודכן בקרוב</span></span>
+          </li>
+          <li class="sc7-line">
+            <span class="sc7-sticker">20440</span>
+            <span class="sc7-entry"><span class="sc7-pending" data-he="השם המלא יעודכן בקרוב" data-ar="الاسم الكامل سيُحدَّث قريبًا">השם המלא יעודכן בקרוב</span></span>
+          </li>
+          <li class="sc7-line">
+            <span class="sc7-sticker">3480</span>
+            <span class="sc7-entry"><span class="sc7-pending" data-he="השם המלא יעודכן בקרוב" data-ar="الاسم الكامل سيُحدَّث قريبًا">השם המלא יעודכן בקרוב</span></span>
+          </li>
+          <li class="sc7-line">
+            <span class="sc7-sticker">31095</span>
+            <span class="sc7-entry"><span class="sc7-pending" data-he="השם המלא יעודכן בקרוב" data-ar="الاسم الكامل سيُحدَّث قريبًا">השם המלא יעודכן בקרוב</span></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== PANEL תשפ״ו — the signature ruled sheet (content byte-identical) ===== -->
+    <div class="sc7-panel sc7-p26">
+      <div class="sc-sheet">
+        <!-- spiral punch-holes down the binding edge -->
+        <span class="sc-spiral" aria-hidden="true">
+          <svg viewBox="0 0 18 400" preserveAspectRatio="none" focusable="false">
+            <circle cx="9" cy="34" r="5"/><circle cx="9" cy="94" r="5"/><circle cx="9" cy="154" r="5"/>
+            <circle cx="9" cy="214" r="5"/><circle cx="9" cy="274" r="5"/><circle cx="9" cy="334" r="5"/>
+          </svg>
+        </span>
+
+        <ul class="sc-lines">
+          <li class="sc-line">
+            <span class="sc-sticker" aria-hidden="true">20527</span>
+            <span class="sc-entry"><b data-he="תוכנית בינה מלאכותית" data-ar="برنامج الذكاء الاصطناعي">תוכנית בינה מלאכותית</b><span class="sc-desc" data-he="ריאדה וחדשנות בעידן ה-AI" data-ar="ريادة وابتكار في عصر الذكاء الاصطناعي">ריאדה וחדשנות בעידן ה-AI</span></span>
+          </li>
+          <li class="sc-line">
+            <span class="sc-sticker" aria-hidden="true">5592</span>
+            <span class="sc-entry"><b data-he="הוראה מותאמת" data-ar="تعليم مُكيَّف">הוראה מותאמת</b><span class="sc-desc" data-he="התאמת ההוראה לצרכים מגוונים" data-ar="ملاءمة التعليم للاحتياجات المتنوّعة">התאמת ההוראה לצרכים מגוונים</span></span>
+          </li>
+          <li class="sc-line">
+            <span class="sc-sticker" aria-hidden="true">4336</span>
+            <span class="sc-entry"><b data-he="בית ספר חסין" data-ar="مدرسة صامدة">בית ספר חסין</b><span class="sc-desc" data-he="מענים פדגוגיים ורגשיים" data-ar="استجابات تربوية وعاطفية">מענים פדגוגיים ורגשיים</span></span>
+          </li>
+          <li class="sc-line">
+            <span class="sc-sticker" aria-hidden="true">20456</span>
+            <span class="sc-entry"><b data-he="תפקודים ניהוליים" data-ar="الوظائف التنفيذية">תפקודים ניהוליים</b><span class="sc-desc" data-he="פיתוח מיומנויות ויסות ותכנון" data-ar="تطوير مهارات التنظيم والتخطيط">פיתוח מיומנויות ויסות ותכנון</span></span>
+          </li>
+          <li class="sc-line">
+            <span class="sc-sticker" aria-hidden="true">33108</span>
+            <span class="sc-entry"><b data-he="גרפומוטוריקה — ריפוי בעיסוק" data-ar="الكتابة — علاج وظيفي">גרפומוטוריקה — ריפוי בעיסוק</b><span class="sc-desc" data-he="חיזוק מיומנויות הכתיבה" data-ar="تعزيز مهارات الكتابة">חיזוק מיומנויות הכתיבה</span></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ===== PANEL תשפ״ה — previous year, one small sheet (text word-for-word) ===== -->
+    <div class="sc7-panel sc7-p25">
+      <div class="sc7-sheet sc7-sheet-mini">
+        <span class="sc7-spiral" aria-hidden="true">
+          <svg viewBox="0 0 18 120" preserveAspectRatio="none" focusable="false">
+            <circle cx="9" cy="30" r="5"/><circle cx="9" cy="90" r="5"/>
+          </svg>
+        </span>
+        <p class="sc7-prev" data-he="תוכניות גפ״ן שהופעלו בשנת הלימודים הקודמת (תשפ״ה) — בהמשך לתוכניות תשפ״ו שמעליהן." data-ar="برامج غِفِن التي شُغّلت في العام الدراسي السابق — استكمالًا لبرامج هذا العام أعلاه.">תוכניות גפ״ן שהופעלו בשנת הלימודים הקודמת (תשפ״ה) — בהמשך לתוכניות תשפ״ו שמעליהן.</p>
       </div>
     </div>
   </div>
 
-  <p class="rvc-blurb" data-he="מילים וחרוזים פועלת מול בתי ספר ורשויות מקומיות בפריסה ארצית רחבה — מרחבי למידה, תוכניות רגשיות, STEM, מוכנות לכיתה א׳ וגרפומוטוריקה." data-ar="تعمل ميليم وحاروزيم مع المدارس والسلطات المحلية بانتشار واسع في أنحاء البلاد — فضاءات تعلّم، برامج عاطفية، STEM، استعداد للصف الأول والكتابة.">מילים וחרוזים פועלת מול בתי ספר ורשויות מקומיות בפריסה ארצית רחבה — מרחבי למידה, תוכניות רגשיות, STEM, מוכנות לכיתה א׳ וגרפומוטוריקה.</p>
-
-  <div class="sc-nb">
-    <!-- folder tab riveted to the sheet's top corner: the school year -->
-    <span class="sc-tab" data-he="תשפ״ו" data-ar="السنة الدراسية 2025/26">תשפ״ו</span>
-
-    <!-- the ruled paper sheet -->
-    <div class="sc-sheet">
-      <!-- spiral punch-holes down the binding edge -->
-      <span class="sc-spiral" aria-hidden="true">
-        <svg viewBox="0 0 18 400" preserveAspectRatio="none" focusable="false">
-          <circle cx="9" cy="34" r="5"/><circle cx="9" cy="94" r="5"/><circle cx="9" cy="154" r="5"/>
-          <circle cx="9" cy="214" r="5"/><circle cx="9" cy="274" r="5"/><circle cx="9" cy="334" r="5"/>
-        </svg>
-      </span>
-
-      <ul class="sc-lines">
-        <li class="sc-line">
-          <span class="sc-sticker" aria-hidden="true">20527</span>
-          <span class="sc-entry"><b data-he="תוכנית בינה מלאכותית" data-ar="برنامج الذكاء الاصطناعي">תוכנית בינה מלאכותית</b><span class="sc-desc" data-he="ריאדה וחדשנות בעידן ה-AI" data-ar="ريادة وابتكار في عصر الذكاء الاصطناعي">ריאדה וחדשנות בעידן ה-AI</span></span>
-        </li>
-        <li class="sc-line">
-          <span class="sc-sticker" aria-hidden="true">5592</span>
-          <span class="sc-entry"><b data-he="הוראה מותאמת" data-ar="تعليم مُكيَّف">הוראה מותאמת</b><span class="sc-desc" data-he="התאמת ההוראה לצרכים מגוונים" data-ar="ملاءمة التعليم للاحتياجات المتنوّعة">התאמת ההוראה לצרכים מגוונים</span></span>
-        </li>
-        <li class="sc-line">
-          <span class="sc-sticker" aria-hidden="true">4336</span>
-          <span class="sc-entry"><b data-he="בית ספר חסין" data-ar="مدرسة صامدة">בית ספר חסין</b><span class="sc-desc" data-he="מענים פדגוגיים ורגשיים" data-ar="استجابات تربوية وعاطفية">מענים פדגוגיים ורגשיים</span></span>
-        </li>
-        <li class="sc-line">
-          <span class="sc-sticker" aria-hidden="true">20456</span>
-          <span class="sc-entry"><b data-he="תפקודים ניהוליים" data-ar="الوظائف التنفيذية">תפקודים ניהוליים</b><span class="sc-desc" data-he="פיתוח מיומנויות ויסות ותכנון" data-ar="تطوير مهارات التنظيم والتخطيط">פיתוח מיומנויות ויסות ותכנון</span></span>
-        </li>
-        <li class="sc-line">
-          <span class="sc-sticker" aria-hidden="true">33108</span>
-          <span class="sc-entry"><b data-he="גרפומוטוריקה — ריפוי בעיסוק" data-ar="الكتابة — علاج وظيفي">גרפומוטוריקה — ריפוי בעיסוק</b><span class="sc-desc" data-he="חיזוק מיומנויות הכתיבה" data-ar="تعزيز مهارات الكتابة">חיזוק מיומנויות הכתיבה</span></span>
-        </li>
-      </ul>
-
-      <!-- previous year: a folded page corner acting as a second tab -->
-      <details class="acc sc-prev"><summary><span data-he="תוכניות תשפ״ה" data-ar="برامج العام السابق">תוכניות תשפ״ה</span><span class="chev" aria-hidden="true">▾</span></summary><div class="body" data-he="תוכניות גפ״ן שהופעלו בשנת הלימודים הקודמת (תשפ״ה) — בהמשך לתוכניות תשפ״ו שמעליהן." data-ar="برامج غِفِن التي شُغّلت في العام الدراسي السابق — استكمالًا لبرامج هذا العام أعلاه.">תוכניות גפ״ן שהופעלו בשנת הלימודים הקודמת (תשפ״ה) — בהמשך לתוכניות תשפ״ו שמעליהן.</div></details>
-    </div>
+  <!-- reach line + program-type chips (replaces the old one-sentence blurb) -->
+  <div class="sc7-reach">
+    <p class="sc7-reach-lead" data-he="פועלים מול בתי ספר ורשויות מקומיות בפריסה ארצית —" data-ar="نعمل مع المدارس والسلطات المحلية بانتشار قُطري —">פועלים מול בתי ספר ורשויות מקומיות בפריסה ארצית —</p>
+    <ul class="sc7-chips">
+      <li class="sc7-chip" data-he="מרחבי למידה" data-ar="فضاءات تعلّم">מרחבי למידה</li>
+      <li class="sc7-chip" data-he="תוכניות רגשיות" data-ar="برامج عاطفية">תוכניות רגשיות</li>
+      <li class="sc7-chip" data-he="STEM" data-ar="STEM">STEM</li>
+      <li class="sc7-chip" data-he="מוכנות לכיתה א׳" data-ar="استعداد للصف الأول">מוכנות לכיתה א׳</li>
+      <li class="sc7-chip" data-he="גרפומוטוריקה" data-ar="الكتابة">גרפומוטוריקה</li>
+    </ul>
   </div>
+
+  <!-- pinned action note: the two CTAs on a washi-taped paper square -->
+  <aside class="sc7-note" aria-label="יצירת קשר לבתי ספר ורשויות" data-aria-he="יצירת קשר לבתי ספר ורשויות" data-aria-ar="التواصل مع المدارس والسلطات">
+    <span class="sc7-washi" aria-hidden="true"></span>
+    <p class="sc7-note-lead" data-he="מפעילים תוכניות בבתי ספר וברשויות:" data-ar="نُشغّل برامج في المدارس والسلطات المحلية:">מפעילים תוכניות בבתי ספר וברשויות:</p>
+    <div class="sc7-note-cta">
+      <a class="btn btn-gold" href="mailto:melimharozemschools@gmail.com" data-he="לקבלת הצעת מחיר לבית ספר / רשות ›" data-ar="للحصول على عرض سعر لمدرسة / سلطة ›">לקבלת הצעת מחיר לבית ספר / רשות ›</a>
+      <a class="btn btn-wa" href="https://wa.me/972506571203"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:19px;height:19px;fill:currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> <span data-he="וואטסאפ" data-ar="واتساب">וואטסאפ</span></a>
+    </div>
+  </aside>
 </div></section>
 
 <!-- initiatives -->

@@ -1400,24 +1400,6 @@ html.anim .jb-badge{opacity:1}
   padding-block-start:18px;      /* room for the folder tab that overhangs the top */
 }
 
-/* ---- the folder tab riveted to the top-start corner of the sheet ----
-   a real tab: rounded top, flat bottom, seated ON the sheet edge. */
-.sc-tab{
-  position:relative;
-  z-index:3;
-  display:inline-block;
-  margin-inline-start:34px;      /* aligns roughly over the margin/binding zone */
-  margin-block-end:-12px;        /* overlaps the sheet's top edge so it "attaches" */
-  padding:9px 22px 16px;
-  background:var(--gold);
-  color:#3d2f00;
-  font-weight:900;
-  font-size:15px;
-  line-height:1;
-  border-radius:12px 12px 0 0;
-  box-shadow:0 -3px 10px rgba(52,40,47,.10);
-  unicode-bidi:plaintext;        /* keep "2025/26" tidy in Arabic mode */
-}
 
 /* ---- the ruled paper sheet ----
    Horizontal rules via a repeating gradient (very low contrast) + a colored
@@ -1513,21 +1495,6 @@ html.anim .jb-badge{opacity:1}
   color:#5a4e54;                 /* darker than --muted for contrast on paper */
 }
 
-/* ---- previous year: a folded page corner / second tab under the sheet ---- */
-.sc-prev.acc{
-  position:relative;
-  margin-block-start:16px;
-  margin-inline-start:auto;
-  max-width:none;
-  width:fit-content;
-  background:var(--cream);
-  border:1px dashed rgba(154,56,84,.35);
-  border-radius:10px;
-  box-shadow:none;
-}
-.sc-prev.acc>summary{padding:14px 18px;font-size:15.5px;min-height:44px}
-.sc-prev.acc>summary .chev{color:var(--burgundy)}
-.sc-prev.acc .body{font-size:14.5px;max-width:62ch}
 
 /* ============================================================
    PROSE PAGES — light "sheet of paper" feel, NOT boxed cards
@@ -1572,7 +1539,6 @@ html.anim .sc-line{transition:transform .2s cubic-bezier(.2,.75,.25,1)}
 
 @media (max-width:700px){
   .sc-nb{margin-block-end:24px}
-  .sc-tab{margin-inline-start:26px;padding:8px 18px 15px;font-size:14px}
   .sc-sheet{
     padding:12px 48px 18px 18px;
     background-image:repeating-linear-gradient(
@@ -1589,14 +1555,12 @@ html.anim .sc-line{transition:transform .2s cubic-bezier(.2,.75,.25,1)}
   .sc-sticker{min-width:50px;font-size:12.5px;padding:6px 8px}
   .sc-entry b{font-size:15px}
   .sc-desc{font-size:13px}
-  .sc-prev.acc{width:auto;margin-inline-start:0}
   .sc-paper .prose.sc-prose{padding-inline-start:16px}
   .sc-lead{font-size:15.5px;line-height:1.5}
   .sc-prose p{font-size:14.5px;line-height:1.55;margin-bottom:11px}
 }
 
 @media (max-width:520px){
-  .sc-tab{margin-inline-start:20px}
   .sc-sheet{padding-inline:42px 14px}
   .sc-sheet::before{inset-inline-start:32px}
   .sc-spiral{inset-inline-start:5px;width:12px}
@@ -2390,96 +2354,6 @@ html.anim .rvs-cta:hover{
    Appended to dist/styles.css after build. RTL / logical props.
    ============================================================ */
 
-/* ===== SCHOOLS — GPN תשפ״ז table on the notebook sheet ===== */
-.rvc-nb{position:relative}
-
-/* white paper sheet holding the table + CTAs (matches .sc-sheet feel) */
-.rvc-sheet{
-  position:relative;
-  background:#fffdfb;
-  border-radius:4px 4px 10px 10px;
-  box-shadow:0 14px 34px rgba(52,40,47,.12),0 1px 0 rgba(255,255,255,.7) inset;
-  padding:20px 22px 22px;
-}
-/* horizontal-scroll safety net so the table never overflows the page */
-.rvc-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
-
-.rvc-gpn{
-  width:100%;
-  border-collapse:collapse;
-  text-align:start;
-  color:var(--ink);
-  font-size:15.5px;
-}
-.rvc-gpn thead th{
-  background:var(--teal-d);
-  color:#fff;
-  font-weight:800;
-  font-size:14.5px;
-  text-align:start;
-  padding:12px 14px;
-  white-space:nowrap;
-  border-inline-end:1px solid rgba(255,255,255,.20);
-}
-.rvc-gpn thead th:last-child{border-inline-end:0}
-.rvc-gpn tbody td{
-  padding:12px 14px;
-  border-block-end:1px solid var(--line);
-  vertical-align:middle;
-  line-height:1.4;
-  font-weight:600;
-}
-/* faint zebra within each stage group for scan-ability */
-.rvc-gpn tbody tr:nth-child(even) td{background:rgba(252,238,224,.4)}
-/* a stronger rule between the two stage groups (2nd tbody) */
-.rvc-gpn tbody + tbody{border-block-start:2px solid var(--teal-l)}
-
-/* program code — bold dark-teal, kept LTR-neat, shrink to content */
-.rvc-code{
-  font-weight:900;
-  font-size:14.5px;
-  color:#00695c;                 /* darker teal → ≥4.5:1 on paper */
-  unicode-bidi:plaintext;
-  white-space:nowrap;
-  width:1%;
-}
-/* pending name (client to supply) */
-.rvc-pending{color:var(--muted);font-weight:700}
-
-/* educational-stage cell (rowspan, groups the rows) */
-.rvc-stage{
-  background:var(--cream);
-  color:var(--burgundy);
-  font-weight:800;
-  font-size:14.5px;
-  text-align:center;
-  vertical-align:middle;
-  line-height:1.35;
-  padding:12px;
-  border-inline-start:1px solid var(--line);
-  min-width:9ch;
-}
-.rvc-gpn tbody tr:nth-child(even) td.rvc-stage{background:var(--cream)}
-
-/* the two CTAs under the table */
-.rvc-cta{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  margin-top:18px;
-}
-
-/* one-sentence blurb, styled like the page prose (start-edge accent) */
-.rvc-blurb{
-  max-width:72ch;
-  margin:4px auto 30px;
-  font-size:16.5px;
-  line-height:1.7;
-  color:#473b41;
-  padding-inline-start:22px;
-  border-inline-start:3px solid var(--gold);
-}
-
 /* ===== JOBS — "why work with us" open row + WA quick-apply ===== */
 .rvc-why{
   list-style:none;
@@ -2562,14 +2436,362 @@ html.anim .rvs-cta:hover{
   .ct-s4{margin-block-start:0}
 }
 
-/* ===== shared small-screen tuning for the schools table + jobs ===== */
+/* ===== shared small-screen tuning for jobs ===== */
 @media (max-width:700px){
-  .rvc-sheet{padding:16px 14px 18px}
-  .rvc-gpn{font-size:14.5px}
-  .rvc-gpn thead th,.rvc-gpn tbody td{padding:10px 9px}
-  .rvc-code{font-size:13.5px}
-  .rvc-stage{padding:10px 6px;font-size:12.5px;min-width:7ch}
-  .rvc-blurb{font-size:14.5px;line-height:1.55;padding-inline-start:14px}
   .rvc-why li{font-size:15.5px}
   .rvc-why{gap:8px 20px}
+}
+
+/* ============================================================
+   SCHOOLS · GPN — ONE notebook, three school-year folder tabs.
+   CSS-only tab mechanism (visually-hidden radios + <label> tabs).
+   Prefix sc7-. Appended to dist/styles.css after build. RTL / logical
+   properties only. No JS. No mask:url(). Fail-open: if the tab-mechanism
+   rules (marked below) don't apply, all three panels stack in order.
+   ============================================================ */
+
+/* ---- notebook wrapper: positioning context for the hidden radios ---- */
+.sc7-nb{
+  position:relative;
+  margin-block:10px 4px;
+  padding-block-start:2px;
+}
+
+/* ---- the switching radios: visually hidden but focusable + arrow-switchable.
+   (Kept in the CSS file; in fail-open they simply show as 3 small controls
+   above the stacked panels — content stays fully readable.) ---- */
+.sc7-radio{
+  position:absolute;
+  inset-inline-start:8px;
+  inset-block-start:0;
+  width:1px;height:1px;
+  margin:0;
+  opacity:0;
+  pointer-events:none;   /* labels do the clicking; radios stay keyboard-reachable */
+}
+
+/* ---- folder-tab strip riveted along the notebook's top edge ---- */
+.sc7-tabs{
+  position:relative;
+  z-index:3;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-end;
+  gap:6px;
+  padding-inline-start:22px;
+  margin-block-end:-8px;   /* the tabs' feet overlap the sheet's top edge */
+}
+.sc7-tab{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:40px;
+  padding:9px 20px 15px;
+  background:var(--cream);
+  color:#6b5a34;
+  font-weight:800;
+  font-size:15px;
+  line-height:1;
+  border-radius:12px 12px 0 0;
+  box-shadow:0 -2px 7px rgba(52,40,47,.06);
+  cursor:pointer;
+  unicode-bidi:plaintext;      /* keep "2026/27" tidy in Arabic mode */
+  border:1px solid var(--line);
+  border-block-end:0;
+  position:relative;
+  transition:background .18s ease,color .18s ease,transform .18s ease;
+}
+.sc7-tab:hover{background:#fbe6c4;color:#4a3d1e}
+
+/* ===== TAB MECHANISM (fail-open target) — active tab + panel show/hide ===== */
+/* active tab: gold, lifted, seated ON the active sheet */
+#sc7-y27:checked ~ .sc7-tabs label[for="sc7-y27"],
+#sc7-y26:checked ~ .sc7-tabs label[for="sc7-y26"],
+#sc7-y25:checked ~ .sc7-tabs label[for="sc7-y25"]{
+  background:var(--gold);
+  color:#3d2f00;
+  box-shadow:0 -3px 11px rgba(52,40,47,.13);
+  z-index:2;
+}
+/* panels: only the checked year is shown. Remove these rules → all stack. */
+.sc7-panel{display:none}
+#sc7-y27:checked ~ .sc7-p27,
+#sc7-y26:checked ~ .sc7-p26,
+#sc7-y25:checked ~ .sc7-p25{display:block}
+/* ===== END TAB MECHANISM ===== */
+
+/* clear keyboard focus ring — shown on the LABEL when its radio is focused */
+#sc7-y27:focus-visible ~ .sc7-tabs label[for="sc7-y27"],
+#sc7-y26:focus-visible ~ .sc7-tabs label[for="sc7-y26"],
+#sc7-y25:focus-visible ~ .sc7-tabs label[for="sc7-y25"]{
+  outline:3px solid var(--burgundy);
+  outline-offset:2px;
+  border-radius:10px 10px 4px 4px;
+}
+
+/* ---- the ruled register sheet (shared paper DNA with .sc-sheet) ---- */
+.sc7-sheet{
+  position:relative;
+  background-color:#fffdfb;
+  border-radius:4px 4px 8px 8px;
+  box-shadow:
+    0 14px 34px rgba(52,40,47,.12),
+    0 1px 0 rgba(255,255,255,.7) inset;
+  /* inline-start padding clears the spiral holes + margin line (RTL: right) */
+  padding:16px 60px 20px 26px;
+  overflow:hidden;
+}
+/* colored vertical margin line on the binding (inline-start) side */
+.sc7-sheet::before{
+  content:"";
+  position:absolute;
+  inset-block:0;
+  inset-inline-start:46px;
+  width:2px;
+  background:var(--pink);
+  opacity:.7;
+}
+/* spiral punch-holes down the binding edge */
+.sc7-spiral{
+  position:absolute;
+  inset-block:0;
+  inset-inline-start:8px;
+  width:18px;
+  color:var(--peach);
+}
+.sc7-spiral svg{width:18px;height:100%}
+.sc7-spiral circle{
+  fill:#f4e3d5;
+  stroke:rgba(52,40,47,.16);
+  stroke-width:1.4;
+}
+
+/* ---- stage sub-headers (h3): a small label written across the sheet ---- */
+.sc7-stage{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-block:6px 2px;
+  padding-block-end:8px;
+  font-size:15px;
+  font-weight:900;
+  color:var(--burgundy);
+  border-block-end:2px dashed rgba(154,56,84,.30);
+}
+.sc7-stage:not(:first-of-type){margin-block-start:22px}
+.sc7-stage-ic{
+  flex-shrink:0;
+  display:inline-flex;
+  width:30px;height:30px;
+  padding:6px;
+  border-radius:9px;
+  background:#f6e5ea;
+  color:var(--burgundy);
+}
+.sc7-stage-ic svg{
+  width:100%;height:100%;
+  stroke:currentColor;fill:none;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+}
+
+/* ---- ruled register lines: a bottom rule is the divider ---- */
+.sc7-lines{list-style:none;margin:0;padding:0}
+.sc7-line{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-height:52px;
+  padding-block:8px;
+  border-block-end:1px solid rgba(0,150,131,.16);
+}
+.sc7-line:last-child{border-block-end:0}
+
+/* index sticker = the program code, cycled brand colors + slight tilt */
+.sc7-sticker{
+  flex-shrink:0;
+  min-width:60px;
+  text-align:center;
+  font-weight:900;
+  font-size:13px;
+  line-height:1;
+  color:#fff;
+  padding:7px 10px;
+  border-radius:7px;
+  box-shadow:0 4px 10px rgba(52,40,47,.16);
+  unicode-bidi:plaintext;      /* digits stay LTR-neat in both languages */
+}
+/* cycle 5 brand colors + alternating tilt so no two neighbours match */
+.sc7-line:nth-child(5n+1) .sc7-sticker{background:var(--teal-d);    transform:rotate(-3deg)}
+.sc7-line:nth-child(5n+2) .sc7-sticker{background:var(--burgundy);  transform:rotate(2.5deg)}
+.sc7-line:nth-child(5n+3) .sc7-sticker{background:var(--orange);    transform:rotate(-2deg)}
+.sc7-line:nth-child(5n+4) .sc7-sticker{background:var(--teal);      transform:rotate(3deg)}
+.sc7-line:nth-child(5n+5) .sc7-sticker{background:var(--soft-orange);transform:rotate(-2.4deg)}
+
+/* the written entry: program name (bold) sitting on the rule */
+.sc7-entry{min-width:0}
+.sc7-entry b{
+  display:block;
+  font-size:16px;
+  font-weight:800;
+  line-height:1.3;
+  color:var(--ink);
+}
+/* pending name — a pencilled note, reads intentional (≥4.5:1 on paper) */
+.sc7-pending{
+  display:block;
+  font-style:italic;
+  font-size:14.5px;
+  line-height:1.35;
+  color:#6d6167;
+}
+
+/* ---- previous-year mini sheet (תשפ״ה) ---- */
+.sc7-sheet-mini{padding-block:18px}
+.sc7-prev{
+  margin:0;
+  font-size:16px;
+  line-height:1.7;
+  color:#473b41;
+  max-width:60ch;
+}
+
+/* ---- reach line + program-type chips (replaces the old blurb) ---- */
+.sc7-reach{margin-block-start:26px}
+.sc7-reach-lead{
+  font-size:16px;
+  font-weight:700;
+  line-height:1.6;
+  color:#473b41;
+  margin-block-end:12px;
+}
+.sc7-chips{
+  list-style:none;
+  margin:0;padding:0;
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.sc7-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 15px 8px 14px;
+  border-radius:30px;
+  background:#fff;
+  border:1.5px solid var(--line);
+  font-size:14px;
+  font-weight:800;
+  color:#3f3339;
+  box-shadow:0 3px 9px rgba(52,40,47,.05);
+  unicode-bidi:plaintext;
+}
+/* a colored bead on the inline-start edge — cycles brand colors */
+.sc7-chip::before{
+  content:"";
+  flex-shrink:0;
+  width:9px;height:9px;
+  border-radius:50%;
+  background:var(--teal-d);
+}
+.sc7-chip:nth-child(2)::before{background:var(--pink)}
+.sc7-chip:nth-child(3)::before{background:var(--gold)}
+.sc7-chip:nth-child(4)::before{background:var(--orange)}
+.sc7-chip:nth-child(5)::before{background:var(--burgundy)}
+
+/* ---- pinned action note: a washi-taped paper square with the two CTAs ---- */
+.sc7-note{
+  position:relative;
+  width:fit-content;
+  max-width:min(100%,360px);
+  margin-block:30px 8px;
+  margin-inline-start:auto;   /* sits toward the binding-opposite edge, like a pinned note */
+  padding:26px 22px 20px;
+  background:linear-gradient(180deg,#fffdf6,var(--cream));
+  border:1px solid #f0dcc4;
+  border-radius:8px;
+  transform:rotate(-1.4deg);
+  box-shadow:7px 12px 28px rgba(52,40,47,.15),0 1px 0 rgba(255,255,255,.6) inset;
+}
+/* the washi tape strip across the top edge (CSS only, woven texture) */
+.sc7-washi{
+  position:absolute;
+  top:-12px;
+  inset-inline-start:50%;
+  width:118px;height:28px;
+  margin-inline-start:-59px;
+  transform:rotate(-2deg);
+  opacity:.85;
+  border-radius:2px;
+  background-color:rgba(252,196,0,.62);
+  background-image:repeating-linear-gradient(
+      45deg, rgba(255,255,255,.35) 0 6px, rgba(255,255,255,0) 6px 12px);
+  background-blend-mode:overlay;
+  box-shadow:0 2px 5px rgba(52,40,47,.10);
+}
+.sc7-note-lead{
+  font-size:15.5px;
+  font-weight:800;
+  line-height:1.5;
+  color:#3a2e34;
+  margin-block-end:14px;
+}
+.sc7-note-cta{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.sc7-note-cta .btn{width:100%;justify-content:center}
+
+/* ============================================================
+   MOTION — decorate only under html.anim; respect reduced-motion.
+   ============================================================ */
+html.anim .sc7-tab{transition:background .18s ease,color .18s ease,transform .18s ease}
+@media (prefers-reduced-motion:no-preference){
+  html.anim .sc7-note{transition:transform .2s cubic-bezier(.2,.75,.25,1),box-shadow .2s ease}
+  html.anim .sc7-note:hover{transform:rotate(0deg) translateY(-3px)}
+  html.anim .sc7-line:hover .sc7-sticker{transition:transform .2s cubic-bezier(.2,.75,.25,1);transform:rotate(0deg) scale(1.05)}
+  html.anim .sc7-chip{transition:transform .18s ease,box-shadow .18s ease}
+  html.anim .sc7-chip:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(52,40,47,.10)}
+}
+@media (prefers-reduced-motion:reduce){
+  html.anim .sc7-note{transition:none}
+  html.anim .sc7-note:hover{transform:rotate(-1.4deg)}
+}
+
+/* ============================================================
+   RESPONSIVE — site breakpoints 900 / 700 / 520. No h-scroll at 390.
+   ============================================================ */
+@media (max-width:900px){
+  .sc7-sheet{padding-inline:54px 22px}
+}
+
+@media (max-width:700px){
+  .sc7-tabs{padding-inline-start:14px;gap:5px}
+  .sc7-tab{min-height:38px;padding:8px 15px 13px;font-size:13.5px}
+  .sc7-sheet{padding:14px 48px 18px 18px}
+  .sc7-sheet::before{inset-inline-start:38px}
+  .sc7-spiral{inset-inline-start:6px;width:14px}
+  .sc7-spiral svg{width:14px}
+  .sc7-line{gap:11px;min-height:50px}
+  .sc7-sticker{min-width:52px;font-size:12.5px;padding:6px 8px}
+  .sc7-entry b{font-size:15px}
+  .sc7-pending{font-size:14px}
+  .sc7-stage{font-size:14px}
+  .sc7-stage-ic{width:27px;height:27px}
+  .sc7-prev{font-size:15px}
+  .sc7-reach-lead{font-size:15px}
+  .sc7-chip{font-size:13px;padding:7px 13px}
+  .sc7-note{margin-inline:auto;max-width:100%}
+}
+
+@media (max-width:520px){
+  .sc7-tabs{padding-inline-start:10px;gap:4px}
+  .sc7-tab{padding:8px 12px 12px;font-size:12.5px}
+  .sc7-sheet{padding-inline:42px 14px}
+  .sc7-sheet::before{inset-inline-start:32px}
+  .sc7-spiral{inset-inline-start:5px;width:12px}
+  .sc7-spiral svg{width:12px}
+  .sc7-sticker{min-width:48px}
+  .sc7-entry b{font-size:15px}
+  .sc7-note{padding:24px 16px 18px}
 }
