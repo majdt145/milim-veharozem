@@ -149,7 +149,7 @@ def build():
     built = []
     for path in pages:
         name = os.path.basename(path)
-        raw = open(path, encoding="utf-8").read()
+        raw = open(path, encoding="utf-8-sig").read()  # utf-8-sig strips a stray BOM
         meta, body = parse_meta(raw)
         body = apply_flags(body)
 
