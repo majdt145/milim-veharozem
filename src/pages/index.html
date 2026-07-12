@@ -56,30 +56,60 @@ nav: home
   </div>
 </section>
 
-<!-- partners -->
+<!-- partners — one seamless sliding strip; falls back to wrapped chips when animations are off -->
 <div class="partners"><div class="wrap">
   <span class="lbl" data-he="בשיתוף פעולה עם:" data-ar="بالتعاون مع:">בשיתוף פעולה עם:</span>
-  <span class="chip" data-he="אוניברסיטת חיפה" data-ar="جامعة حيفا">אוניברסיטת חיפה</span>
-  <span class="chip" data-he="גפ״ן · משרד החינוך" data-ar="غِفِن · وزارة التربية">גפ״ן · משרד החינוך</span>
-  <span class="chip" data-he="ברנקו וייס" data-ar="برانكو فايس">ברנקו וייס</span>
-  <span class="chip" data-he="מחלקות הרווחה" data-ar="أقسام الرفاه">מחלקות הרווחה</span>
-  <span class="chip" data-he="המרכז לגיל הרך עכו" data-ar="المركز للطفولة المبكرة عكا">המרכז לגיל הרך עכו</span>
-  <span class="chip" data-he="המרכז לגיל הרך מג׳דל שמס" data-ar="المركز للطفولة المبكرة مجدل شمس">המרכז לגיל הרך מג׳דל שמס</span>
-  <span class="chip" data-he="המרכז לגיל הרך מזרעה" data-ar="المركز للطفولة المبكرة المزرعة">המרכז לגיל הרך מזרעה</span>
-  <span class="chip" data-he="המרכז לגיל הרך שעב" data-ar="المركز للطفولة المبكرة شعب">המרכז לגיל הרך שעב</span>
-  <span class="chip" data-he="רשות מקומית ג׳דיידה-מכר" data-ar="السلطة المحلية جديدة-المكر">רשות מקומית ג׳דיידה-מכר</span>
-  <span class="chip" data-he="רשות מקומית מג׳דל שמס" data-ar="السلطة المحلية مجدل شمس">רשות מקומית מג׳דל שמס</span>
-  <span class="chip" data-he="רשות מקומית מזרעה" data-ar="السلطة المحلية المزرعة">רשות מקומית מזרעה</span>
-  <span class="chip" data-he="רשות מקומית שעב" data-ar="السلطة المحلية شعب">רשות מקומית שעב</span>
-  <a class="chip" target="_blank" rel="noopener" href="https://www.akko.muni.il" data-he="עיריית עכו" data-ar="بلدية عكا">עיריית עכו</a>
-  <a class="chip" target="_blank" rel="noopener" href="https://www.matteasher.org.il" data-he="מועצה אזורית מטה אשר" data-ar="مجلس مطيه أشير الإقليمي">מועצה אזורית מטה אשר</a>
-  <a class="chip" target="_blank" rel="noopener" href="https://www.ort.org.il" data-he="רשת אורט" data-ar="شبكة أورط">רשת אורט</a>
-  <span class="chip" data-he="רשת עתיד" data-ar="شبكة عتيد">רשת עתיד</span>
-  <a class="chip" target="_blank" rel="noopener" href="https://www.gov.il/he/departments/ministry_of_health" data-he="משרד הבריאות" data-ar="وزارة الصحة">משרד הבריאות</a>
-  <a class="chip" target="_blank" rel="noopener" href="https://www.gov.il/he/departments/ministry_of_education" data-he="משרד החינוך" data-ar="وزارة التربية والتعليم">משרד החינוך</a>
-  <span class="chip" data-he="נוירוטק בע״מ" data-ar="نيوروتك م.ض">נוירוטק בע״מ</span>
-  <a class="chip" target="_blank" rel="noopener" href="https://www.technion.ac.il" data-he="הטכניון" data-ar="التخنيون">הטכניון</a>
-  <a class="chip" target="_blank" rel="noopener" href="https://www.telhai.ac.il" data-he="מכללת תל-חי" data-ar="كلية تل حاي">מכללת תל-חי</a>
+  <div class="pt-viewport">
+    <div class="pt-track">
+      <div class="pt-set">
+        <span class="chip" data-he="אוניברסיטת חיפה" data-ar="جامعة حيفا">אוניברסיטת חיפה</span>
+        <span class="chip" data-he="גפ״ן · משרד החינוך" data-ar="غِفِن · وزارة التربية">גפ״ן · משרד החינוך</span>
+        <span class="chip" data-he="ברנקו וייס" data-ar="برانكو فايس">ברנקו וייס</span>
+        <span class="chip" data-he="מחלקות הרווחה" data-ar="أقسام الرفاه">מחלקות הרווחה</span>
+        <span class="chip" data-he="המרכז לגיל הרך עכו" data-ar="المركز للطفولة المبكرة عكا">המרכז לגיל הרך עכו</span>
+        <span class="chip" data-he="המרכז לגיל הרך מג׳דל שמס" data-ar="المركز للطفولة المبكرة مجدل شمس">המרכז לגיל הרך מג׳דל שמס</span>
+        <span class="chip" data-he="המרכז לגיל הרך מזרעה" data-ar="المركز للطفولة المبكرة المزرعة">המרכז לגיל הרך מזרעה</span>
+        <span class="chip" data-he="המרכז לגיל הרך שעב" data-ar="المركز للطفولة المبكرة شعب">המרכז לגיל הרך שעב</span>
+        <span class="chip" data-he="רשות מקומית ג׳דיידה-מכר" data-ar="السلطة المحلية جديدة-المكر">רשות מקומית ג׳דיידה-מכר</span>
+        <span class="chip" data-he="רשות מקומית מג׳דל שמס" data-ar="السلطة المحلية مجدل شمس">רשות מקומית מג׳דל שמס</span>
+        <span class="chip" data-he="רשות מקומית מזרעה" data-ar="السلطة المحلية المزرعة">רשות מקומית מזרעה</span>
+        <span class="chip" data-he="רשות מקומית שעב" data-ar="السلطة المحلية شعب">רשות מקומית שעב</span>
+        <a class="chip" target="_blank" rel="noopener" href="https://www.akko.muni.il" data-he="עיריית עכו" data-ar="بلدية عكا">עיריית עכו</a>
+        <a class="chip" target="_blank" rel="noopener" href="https://www.matteasher.org.il" data-he="מועצה אזורית מטה אשר" data-ar="مجلس مطيه أشير الإقليمي">מועצה אזורית מטה אשר</a>
+        <a class="chip" target="_blank" rel="noopener" href="https://www.ort.org.il" data-he="רשת אורט" data-ar="شبكة أورط">רשת אורט</a>
+        <span class="chip" data-he="רשת עתיד" data-ar="شبكة عتيد">רשת עתיד</span>
+        <a class="chip" target="_blank" rel="noopener" href="https://www.gov.il/he/departments/ministry_of_health" data-he="משרד הבריאות" data-ar="وزارة الصحة">משרד הבריאות</a>
+        <a class="chip" target="_blank" rel="noopener" href="https://www.gov.il/he/departments/ministry_of_education" data-he="משרד החינוך" data-ar="وزارة التربية والتعليم">משרד החינוך</a>
+        <span class="chip" data-he="נוירוטק בע״מ" data-ar="نيوروتك م.ض">נוירוטק בע״מ</span>
+        <a class="chip" target="_blank" rel="noopener" href="https://www.technion.ac.il" data-he="הטכניון" data-ar="التخنيون">הטכניון</a>
+        <a class="chip" target="_blank" rel="noopener" href="https://www.telhai.ac.il" data-he="מכללת תל-חי" data-ar="كلية تل حاي">מכללת תל-חי</a>
+      </div>
+      <!-- duplicate set = the seamless loop; hidden from SRs and keyboards, hidden entirely when static -->
+      <div class="pt-set pt-dup" aria-hidden="true">
+        <span class="chip" data-he="אוניברסיטת חיפה" data-ar="جامعة حيفا">אוניברסיטת חיפה</span>
+        <span class="chip" data-he="גפ״ן · משרד החינוך" data-ar="غِفِن · وزارة التربية">גפ״ן · משרד החינוך</span>
+        <span class="chip" data-he="ברנקו וייס" data-ar="برانكو فايس">ברנקו וייס</span>
+        <span class="chip" data-he="מחלקות הרווחה" data-ar="أقسام الرفاه">מחלקות הרווחה</span>
+        <span class="chip" data-he="המרכז לגיל הרך עכו" data-ar="المركز للطفولة المبكرة عكا">המרכז לגיל הרך עכו</span>
+        <span class="chip" data-he="המרכז לגיל הרך מג׳דל שמס" data-ar="المركز للطفولة المبكرة مجدل شمس">המרכז לגיל הרך מג׳דל שמס</span>
+        <span class="chip" data-he="המרכז לגיל הרך מזרעה" data-ar="المركز للطفولة المبكرة المزرعة">המרכז לגיל הרך מזרעה</span>
+        <span class="chip" data-he="המרכז לגיל הרך שעב" data-ar="المركز للطفولة المبكرة شعب">המרכז לגיל הרך שעב</span>
+        <span class="chip" data-he="רשות מקומית ג׳דיידה-מכר" data-ar="السلطة المحلية جديدة-المكر">רשות מקומית ג׳דיידה-מכר</span>
+        <span class="chip" data-he="רשות מקומית מג׳דל שמס" data-ar="السلطة المحلية مجدل شمس">רשות מקומית מג׳דל שמס</span>
+        <span class="chip" data-he="רשות מקומית מזרעה" data-ar="السلطة المحلية المزرعة">רשות מקומית מזרעה</span>
+        <span class="chip" data-he="רשות מקומית שעב" data-ar="السلطة المحلية شعب">רשות מקומית שעב</span>
+        <span class="chip" data-he="עיריית עכו" data-ar="بلدية عكا">עיריית עכו</span>
+        <span class="chip" data-he="מועצה אזורית מטה אשר" data-ar="مجلس مطيه أشير الإقليمي">מועצה אזורית מטה אשר</span>
+        <span class="chip" data-he="רשת אורט" data-ar="شبكة أورط">רשת אורט</span>
+        <span class="chip" data-he="רשת עתיד" data-ar="شبكة عتيد">רשת עתיד</span>
+        <span class="chip" data-he="משרד הבריאות" data-ar="وزارة الصحة">משרד הבריאות</span>
+        <span class="chip" data-he="משרד החינוך" data-ar="وزارة التربية والتعليم">משרד החינוך</span>
+        <span class="chip" data-he="נוירוטק בע״מ" data-ar="نيوروتك م.ض">נוירוטק בע״מ</span>
+        <span class="chip" data-he="הטכניון" data-ar="التخنيون">הטכניון</span>
+        <span class="chip" data-he="מכללת תל-חי" data-ar="كلية تل حاي">מכללת תל-חי</span>
+      </div>
+    </div>
+  </div>
 </div></div>
 
 <!-- steps (the journey path) -->

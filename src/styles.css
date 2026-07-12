@@ -96,9 +96,24 @@ section{padding:62px 0}
 
 /* partners strip */
 .partners{background:#fff;border-block:1px solid var(--line)}
-.partners .wrap{padding:18px 22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:center}
-.partners .lbl{font-size:13.5px;color:var(--muted);font-weight:700}
+.partners .wrap{padding:18px 22px;display:flex;align-items:center;gap:16px}
+.partners .lbl{font-size:13.5px;color:var(--muted);font-weight:700;flex:0 0 auto}
 .partners .chip{background:var(--cream);border-radius:30px;padding:8px 18px;font-weight:800;font-size:14px;color:var(--burgundy)}
+/* strip machinery — static fallback (no .anim): first set wraps exactly like the old layout */
+.pt-viewport{flex:1;min-width:0}
+.pt-set{display:flex;align-items:center;gap:12px 18px;flex-wrap:wrap;justify-content:center}
+.pt-dup{display:none}
+/* animations allowed → one slow seamless sliding strip (pauses on hover/focus) */
+html.anim .pt-viewport{position:relative;overflow:hidden}
+html.anim .pt-viewport::before,html.anim .pt-viewport::after{content:"";position:absolute;top:0;bottom:0;width:42px;z-index:1;pointer-events:none}
+html.anim .pt-viewport::before{left:0;background:linear-gradient(90deg,#fff 12%,rgba(255,255,255,0))}
+html.anim .pt-viewport::after{right:0;background:linear-gradient(270deg,#fff 12%,rgba(255,255,255,0))}
+html.anim .pt-track{display:flex;width:max-content;animation:ptSlide 80s linear infinite}
+html.anim .pt-set{display:flex;flex-wrap:nowrap;padding-inline-end:18px}
+html.anim .pt-dup{display:flex}
+html.anim .partners .chip{white-space:nowrap}
+html.anim .pt-track:hover,html.anim .pt-track:focus-within{animation-play-state:paused}
+@keyframes ptSlide{from{transform:translateX(0)}to{transform:translateX(50%)}}
 
 /* steps — "the journey" (connected roadmap stations, grounded in the puzzle/journey brand) */
 .steps{background:var(--peach)}
@@ -127,10 +142,13 @@ section{padding:62px 0}
 /* phones: variable-width chips wrap into a ragged pile — snap both chip
    sections into tidy 2-column grids of equal-width, centered chips */
 @media(max-width:700px){
-  .partners .wrap{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:16px 18px}
-  .partners .lbl{grid-column:1/-1;text-align:center;margin-bottom:2px}
-  .partners .chip{text-align:center;padding:9px 6px;font-size:13px}
-  .partners .chip:last-child{grid-column:1/-1;justify-self:center;padding-inline:22px}
+  .partners .wrap{flex-direction:column;align-items:stretch;gap:10px;padding:14px 0}
+  .partners .lbl{text-align:center;padding-inline:18px}
+  html.anim .partners .chip{font-size:13px;padding:8px 13px}
+  html:not(.anim) .pt-set{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-inline:18px}
+  html:not(.anim) .pt-dup{display:none}
+  html:not(.anim) .partners .chip{text-align:center;padding:9px 6px;font-size:13px}
+  html:not(.anim) .pt-set .chip:last-child{grid-column:1/-1;justify-self:center;padding-inline:22px}
   .ass-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;max-width:360px}
   .ass-grid .pill{text-align:center;padding:10px 6px;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 }
@@ -2231,10 +2249,6 @@ html.anim .partners a.chip{transition:background .2s ease}
 .partners a.chip:focus-visible{
   outline:2px solid var(--burgundy);
   outline-offset:2px;
-}
-/* many chips now — trim padding a touch so rows wrap tidily on mobile 2-col */
-@media (max-width:700px){
-  .partners .chip{padding:8px 6px;font-size:12.5px}
 }
 
 /* ---- Task 7: site-wide floating WhatsApp button ---- */
