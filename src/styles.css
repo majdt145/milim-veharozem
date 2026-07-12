@@ -96,8 +96,9 @@ section{padding:62px 0}
 
 /* partners strip */
 .partners{background:#fff;border-block:1px solid var(--line)}
-.partners .wrap{padding:18px 22px;display:flex;align-items:center;gap:16px}
-.partners .lbl{font-size:13.5px;color:var(--muted);font-weight:700;flex:0 0 auto}
+/* full-bleed at every width: strip runs screen-edge to screen-edge, label centered above */
+.partners .wrap{max-width:none;padding:16px 0;display:flex;flex-direction:column;align-items:stretch;gap:10px}
+.partners .lbl{font-size:13.5px;color:var(--muted);font-weight:700;text-align:center;padding-inline:22px}
 .partners .chip{background:var(--cream);border-radius:30px;padding:8px 18px;font-weight:800;font-size:14px;color:var(--burgundy)}
 /* strip machinery — static fallback (no .anim): first set wraps exactly like the old layout */
 .pt-viewport{flex:1;min-width:0}
