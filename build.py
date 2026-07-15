@@ -8,6 +8,7 @@ fills <title>/<meta description>, and copies styles.css, app.js and assets/ to d
 Usage:  python build.py
 """
 import os, re, shutil, glob, hashlib
+from html import escape as _esc  # title/desc land in HTML attrs — escape so a literal " can't truncate them
 
 
 def _ver(path):
@@ -24,6 +25,11 @@ DIST = os.path.join(ROOT, "dist")
 # rebuild — see docs/launch.md. No hreflang: one URL serves He+Ar via the JS
 # toggle, so alternate-language URLs don't exist.
 SITE_URL = "https://milim-veharozem.vercel.app"
+
+# Google Search Console HTML-file verification — served at the site root and
+# fetched by GSC to prove ownership. The token is per Google account, so the
+# same file verifies every property under it. Keep it even after verifying.
+GOOGLE_SITE_VERIFICATION = "google3654382e4b01e65d.html"
 
 # Content flags. TESTIMONIALS stays False until real consented parent quotes
 # arrive from the clinic — the placeholder section is then swapped for them
@@ -96,6 +102,9 @@ def write_sitemap(pages):
     open(os.path.join(DIST, "sitemap.xml"), "w", encoding="utf-8").write(xml)
     open(os.path.join(DIST, "robots.txt"), "w", encoding="utf-8").write(
         "User-agent: *\nAllow: /\nSitemap: %s/sitemap.xml\n" % SITE_URL)
+    # Google Search Console ownership file (HTML-file method)
+    open(os.path.join(DIST, GOOGLE_SITE_VERIFICATION), "w", encoding="utf-8").write(
+        "google-site-verification: " + GOOGLE_SITE_VERIFICATION + "\n")
 
 
 def parse_meta(text):
@@ -157,11 +166,14 @@ def build():
         # cache-bust asset refs so browsers never serve a stale CSS/JS
         html = html.replace('href="styles.css"', 'href="styles.css?v=%s"' % ver["styles.css"])
         html = html.replace('src="app.js"', 'src="app.js?v=%s"' % ver["app.js"])
+        # These four values are injected into HTML attributes (title/data-he/
+        # og:*/description). HTML-escape them so a literal " (e.g. גפ"ן) can't
+        # close the attribute early and silently truncate the tag.
         title = meta.get("title", "מילים וחרוזים")
-        html = html.replace("{{TITLE}}", title)
-        html = html.replace("{{TITLE_AR}}", meta.get("title_ar", title))
-        html = html.replace("{{DESC}}", meta.get("desc", ""))
-        html = html.replace("{{DESC_AR}}", meta.get("desc_ar", meta.get("desc", "")))
+        html = html.replace("{{TITLE}}", _esc(title))
+        html = html.replace("{{TITLE_AR}}", _esc(meta.get("title_ar", title)))
+        html = html.replace("{{DESC}}", _esc(meta.get("desc", "")))
+        html = html.replace("{{DESC_AR}}", _esc(meta.get("desc_ar", meta.get("desc", ""))))
         html = html.replace("{{CANONICAL}}",
                             SITE_URL + "/" + ("" if name == "index.html" else name))
         html = html.replace("{{SITE_URL}}", SITE_URL)
