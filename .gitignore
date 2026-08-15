@@ -12,3 +12,6 @@ Thumbs.db
 .DS_Store
 *.tmp
 __pycache__/
+
+.vercel
+.env*
