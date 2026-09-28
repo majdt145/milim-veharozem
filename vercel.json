@@ -4,9 +4,9 @@
   "outputDirectory": "dist",
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/:path(.*)",
       "has": [{ "type": "host", "value": "milim-veharozem.vercel.app" }],
-      "destination": "https://www.melimharozem.com/:path*",
+      "destination": "https://www.melimharozem.com/:path",
       "permanent": true
     }
   ],
