@@ -70,6 +70,12 @@ def jsonld():
         "telephone": "+972-50-657-1203",
         "foundingDate": "2016",
         "availableLanguage": ["he", "ar"],
+        # The clinic's own social profiles — ties the brand entity Google already
+        # knows (the Facebook page ranks for the name) to this site.
+        "sameAs": [
+            "https://www.facebook.com/melimharozem/",
+            "https://www.instagram.com/melimharozem/",
+        ],
     }
     def clinic(name, name_en, tel, street=None, locality=None):
         c = {
@@ -90,7 +96,7 @@ def jsonld():
     graph = {"@context": "https://schema.org", "@graph": [
         org,
         clinic("עכו", "Milim VeHaruzim Akko", "+972-50-657-1203",
-               "קניון עזריאלי, קומה 4", "עכו"),
+               "קניון עזריאלי, רחוב החרושת 2, קומה 4", "עכו"),
         clinic("מזרעה", "Milim VeHaruzim Mazra'a", "+972-53-587-3804",
                "רחוב אלאנביאא 11", "מזרעה"),
         clinic("שעב", "Milim VeHaruzim Sha'ab", "+972-50-657-1203",
