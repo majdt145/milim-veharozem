@@ -36,13 +36,23 @@ Vercel dashboard → Project → Analytics → Enable Web Analytics, then add to
 2. Verify via the HTML-tag method (add the meta tag to `src/layout.html`, push).
 3. Submit `sitemap.xml`.
 
-## 5. Custom domain (when Mostafa hands over melimharozem.co.il)
-1. Vercel → Project → Settings → Domains → add `melimharozem.co.il` + `www`.
-2. At the registrar, set the DNS records Vercel shows (A / CNAME).
-3. Flip `SITE_URL` in `build.py` to the domain, push (regenerates canonicals/OG/sitemap).
-4. Re-verify the domain property in Search Console + resubmit sitemap.
-5. Resend: verify the domain, then change `From:` in `api/form.js` to
-   `forms@melimharozem.co.il` (removes the onboarding@resend.dev sender).
+## 5. Custom domain — `www.melimharozem.com` (connected 2026-09-28)
+- Bought by the clinic at GoDaddy (the old `melimharozem.co.il` had expired).
+- Vercel → Project → Settings → Domains: **`www.melimharozem.com` is primary**;
+  `melimharozem.com` 308-redirects to it. `vercel.json` 308-redirects the old
+  `milim-veharozem.vercel.app` there too.
+- `SITE_URL` in `build.py` = `https://www.melimharozem.com` (canonicals/OG/sitemap/llms.txt).
+- Search Console: URL-prefix property `https://www.melimharozem.com/`, verified by the
+  HTML file `build.py` writes; submit `sitemap.xml`.
+- IndexNow (Bing etc.): key in `build.py` (`INDEXNOW_KEY`); after content deploys, POST the
+  changed URLs to `https://api.indexnow.org/indexnow`.
+- Still open: Resend → verify the domain, then change `From:` in `api/form.js` to
+  `forms@melimharozem.com` (removes the onboarding@resend.dev sender).
+
+## 6. Private-preview gate (Aug–Sep 2026, removed at launch)
+To lock the site again, restore the gate from git — `git checkout b7ba8fe -- middleware.js`
+(not a `>` redirect: PowerShell 5.1 would write it as UTF-16), commit, push. It is Basic Auth on every path (user `majd`), with the password in the `PREVIEW_PASS`
+env var on Vercel.
 
 ## Content still owed by the clinic (all non-blocking)
 | Item | Where it goes | Until then |

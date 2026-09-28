@@ -20,16 +20,22 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(ROOT, "src")
 DIST = os.path.join(ROOT, "dist")
 
-# Canonical origin for canonicals / OG / sitemap / robots. When the custom
-# domain (melimharozem.co.il) is connected in Vercel, flip this ONE line and
-# rebuild — see docs/launch.md. No hreflang: one URL serves He+Ar via the JS
+# Canonical origin for canonicals / OG / sitemap / robots / llms.txt. The
+# custom domain www.melimharozem.com (bought 2026-09-28) is the primary; the
+# apex and the old milim-veharozem.vercel.app both 308 to it (Vercel domain
+# settings + vercel.json). No hreflang: one URL serves He+Ar via the JS
 # toggle, so alternate-language URLs don't exist.
-SITE_URL = "https://milim-veharozem.vercel.app"
+SITE_URL = "https://www.melimharozem.com"
 
 # Google Search Console HTML-file verification — served at the site root and
 # fetched by GSC to prove ownership. The token is per Google account, so the
 # same file verifies every property under it. Keep it even after verifying.
 GOOGLE_SITE_VERIFICATION = "google3654382e4b01e65d.html"
+
+# IndexNow ownership key (Bing, Yandex, Naver, Seznam — ChatGPT search reads
+# Bing). Must stay stable and match the {key}.txt file at the site root.
+# Ping after content deploys: POST https://api.indexnow.org/indexnow
+INDEXNOW_KEY = "446ee9a335c6feb9e2eeb5fe87b29542"
 
 # Content flags. TESTIMONIALS stays False until real consented parent quotes
 # arrive from the clinic — the placeholder section is then swapped for them
@@ -45,9 +51,10 @@ def apply_flags(html):
     return FLAG_RE.sub(lambda m: m.group(2) if FLAGS.get(m.group(1)) else "", html)
 
 
-# Structured data for Google: the organization + its three physical branches.
+# Structured data for Google: the organization + its four physical branches.
 # Injected on index + contact only (the pages that describe the clinic itself).
-# openingHours intentionally omitted until the clinic confirms real hours.
+# openingHours intentionally omitted until the clinic confirms real hours;
+# street addresses only where the clinic has given one.
 def jsonld():
     import json
     org = {
@@ -55,7 +62,7 @@ def jsonld():
         "@id": SITE_URL + "/#org",
         "name": "מילים וחרוזים בע״מ",
         "alternateName": "Milim VeHaruzim",
-        "description": "יחידה להתפתחות הילד — אבחון וטיפול רב-תחומי לגיל הרך",
+        "description": "יחידה להתפתחות הילד — אבחון וטיפול רב-תחומי מלידה ועד גיל 18",
         "url": SITE_URL + "/",
         "logo": SITE_URL + "/assets/icons/icon-512.png",
         "image": SITE_URL + "/assets/og.jpg",
@@ -72,7 +79,7 @@ def jsonld():
             "parentOrganization": {"@id": SITE_URL + "/#org"},
             "telephone": tel,
             "url": SITE_URL + "/contact.html",
-            "medicalSpecialty": ["SpeechPathology", "Physiotherapy", "Psychiatric"],
+            "medicalSpecialty": ["Pediatric", "SpeechPathology", "Physiotherapy", "Psychiatric"],
             "availableLanguage": ["he", "ar"],
         }
         addr = {"@type": "PostalAddress", "addressCountry": "IL"}
@@ -86,6 +93,8 @@ def jsonld():
                "קניון עזריאלי, קומה 4", "עכו"),
         clinic("מזרעה", "Milim VeHaruzim Mazra'a", "+972-53-587-3804",
                "רחוב אלאנביאא 11", "מזרעה"),
+        clinic("שעב", "Milim VeHaruzim Sha'ab", "+972-50-657-1203",
+               None, "שעב"),
         clinic("מג'דל שמס", "Milim VeHaruzim Majdal Shams", "+972-54-895-5099",
                None, "מג'דל שמס"),
     ]}
@@ -102,9 +111,45 @@ def write_sitemap(pages):
     open(os.path.join(DIST, "sitemap.xml"), "w", encoding="utf-8").write(xml)
     open(os.path.join(DIST, "robots.txt"), "w", encoding="utf-8").write(
         "User-agent: *\nAllow: /\nSitemap: %s/sitemap.xml\n" % SITE_URL)
+    open(os.path.join(DIST, INDEXNOW_KEY + ".txt"), "w", encoding="utf-8").write(INDEXNOW_KEY)
     # Google Search Console ownership file (HTML-file method)
     open(os.path.join(DIST, GOOGLE_SITE_VERIFICATION), "w", encoding="utf-8").write(
         "google-site-verification: " + GOOGLE_SITE_VERIFICATION + "\n")
+
+
+# Page order for llms.txt (anything not listed follows alphabetically).
+LLMS_ORDER = ["index.html", "services.html", "team.html", "workshops.html",
+              "schools.html", "jobs.html", "contact.html",
+              "accessibility.html", "privacy.html"]
+
+
+def write_llms(page_meta):
+    """llms.txt — AI-search discovery file. Page lines reuse each page's own
+    title/desc, so it never drifts from the site's (the clinic's) wording."""
+    order = ([p for p in LLMS_ORDER if p in page_meta] +
+             sorted(p for p in page_meta if p not in LLMS_ORDER))
+    lines = [
+        "# מילים וחרוזים — Milim VeHaruzim",
+        "",
+        "> " + page_meta.get("index.html", ("", ""))[1],
+        "",
+        "Multidisciplinary child-development unit: assessment and therapy from birth "
+        "to age 18 (speech therapy, occupational therapy, physiotherapy, psychology, "
+        "emotional therapy, social work). Branches in the north: Akko, Mazra'a, "
+        "Sha'ab, Majdal Shams. The site is in Hebrew, with a full Arabic version on "
+        "the same URLs.",
+        "",
+        "- Phone / WhatsApp: 050-657-1203",
+        "- Email: melimharozem@gmail.com",
+        "",
+        "## Pages",
+        "",
+    ]
+    for p in order:
+        title, desc = page_meta[p]
+        url = SITE_URL + "/" + ("" if p == "index.html" else p)
+        lines.append("- [%s](%s): %s" % (title, url, desc))
+    open(os.path.join(DIST, "llms.txt"), "w", encoding="utf-8").write("\n".join(lines) + "\n")
 
 
 def parse_meta(text):
@@ -153,9 +198,14 @@ def build():
         ver[fname] = _ver(src_file)
     if os.path.isdir(os.path.join(SRC, "assets")):
         shutil.copytree(os.path.join(SRC, "assets"), os.path.join(DIST, "assets"))
+    # crawlers and browsers still request /favicon.ico at the root directly
+    ico = os.path.join(SRC, "assets", "icons", "favicon.ico")
+    if os.path.exists(ico):
+        shutil.copyfile(ico, os.path.join(DIST, "favicon.ico"))
 
     pages = sorted(glob.glob(os.path.join(SRC, "pages", "*.html")))
     built = []
+    page_meta = {}  # name -> (title, desc), for llms.txt
     for path in pages:
         name = os.path.basename(path)
         raw = open(path, encoding="utf-8-sig").read()  # utf-8-sig strips a stray BOM
@@ -170,6 +220,7 @@ def build():
         # og:*/description). HTML-escape them so a literal " (e.g. גפ"ן) can't
         # close the attribute early and silently truncate the tag.
         title = meta.get("title", "מילים וחרוזים")
+        page_meta[name] = (title, meta.get("desc", ""))
         html = html.replace("{{TITLE}}", _esc(title))
         html = html.replace("{{TITLE_AR}}", _esc(meta.get("title_ar", title)))
         html = html.replace("{{DESC}}", _esc(meta.get("desc", "")))
@@ -194,9 +245,10 @@ def build():
         built.append(name)
 
     write_sitemap(built)
+    write_llms(page_meta)
 
     print("Built %d page(s): %s" % (len(built), ", ".join(built)))
-    print("Output: %s (+ sitemap.xml, robots.txt)" % DIST)
+    print("Output: %s (+ sitemap.xml, robots.txt, llms.txt, IndexNow key)" % DIST)
 
 
 if __name__ == "__main__":
