@@ -204,8 +204,10 @@ def build():
         ver[fname] = _ver(src_file)
     if os.path.isdir(os.path.join(SRC, "assets")):
         shutil.copytree(os.path.join(SRC, "assets"), os.path.join(DIST, "assets"))
-    # crawlers and browsers still request /favicon.ico at the root directly
-    ico = os.path.join(SRC, "assets", "icons", "favicon.ico")
+    # crawlers and browsers still request /favicon.ico at the root directly.
+    # mark.ico = the logo's heart + child only (no text — unreadable at 16–48px),
+    # sizes 16/32/48; Google Search wants icons in multiples of 48px.
+    ico = os.path.join(SRC, "assets", "icons", "mark.ico")
     if os.path.exists(ico):
         shutil.copyfile(ico, os.path.join(DIST, "favicon.ico"))
 
