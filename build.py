@@ -93,7 +93,19 @@ def jsonld():
         if locality: addr["addressLocality"] = locality
         c["address"] = addr
         return c
+    # Google's site-name signal: the name shown above the URL in search
+    # results (otherwise it falls back to the bare domain "melimharozem.com").
+    website = {
+        "@type": "WebSite",
+        "@id": SITE_URL + "/#website",
+        "name": "מילים וחרוזים",
+        "alternateName": ["Milim VeHaruzim", "melimharozem"],
+        "url": SITE_URL + "/",
+        "inLanguage": ["he", "ar"],
+        "publisher": {"@id": SITE_URL + "/#org"},
+    }
     graph = {"@context": "https://schema.org", "@graph": [
+        website,
         org,
         clinic("עכו", "Milim VeHaruzim Akko", "+972-50-657-1203",
                "קניון עזריאלי, רחוב החרושת 2, קומה 4", "עכו"),
