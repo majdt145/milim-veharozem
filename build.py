@@ -4,11 +4,14 @@
 מילים וחרוזים — tiny static-site generator (no Node needed).
 Wraps each src/pages/*.html in src/layout.html, sets the active nav item,
 fills <title>/<meta description>, and copies styles.css, app.js and assets/ to dist/.
+Every page is built twice: Hebrew at the root (/services.html) and Arabic
+under /ar/ (/ar/services.html), from the same source (see localize()).
 
 Usage:  python build.py
 """
 import os, re, shutil, glob, hashlib
 from html import escape as _esc  # title/desc land in HTML attrs — escape so a literal " can't truncate them
+from html.parser import HTMLParser
 
 
 def _ver(path):
@@ -23,9 +26,34 @@ DIST = os.path.join(ROOT, "dist")
 # Canonical origin for canonicals / OG / sitemap / robots / llms.txt. The
 # custom domain www.melimharozem.com (bought 2026-09-28) is the primary; the
 # apex and the old milim-veharozem.vercel.app both 308 to it (Vercel domain
-# settings + vercel.json). No hreflang: one URL serves He+Ar via the JS
-# toggle, so alternate-language URLs don't exist.
+# settings + vercel.json).
 SITE_URL = "https://www.melimharozem.com"
+
+# Languages. Hebrew is the root site and the x-default; Arabic lives under
+# /ar/. Each page carries reciprocal hreflang links to both (+ x-default),
+# and the sitemap lists both with the same alternates.
+LANGS = ("he", "ar")
+SITE_NAME = {"he": "מילים וחרוזים", "ar": "ميليم وحاروزيم"}
+OG_LOCALE = {"he": "he_IL", "ar": "ar_IL"}
+HREFLANG = (("he", "he"), ("ar", "ar"), ("x-default", "he"))
+
+# Hebrew homepage only: a visitor who explicitly chose Arabic in the language
+# switch (app.js stores it) and arrives from OUTSIDE the site (typed the
+# domain, a bookmark, a search result) lands on /ar/. Internal navigation to
+# the Hebrew home is never redirected, and crawlers have no stored choice, so
+# they always get the Hebrew page.
+LANG_MEMORY = ("<script>(function(){try{if(localStorage.getItem('mvh_lang')==='ar'"
+               "&&document.referrer.indexOf(location.origin)!==0)"
+               "location.replace('/ar/'+location.search+location.hash);}catch(e){}})();</script>")
+
+
+def page_path(name, lang):
+    """Root-relative URL of a page: / · /services.html · /ar/ · /ar/services.html"""
+    return ("/ar/" if lang == "ar" else "/") + ("" if name == "index.html" else name)
+
+
+def page_url(name, lang):
+    return SITE_URL + page_path(name, lang)
 
 # Google Search Console HTML-file verification — served at the site root and
 # fetched by GSC to prove ownership. The token is per Google account, so the
@@ -49,6 +77,119 @@ FLAG_RE = re.compile(r"<!--IF:(\w+)-->(.*?)<!--ENDIF:\1-->", re.DOTALL)
 def apply_flags(html):
     """Keep or drop <!--IF:NAME--> ... <!--ENDIF:NAME--> blocks per FLAGS."""
     return FLAG_RE.sub(lambda m: m.group(2) if FLAGS.get(m.group(1)) else "", html)
+
+
+# ---------------------------------------------------------------------------
+# Localization. The source marks every translatable node with data-he/data-ar
+# (+ data-aria-* for aria-label, data-alt-* for alt). This used to be swapped
+# in the browser; now each language is baked into its own static page, with
+# the SAME rule the old runtime toggle used: only the innermost [data-ar] node
+# gets data-ar as its innerHTML, so icons / tel: links / nested spans inside a
+# container survive. The i18n attributes are then stripped from the output.
+# ---------------------------------------------------------------------------
+VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link",
+        "meta", "source", "track", "wbr"}
+I18N_ATTR_RE = re.compile(r'\s+data-(?:aria-|alt-)?(?:he|ar)="[^"]*"')
+
+
+class _Elements(HTMLParser):
+    """Every element's start-tag span and content span, as absolute offsets
+    into the source text, so localize() can splice it without re-serializing."""
+
+    def __init__(self, text):
+        super().__init__(convert_charrefs=True)
+        self.line_starts = [0] + [m.end() for m in re.finditer("\n", text)]
+        self.stack, self.elems = [], []
+        self.feed(text)
+        self.close()
+
+    def _pos(self):
+        line, col = self.getpos()
+        return self.line_starts[line - 1] + col
+
+    def _el(self, tag, attrs):
+        start = self._pos()
+        el = {"tag": tag, "attrs": dict(attrs), "start": start,
+              "tag_end": start + len(self.get_starttag_text()),
+              "close": None, "implicit": False, "nested": False}
+        if "data-ar" in el["attrs"]:
+            for anc in self.stack:
+                anc["nested"] = True  # an ancestor of a [data-ar] is never swapped
+        self.elems.append(el)
+        return el
+
+    def handle_starttag(self, tag, attrs):
+        el = self._el(tag, attrs)
+        if tag not in VOID:
+            self.stack.append(el)
+
+    def handle_startendtag(self, tag, attrs):
+        self._el(tag, attrs)
+
+    def handle_endtag(self, tag):
+        for i in range(len(self.stack) - 1, -1, -1):
+            if self.stack[i]["tag"] == tag:
+                for el in self.stack[i + 1:]:
+                    el["implicit"] = True  # closed without its own end tag
+                self.stack[i]["close"] = self._pos()
+                del self.stack[i:]
+                return
+
+
+def _set_attr(tag_html, name, value):
+    """Set one attribute's value inside a raw start tag (adds it if missing)."""
+    value = _esc(value, quote=True)
+    pat = re.compile(r'(\s%s=")[^"]*(")' % re.escape(name))
+    if pat.search(tag_html):
+        return pat.sub(lambda m: m.group(1) + value + m.group(2), tag_html, count=1)
+    return re.sub(r"\s*/?>$", lambda m: ' %s="%s"%s' % (name, value, m.group(0)),
+                  tag_html, count=1)
+
+
+def localize(html, lang, page):
+    """Bake one language into a built page and strip the i18n attributes.
+    Hebrew keeps its static text as-is (it IS the Hebrew); Arabic swaps in
+    data-ar / data-aria-ar / data-alt-ar. Raises instead of guessing when a
+    translatable node has no explicit end tag."""
+    doc = _Elements(html)
+    swaps, tag_edits = [], []
+    for el in doc.elems:
+        a = el["attrs"]
+        if lang == "ar" and "data-ar" in a and not el["nested"]:
+            if el["tag"] in VOID or el["close"] is None or el["implicit"]:
+                raise ValueError("%s: <%s data-ar> at offset %d has no end tag"
+                                 % (page, el["tag"], el["start"]))
+            swaps.append((el["tag_end"], el["close"], a["data-ar"]))
+        raw = html[el["start"]:el["tag_end"]]
+        new = I18N_ATTR_RE.sub("", raw)
+        if lang == "ar":
+            if "data-aria-ar" in a:
+                new = _set_attr(new, "aria-label", a["data-aria-ar"])
+            if "data-alt-ar" in a:
+                new = _set_attr(new, "alt", a["data-alt-ar"])
+        if new != raw:
+            tag_edits.append((el["start"], el["tag_end"], new))
+    # a start tag inside a swapped node is replaced wholesale with that node
+    edits = swaps + [e for e in tag_edits
+                     if not any(lo <= e[0] < hi for lo, hi, _ in swaps)]
+    for start, end, text in sorted(edits, reverse=True):
+        html = html[:start] + text + html[end:]
+    return html
+
+
+def rebase_ar(html, pages):
+    """Arabic pages live one folder down (/ar/). Point shared files at the
+    root and page links at their Arabic twins; leave absolute / external /
+    mailto: / tel: / #fragment links alone."""
+    def fix(m):
+        attr, q, url = m.group(1), m.group(2), m.group(3)
+        path, hash_, frag = url.partition("#")
+        if path.split("?")[0] in ("styles.css", "app.js") or path.startswith("assets/"):
+            url = "/" + url
+        elif path in pages:
+            url = page_path(path, "ar") + hash_ + frag
+        return "%s=%s%s%s" % (attr, q, url, q)
+    return re.sub(r'\b(href|src)=(["\'])([^"\'#:/?][^"\']*)\2', fix, html)
 
 
 # Structured data for Google: the organization + its four physical branches.
@@ -119,13 +260,22 @@ def jsonld():
     return '<script type="application/ld+json">%s</script>' % json.dumps(graph, ensure_ascii=False)
 
 
+def hreflang_links(name, fmt):
+    """The page's full language cluster (he, ar, x-default) — identical on
+    both versions, which is what makes the pairs reciprocal."""
+    return "".join(fmt % (code, page_url(name, lang)) for code, lang in HREFLANG)
+
+
 def write_sitemap(pages):
     urls = "".join(
-        "  <url><loc>%s/%s</loc></url>\n" % (SITE_URL, "" if p == "index.html" else p)
-        for p in sorted(pages)
+        "  <url><loc>%s</loc>\n%s  </url>\n" % (
+            page_url(p, lang),
+            hreflang_links(p, '    <xhtml:link rel="alternate" hreflang="%s" href="%s"/>\n'))
+        for lang in LANGS for p in sorted(pages)
     )
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
-           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % urls)
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'
+           '        xmlns:xhtml="http://www.w3.org/1999/xhtml">\n%s</urlset>\n' % urls)
     open(os.path.join(DIST, "sitemap.xml"), "w", encoding="utf-8").write(xml)
     open(os.path.join(DIST, "robots.txt"), "w", encoding="utf-8").write(
         "User-agent: *\nAllow: /\nSitemap: %s/sitemap.xml\n" % SITE_URL)
@@ -143,30 +293,30 @@ LLMS_ORDER = ["index.html", "services.html", "team.html", "workshops.html",
 
 def write_llms(page_meta):
     """llms.txt — AI-search discovery file. Page lines reuse each page's own
-    title/desc, so it never drifts from the site's (the clinic's) wording."""
-    order = ([p for p in LLMS_ORDER if p in page_meta] +
-             sorted(p for p in page_meta if p not in LLMS_ORDER))
+    title/desc, so it never drifts from the site's (the clinic's) wording.
+    page_meta: lang -> {name: (title, desc)}"""
+    he = page_meta["he"]
+    order = ([p for p in LLMS_ORDER if p in he] +
+             sorted(p for p in he if p not in LLMS_ORDER))
     lines = [
         "# מילים וחרוזים — Milim VeHaruzim",
         "",
-        "> " + page_meta.get("index.html", ("", ""))[1],
+        "> " + he.get("index.html", ("", ""))[1],
         "",
         "Multidisciplinary child-development unit: assessment and therapy from birth "
         "to age 18 (speech therapy, occupational therapy, physiotherapy, psychology, "
         "emotional therapy, social work). Branches in the north: Akko, Mazra'a, "
-        "Sha'ab, Majdal Shams. The site is in Hebrew, with a full Arabic version on "
-        "the same URLs.",
+        "Sha'ab, Majdal Shams. The site is in Hebrew, with a full Arabic version "
+        "under %s/ar/." % SITE_URL,
         "",
         "- Phone / WhatsApp: 050-657-1203",
         "- Email: melimharozem@gmail.com",
-        "",
-        "## Pages",
-        "",
     ]
-    for p in order:
-        title, desc = page_meta[p]
-        url = SITE_URL + "/" + ("" if p == "index.html" else p)
-        lines.append("- [%s](%s): %s" % (title, url, desc))
+    for lang, heading in (("he", "Pages (Hebrew)"), ("ar", "Pages (Arabic)")):
+        lines += ["", "## " + heading, ""]
+        for p in order:
+            title, desc = page_meta[lang][p]
+            lines.append("- [%s](%s): %s" % (title, page_url(p, lang), desc))
     open(os.path.join(DIST, "llms.txt"), "w", encoding="utf-8").write("\n".join(lines) + "\n")
 
 
@@ -224,51 +374,71 @@ def build():
         shutil.copyfile(ico, os.path.join(DIST, "favicon.ico"))
 
     pages = sorted(glob.glob(os.path.join(SRC, "pages", "*.html")))
-    built = []
-    page_meta = {}  # name -> (title, desc), for llms.txt
+    names = [os.path.basename(p) for p in pages]
+    os.makedirs(os.path.join(DIST, "ar"), exist_ok=True)
+    page_meta = {lang: {} for lang in LANGS}  # lang -> name -> (title, desc), for llms.txt
     for path in pages:
         name = os.path.basename(path)
         raw = open(path, encoding="utf-8-sig").read()  # utf-8-sig strips a stray BOM
         meta, body = parse_meta(raw)
         body = apply_flags(body)
 
-        html = layout
-        # cache-bust asset refs so browsers never serve a stale CSS/JS
-        html = html.replace('href="styles.css"', 'href="styles.css?v=%s"' % ver["styles.css"])
-        html = html.replace('src="app.js"', 'src="app.js?v=%s"' % ver["app.js"])
-        # These four values are injected into HTML attributes (title/data-he/
-        # og:*/description). HTML-escape them so a literal " (e.g. גפ"ן) can't
-        # close the attribute early and silently truncate the tag.
-        title = meta.get("title", "מילים וחרוזים")
-        page_meta[name] = (title, meta.get("desc", ""))
-        html = html.replace("{{TITLE}}", _esc(title))
-        html = html.replace("{{TITLE_AR}}", _esc(meta.get("title_ar", title)))
-        html = html.replace("{{DESC}}", _esc(meta.get("desc", "")))
-        html = html.replace("{{DESC_AR}}", _esc(meta.get("desc_ar", meta.get("desc", ""))))
-        html = html.replace("{{CANONICAL}}",
-                            SITE_URL + "/" + ("" if name == "index.html" else name))
-        html = html.replace("{{SITE_URL}}", SITE_URL)
-        html = html.replace("{{JSONLD}}",
-                            jsonld() if name in ("index.html", "contact.html") else "")
-        html = html.replace("{{CONTENT}}", body)
+        for lang in LANGS:
+            html = layout
+            # cache-bust asset refs so browsers never serve a stale CSS/JS
+            html = html.replace('href="styles.css"', 'href="styles.css?v=%s"' % ver["styles.css"])
+            html = html.replace('src="app.js"', 'src="app.js?v=%s"' % ver["app.js"])
+            # title/desc are injected into HTML attributes (og:*/description).
+            # HTML-escape them so a literal " (e.g. גפ"ן) can't close the
+            # attribute early and silently truncate the tag.
+            title = meta.get("title", "מילים וחרוזים")
+            desc = meta.get("desc", "")
+            if lang == "ar":
+                title, desc = meta.get("title_ar", title), meta.get("desc_ar", desc)
+            page_meta[lang][name] = (title, desc)
+            alt = "ar" if lang == "he" else "he"
+            html = html.replace("{{LANG}}", lang)
+            html = html.replace("{{TITLE}}", _esc(title))
+            html = html.replace("{{DESC}}", _esc(desc))
+            html = html.replace("{{SITE_NAME}}", SITE_NAME[lang])
+            html = html.replace("{{OG_LOCALE}}", OG_LOCALE[lang])
+            html = html.replace("{{OG_LOCALE_ALT}}", OG_LOCALE[alt])
+            html = html.replace("{{CANONICAL}}", page_url(name, lang))
+            html = html.replace("{{HREFLANG}}", hreflang_links(
+                name, '<link rel="alternate" hreflang="%s" href="%s">\n').rstrip("\n"))
+            # the language switch: plain links between the two versions
+            for l in LANGS:
+                html = html.replace("{{HREF_%s}}" % l.upper(), page_path(name, l))
+                html = html.replace("{{ON_%s}}" % l.upper(),
+                                    ' class="on" aria-current="true"' if l == lang else "")
+            # a visitor who explicitly picked Arabic and later arrives at the
+            # bare homepage from outside the site gets /ar/ (see app.js)
+            html = html.replace("{{LANG_MEMORY}}\n", LANG_MEMORY + "\n"
+                                if (lang, name) == ("he", "index.html") else "")
+            html = html.replace("{{SITE_URL}}", SITE_URL)
+            html = html.replace("{{JSONLD}}",
+                                jsonld() if name in ("index.html", "contact.html") else "")
+            html = html.replace("{{CONTENT}}", body)
 
-        # active nav item
-        nav = meta.get("nav", "")
-        if nav:
-            html = html.replace(
-                'data-nav="%s"' % nav,
-                'data-nav="%s" class="active" aria-current="page"' % nav,
-            )
+            # active nav item
+            nav = meta.get("nav", "")
+            if nav:
+                html = html.replace(
+                    'data-nav="%s"' % nav,
+                    'data-nav="%s" class="active" aria-current="page"' % nav,
+                )
 
-        out = os.path.join(DIST, name)
-        open(out, "w", encoding="utf-8").write(html)
-        built.append(name)
+            html = localize(html, lang, name)
+            if lang == "ar":
+                html = rebase_ar(html, names)
+            out = os.path.join(DIST, "ar", name) if lang == "ar" else os.path.join(DIST, name)
+            open(out, "w", encoding="utf-8").write(html)
 
-    write_sitemap(built)
+    write_sitemap(names)
     write_llms(page_meta)
 
-    print("Built %d page(s): %s" % (len(built), ", ".join(built)))
-    print("Output: %s (+ sitemap.xml, robots.txt, llms.txt, IndexNow key)" % DIST)
+    print("Built %d page(s) x %d languages: %s" % (len(names), len(LANGS), ", ".join(names)))
+    print("Output: %s (+ ar/, sitemap.xml, robots.txt, llms.txt, IndexNow key)" % DIST)
 
 
 if __name__ == "__main__":

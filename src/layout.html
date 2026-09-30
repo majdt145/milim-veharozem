@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="{{LANG}}" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title data-he="{{TITLE}}" data-ar="{{TITLE_AR}}">{{TITLE}}</title>
-<meta name="description" content="{{DESC}}" data-desc-he="{{DESC}}" data-desc-ar="{{DESC_AR}}">
+{{LANG_MEMORY}}
+<title>{{TITLE}}</title>
+<meta name="description" content="{{DESC}}">
 <link rel="canonical" href="{{CANONICAL}}">
+{{HREFLANG}}
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="מילים וחרוזים">
+<meta property="og:site_name" content="{{SITE_NAME}}">
 <meta property="og:title" content="{{TITLE}}">
 <meta property="og:description" content="{{DESC}}">
 <meta property="og:url" content="{{CANONICAL}}">
 <meta property="og:image" content="{{SITE_URL}}/assets/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:locale" content="he_IL">
-<meta property="og:locale:alternate" content="ar_IL">
+<meta property="og:locale" content="{{OG_LOCALE}}">
+<meta property="og:locale:alternate" content="{{OG_LOCALE_ALT}}">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="96x96" href="assets/icons/mark-96.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/mark-192.png">
@@ -40,16 +42,17 @@
 <!-- utility bar -->
 <div class="util"><div class="wrap">
   <span class="bdi"><svg viewBox="0 0 24 24" aria-hidden="true" style="display:inline-block;vertical-align:-2px;width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span data-he="עכו · מזרעה · שעב · מג'דל שמס" data-ar="عكا · المزرعة · شعب · مجدل شمس">עכו · מזרעה · שעב · מג'דל שמס</span><span class="util-tel"> &nbsp;|&nbsp; <svg viewBox="0 0 24 24" aria-hidden="true" style="display:inline-block;vertical-align:-2px;width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg> <a href="tel:0506571203" dir="ltr">050-657-1203</a></span></span>
-  <div class="lang" role="group" aria-label="שפה / لغة">
-    <button class="on" data-lang="he" data-i18n-exempt aria-pressed="true" onclick="setLang('he')">עברית</button>
-    <button data-lang="ar" data-i18n-exempt aria-pressed="false" onclick="setLang('ar')">عربي</button>
+  <!-- language = URL: Hebrew at /, Arabic at /ar/ (build.py bakes both) -->
+  <div class="lang" role="group" aria-label="שפה / لغة" data-i18n-exempt>
+    <a href="{{HREF_HE}}" data-lang="he" hreflang="he" lang="he" data-i18n-exempt{{ON_HE}}>עברית</a>
+    <a href="{{HREF_AR}}" data-lang="ar" hreflang="ar" lang="ar" data-i18n-exempt{{ON_AR}}>عربي</a>
   </div>
 </div></div>
 
 <!-- header -->
 <header class="site"><div class="wrap">
-  <a class="brand" href="index.html" aria-label="מילים וחרוזים — דף הבית"><img src="assets/logo.webp" alt="מילים וחרוזים" width="320" height="312"></a>
-  <nav class="main" aria-label="ראשי"><ul id="mainmenu">
+  <a class="brand" href="index.html" aria-label="מילים וחרוזים — דף הבית" data-aria-he="מילים וחרוזים — דף הבית" data-aria-ar="ميليم وحاروزيم — الصفحة الرئيسية"><img src="assets/logo.webp" alt="מילים וחרוזים" data-alt-ar="ميليم وحاروزيم" width="320" height="312"></a>
+  <nav class="main" aria-label="ראשי" data-aria-he="ראשי" data-aria-ar="القائمة الرئيسية"><ul id="mainmenu">
     <li><a href="index.html" data-nav="home" data-he="בית" data-ar="الرئيسية">בית</a></li>
     <li><a href="services.html" data-nav="services" data-he="השירותים שלנו" data-ar="خدماتنا">השירותים שלנו</a></li>
     <li><a href="team.html" data-nav="team" data-he="הצוות שלנו" data-ar="فريقنا">הצוות שלנו</a></li>

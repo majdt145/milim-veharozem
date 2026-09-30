@@ -1,35 +1,20 @@
-/* מילים וחרוזים — shared behavior: language toggle (He/Ar) + mobile nav */
+/* מילים וחרוזים — shared behavior: language switch (He/Ar) + mobile nav */
 (function () {
   "use strict";
 
-  function applyLang(l) {
-    document.querySelectorAll(".lang button").forEach(function (b) {
-      b.classList.toggle("on", b.dataset.lang === l);
-      b.setAttribute("aria-pressed", b.dataset.lang === l ? "true" : "false");
-    });
-    document.documentElement.lang = l === "ar" ? "ar" : "he";
-    document.documentElement.dir = "rtl"; /* both He & Ar are RTL */
-    document.querySelectorAll("[data-" + l + "]").forEach(function (el) {
-      // only swap the innermost translatable node, so decorative emoji /
-      // tel: links / nested spans in a container are never destroyed
-      if (el.querySelector("[data-" + l + "]")) return;
-      el.innerHTML = el.getAttribute("data-" + l);
-    });
-    document.querySelectorAll("[data-aria-" + l + "]").forEach(function (el) {
-      el.setAttribute("aria-label", el.getAttribute("data-aria-" + l));
-    });
-    var md = document.querySelector('meta[name="description"]');
-    if (md && md.getAttribute("data-desc-" + l)) md.setAttribute("content", md.getAttribute("data-desc-" + l));
-    try { localStorage.setItem("mvh_lang", l); } catch (e) {}
-  }
-
-  window.setLang = function (l) { applyLang(l); };
+  /* Language = URL: Hebrew pages at /, Arabic at /ar/ — build.py bakes each
+     language into its own static page, so nothing is swapped here. */
+  var LANG = document.documentElement.lang === "ar" ? "ar" : "he";
 
   document.addEventListener("DOMContentLoaded", function () {
-    /* restore saved language */
-    var saved = "he";
-    try { saved = localStorage.getItem("mvh_lang") || "he"; } catch (e) {}
-    if (saved === "ar") applyLang("ar");
+    /* language switch: remember the explicit choice (the Hebrew homepage
+       honours it for visitors arriving from outside) and keep the #section */
+    [].slice.call(document.querySelectorAll(".lang a[data-lang]")).forEach(function (a) {
+      a.addEventListener("click", function () {
+        try { localStorage.setItem("mvh_lang", a.getAttribute("data-lang")); } catch (e) {}
+        if (location.hash) a.href = a.href.split("#")[0] + location.hash;
+      });
+    });
 
     /* mobile nav toggle */
     var hamb = document.querySelector(".hamb");
@@ -93,9 +78,6 @@
   function initForms() {
     var MAX_FILES_BYTES = 3.5 * 1024 * 1024;
 
-    function currentLang() {
-      try { return localStorage.getItem("mvh_lang") === "ar" ? "ar" : "he"; } catch (e) { return "he"; }
-    }
     function show(form, sel) {
       [].slice.call(form.querySelectorAll(".done,.err")).forEach(function (el) { el.hidden = true; });
       var el = sel && form.querySelector(sel);
@@ -106,10 +88,12 @@
       if (!btn) return;
       btn.disabled = busy;
       btn.setAttribute("aria-busy", busy ? "true" : "false");
-      var l = currentLang();
-      btn.textContent = busy
-        ? (l === "ar" ? "جارٍ الإرسال…" : "שולח…")
-        : (btn.getAttribute("data-" + l) || btn.getAttribute("data-he"));
+      if (busy) {
+        btn.__label = btn.innerHTML;  /* the page's own label, already in its language */
+        btn.textContent = LANG === "ar" ? "جارٍ الإرسال…" : "שולח…";
+      } else if (btn.__label != null) {
+        btn.innerHTML = btn.__label;
+      }
     }
     function readFiles(input) {
       var files = [].slice.call(input.files || []);
@@ -135,7 +119,7 @@
         var fileInput = form.querySelector('input[type="file"]');
         var body = {
           formType: form.getAttribute("data-form"),
-          lang: currentLang(),
+          lang: LANG,
           fields: fields,
           website: (form.querySelector('input[name="website"]') || {}).value || "",
         };
@@ -183,8 +167,7 @@
           d.setAttribute("aria-selected", k === i ? "true" : "false");
         });
         if (live) {
-          var ar = document.documentElement.lang === "ar";
-          live.textContent = ar
+          live.textContent = LANG === "ar"
             ? "توصية " + (i + 1) + " من " + n
             : "המלצה " + (i + 1) + " מתוך " + n;
         }
@@ -441,15 +424,6 @@
         } catch (e) {}
         apply(state); renderControls();
       });
-
-      /* re-render dynamic bits (fs %, switch states) after a language flip —
-         app.js's setLang only swaps data-he/data-ar text nodes, so the
-         numeric % + aria states need refreshing. Wrap setLang once. */
-      if (typeof window.setLang === "function" && !window.__awLangWrapped) {
-        var _setLang = window.setLang;
-        window.setLang = function (l) { _setLang(l); try { renderControls(); } catch (e) {} };
-        window.__awLangWrapped = true;
-      }
     }
 
     function initCookie() {

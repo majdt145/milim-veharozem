@@ -1,14 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""i18n audit: find Hebrew text that would NOT switch in Arabic mode.
+"""i18n audit: find Hebrew text left on the ARABIC pages.
 
-Scans built pages in dist/ and reports:
-  1. text nodes containing Hebrew letters with no data-ar on the element
-     or any ancestor (the JS toggle swaps the innermost data-ar holder)
-  2. aria-label / alt / placeholder attributes with Hebrew but no
-     matching data-aria-ar (aria-label) — informational
+build.py bakes each language into its own static page (Hebrew at /, Arabic
+at /ar/). A Hebrew letter in a text node of dist/ar/*.html means a source
+node had no data-ar, so Arabic readers (and Google's Arabic index) see Hebrew.
 
-Run `python build.py` first. Exit code 1 if untranslated text remains.
+Scans dist/ar/*.html and reports:
+  1. text nodes containing Hebrew letters — FAIL (exit 1)
+     (exempt: anything inside lang="he" or data-i18n-exempt, e.g. the
+     "עברית" link of the language switch)
+  2. alt / aria-label / placeholder / title attributes with Hebrew —
+     informational (add data-alt-ar / data-aria-ar in src to translate)
+  3. leftover data-he / data-ar attributes in any built page — FAIL
+     (build.py strips them; one surviving means localize() missed a tag)
+
+Run `python build.py` first.
 """
 import glob
 import os
@@ -18,36 +25,42 @@ from html.parser import HTMLParser
 
 HEB = re.compile(r"[֐-׿]")
 SKIP_TAGS = {"script", "style"}
+VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link",
+        "meta", "source", "track", "wbr"}
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DIST = os.path.join(ROOT, "dist")
+try:
+    sys.stdout.reconfigure(encoding="utf-8")  # Windows consoles default to cp1255
+except Exception:
+    pass
 
 
 class Audit(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
-        self.stack = []  # (tag, covered_by_data_ar)
+        self.stack = []  # (tag, exempt)
         self.findings = []
         self.attr_notes = []
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
         # bool() matters: `stack and ...` on an empty stack returns the stack
-        # OBJECT, which later grows truthy and would mark everything covered.
-        # data-i18n-exempt marks text that must NOT switch (e.g. the language
-        # buttons themselves — עברית stays Hebrew, عربي stays Arabic).
-        covered = ("data-ar" in a) or ("data-i18n-exempt" in a) \
+        # OBJECT, which later grows truthy and would mark everything exempt.
+        exempt = a.get("lang") == "he" or "data-i18n-exempt" in a \
             or bool(self.stack and self.stack[-1][1])
-        if tag not in ("br", "img", "input", "meta", "link", "hr", "i"):
-            self.stack.append((tag, covered))
-        label = a.get("aria-label", "")
-        if HEB.search(label) and "data-aria-ar" not in a:
-            self.attr_notes.append("aria-label=%r" % label[:40])
-        for attr in ("alt", "placeholder"):
-            if HEB.search(a.get(attr, "")):
-                # alt/placeholder don't switch by design — note, don't fail
+        if tag not in VOID:
+            self.stack.append((tag, exempt))
+        if exempt:
+            return
+        for attr in ("alt", "aria-label", "placeholder", "title"):
+            if HEB.search(a.get(attr) or ""):
                 self.attr_notes.append("%s=%r" % (attr, a[attr][:40]))
-        # void-ish elements can still carry data-ar (e.g. <input>) — ignore
+
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
+        if tag not in VOID:
+            self.handle_endtag(tag)
 
     def handle_endtag(self, tag):
         for k in range(len(self.stack) - 1, -1, -1):
@@ -67,15 +80,30 @@ class Audit(HTMLParser):
 
 
 bad = 0
-for page in sorted(glob.glob(os.path.join(DIST, "*.html"))):
+notes = 0
+for page in sorted(glob.glob(os.path.join(DIST, "ar", "*.html"))):
     p = Audit()
     p.feed(open(page, encoding="utf-8").read())
     if p.findings:
-        print("\n== %s — %d untranslated text node(s)" % (os.path.basename(page), len(p.findings)))
+        print("\n== ar/%s — %d Hebrew text node(s)" % (os.path.basename(page), len(p.findings)))
         for f in p.findings:
             print("   " + f)
         bad += len(p.findings)
+    if p.attr_notes:
+        print("\n-- ar/%s — %d Hebrew attribute(s) (info)" % (os.path.basename(page), len(p.attr_notes)))
+        for n in p.attr_notes:
+            print("   " + n)
+        notes += len(p.attr_notes)
 
-print("\n%s" % ("CLEAN — every Hebrew text node switches to Arabic." if bad == 0
-                else "TOTAL: %d untranslated node(s)." % bad))
+leftover = re.compile(r'\sdata-(?:aria-|alt-)?(?:he|ar)="')
+for page in sorted(glob.glob(os.path.join(DIST, "*.html")) + glob.glob(os.path.join(DIST, "ar", "*.html"))):
+    n = len(leftover.findall(open(page, encoding="utf-8").read()))
+    if n:
+        print("\n== %s — %d leftover data-he/data-ar attribute(s)" % (os.path.relpath(page, DIST), n))
+        bad += n
+
+print("\n%s" % ("CLEAN — no Hebrew text on the Arabic pages." if bad == 0
+                else "TOTAL: %d problem(s)." % bad))
+if notes:
+    print("(%d Hebrew alt/aria-label attribute(s) noted above — informational)" % notes)
 sys.exit(1 if bad else 0)
