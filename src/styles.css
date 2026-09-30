@@ -2808,3 +2808,50 @@ html.anim .sc7-tab{transition:background .18s ease,color .18s ease,transform .18
   .sc7-entry b{font-size:15px}
   .sc7-note{padding:24px 16px 18px}
 }
+
+/* =====================================================================
+   Service detail pages (svd-) — one page per service (2026-10-01).
+   Body texts are the clinic's own, copied from services.html; the team
+   block is pulled from team.html at build time (<!--TEAM:…--> in build.py).
+   Discipline colour comes from the reused svc-t-* class (--tint / --pc).
+   ===================================================================== */
+.svd-cta{justify-content:center;margin-top:22px}
+.svd{padding:44px 0 18px}
+.svd-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:30px;align-items:start}
+.svd-block{background:#fff;border:1px solid var(--line);border-inline-start:6px solid var(--pc,var(--teal-d));
+  border-radius:var(--radius);padding:24px 26px 22px;margin-bottom:20px;box-shadow:var(--shadow-sm)}
+.svd-block h2{font-size:clamp(21px,2.6vw,26px);font-weight:900;line-height:1.25;margin-bottom:10px;
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
+.svd-block p{font-size:17px;color:#473b41;line-height:1.85}
+.svd-tag{font-size:12.5px;font-weight:800;color:var(--burgundy);background:var(--cream);padding:4px 12px;border-radius:20px}
+.svd-fit{margin-top:12px}
+.svd-fit b{color:var(--pc,var(--teal-d));font-weight:800}
+.svd-block .svc-age{background:var(--tint,var(--cream))}
+.svd-side{position:sticky;top:calc(var(--nav-h,76px) + 58px);display:grid;gap:16px}
+.svd-card{background:var(--cream);border-radius:var(--radius);padding:22px}
+.svd-h{font-size:19px;font-weight:900;margin-bottom:6px}
+.svd-card p{font-size:15px;color:var(--muted);margin-bottom:12px;line-height:1.6}
+.svd-branches{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.svd-branches a{display:inline-block;background:#fff;border-radius:999px;padding:6px 14px;font-weight:800;font-size:14.5px;color:var(--teal-d)}
+.svd-card .btn{width:100%;justify-content:center}
+.svd-tel{display:block;text-align:center;margin-top:10px;font-weight:800;color:var(--teal-d)}
+.svd-links{list-style:none;display:grid;gap:8px}
+.svd-links a{font-weight:800;color:var(--teal-d)}
+.svd-links a::after{content:" ›"}
+.svd-kicker{text-align:center;color:var(--teal-d);font-weight:800;margin-top:22px}
+.svd-team .tm-group .group-head{justify-content:center}
+.svd-more{text-align:center;margin:6px 0 20px}
+.svd-more a,.svd-full{font-weight:800;color:var(--teal-d)}
+.svd-full{display:inline-block;margin-top:10px}
+.svd-related{padding:14px 0 50px}
+.svd-related h2{font-size:clamp(21px,2.6vw,26px);font-weight:900;margin-bottom:16px;text-align:center}
+.svd-chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.svd-chips a{background:#fff;border:2px solid var(--teal-l);color:var(--teal-d);border-radius:999px;padding:8px 18px;font-weight:800;font-size:15px}
+.svd-chips a:hover,.svd-branches a:hover{background:var(--teal-d);color:#fff}
+/* services.html: titles now link to their page; homepage assessment pills are links */
+.svc-piece h3 a{color:inherit}
+.svc-piece h3 a:hover{text-decoration:underline;text-underline-offset:3px}
+a.pill{color:inherit}
+a.pill:hover{text-decoration:underline;text-underline-offset:3px}
+@media(max-width:860px){.svd-grid{grid-template-columns:1fr}.svd-side{position:static}}
+@media(max-width:700px){.svd{padding:30px 0 10px}.svd-block{padding:20px 18px}.svd-block p{font-size:16px}}

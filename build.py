@@ -177,6 +177,42 @@ def localize(html, lang, page):
     return html
 
 
+TEAM_RE = re.compile(r"<!--TEAM:(.+?)-->")
+
+
+def team_groups():
+    """Hebrew group name (the h2 on team.html) -> that whole .tm-group block,
+    so a service page shows exactly the people the team page does (one source,
+    no drift). Used via <!--TEAM:קלינאות תקשורת--> in a page."""
+    raw = open(os.path.join(SRC, "pages", "team.html"), encoding="utf-8-sig").read()
+    _, body = parse_meta(raw)
+    groups = {}
+    for el in _Elements(body).elems:
+        if el["tag"] == "div" and "tm-group" in el["attrs"].get("class", "").split() \
+                and el["close"] is not None and not el["implicit"]:
+            block = body[el["start"]:el["close"] + len("</div>")]
+            h2 = re.search(r'<h2[^>]*data-he="([^"]+)"', block)
+            if h2:
+                groups[h2.group(1)] = block
+    return groups
+
+
+def breadcrumb_ld(name, lang, meta, metas):
+    """BreadcrumbList for pages with a `parent` (home › parent › page)."""
+    import json
+    ar = lang == "ar"
+    crumb = lambda m: (m.get("crumb_ar") if ar else None) or m.get("crumb") or m.get("title", "")
+    chain = [("index.html", "الرئيسية" if ar else "בית")]
+    if meta.get("parent") in metas:
+        chain.append((meta["parent"], crumb(metas[meta["parent"]])))
+    chain.append((name, crumb(meta)))
+    items = [{"@type": "ListItem", "position": i + 1, "name": n, "item": page_url(p, lang)}
+             for i, (p, n) in enumerate(chain)]
+    return '<script type="application/ld+json">%s</script>' % json.dumps(
+        {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": items},
+        ensure_ascii=False)
+
+
 def rebase_ar(html, pages):
     """Arabic pages live one folder down (/ar/). Point shared files at the
     root and page links at their Arabic twins; leave absolute / external /
@@ -196,13 +232,21 @@ def rebase_ar(html, pages):
 # Injected on index + contact only (the pages that describe the clinic itself).
 # openingHours intentionally omitted until the clinic confirms real hours;
 # street addresses only where the clinic has given one.
-def jsonld():
+# Every way people spell the clinic's name in searches — Latin (the domain,
+# the Instagram handle, the common "milim" misspelling) and Arabic (our own
+# rendering + the one kesher.org.il uses). Search engines read these as the
+# same entity.
+NAME_VARIANTS = ["Milim VeHaruzim", "melimharozem", "milimharozem",
+                 "Melim Harozem", "ميليم وحاروزيم", "ميليم في حروزيم"]
+
+
+def jsonld(services=()):
     import json
     org = {
         "@type": "MedicalOrganization",
         "@id": SITE_URL + "/#org",
         "name": "מילים וחרוזים בע״מ",
-        "alternateName": "Milim VeHaruzim",
+        "alternateName": NAME_VARIANTS,
         "description": "יחידה להתפתחות הילד — אבחון וטיפול רב-תחומי מלידה ועד גיל 18",
         "url": SITE_URL + "/",
         "logo": SITE_URL + "/assets/icons/icon-512.png",
@@ -218,6 +262,12 @@ def jsonld():
             "https://www.instagram.com/melimharozem/",
         ],
     }
+    # the service pages (meta `service_type`), so the entity lists what it offers
+    if services:
+        org["availableService"] = [
+            {"@type": stype, "name": name, "url": page_url(p, "he")}
+            for p, name, stype in services
+        ]
     def clinic(name, name_en, tel, street=None, locality=None):
         c = {
             "@type": "MedicalClinic",
@@ -240,7 +290,7 @@ def jsonld():
         "@type": "WebSite",
         "@id": SITE_URL + "/#website",
         "name": "מילים וחרוזים",
-        "alternateName": ["Milim VeHaruzim", "melimharozem"],
+        "alternateName": NAME_VARIANTS,
         "url": SITE_URL + "/",
         "inLanguage": ["he", "ar"],
         "publisher": {"@id": SITE_URL + "/#org"},
@@ -286,7 +336,11 @@ def write_sitemap(pages):
 
 
 # Page order for llms.txt (anything not listed follows alphabetically).
-LLMS_ORDER = ["index.html", "services.html", "team.html", "workshops.html",
+LLMS_ORDER = ["index.html", "services.html",
+              "speech-therapy.html", "occupational-therapy.html", "physiotherapy.html",
+              "psychology.html", "emotional-therapy.html", "learning-assessment.html",
+              "autism-assessment.html", "adhd-moxo.html",
+              "team.html", "workshops.html",
               "schools.html", "jobs.html", "contact.html",
               "accessibility.html", "privacy.html"]
 
@@ -377,11 +431,22 @@ def build():
     names = [os.path.basename(p) for p in pages]
     os.makedirs(os.path.join(DIST, "ar"), exist_ok=True)
     page_meta = {lang: {} for lang in LANGS}  # lang -> name -> (title, desc), for llms.txt
+    sources = []
     for path in pages:
-        name = os.path.basename(path)
         raw = open(path, encoding="utf-8-sig").read()  # utf-8-sig strips a stray BOM
         meta, body = parse_meta(raw)
-        body = apply_flags(body)
+        sources.append((os.path.basename(path), meta, apply_flags(body)))
+    metas = {name: meta for name, meta, _ in sources}
+    services = [(name, meta.get("crumb", meta.get("title")), meta["service_type"])
+                for name, meta, _ in sources if meta.get("service_type")]
+    teams = team_groups()
+
+    for name, meta, body in sources:
+        def team(m):
+            if m.group(1) not in teams:
+                raise ValueError("%s: no team group named %r on team.html" % (name, m.group(1)))
+            return teams[m.group(1)]
+        body = TEAM_RE.sub(team, body)
 
         for lang in LANGS:
             html = layout
@@ -416,8 +481,10 @@ def build():
             html = html.replace("{{LANG_MEMORY}}\n", LANG_MEMORY + "\n"
                                 if (lang, name) == ("he", "index.html") else "")
             html = html.replace("{{SITE_URL}}", SITE_URL)
-            html = html.replace("{{JSONLD}}",
-                                jsonld() if name in ("index.html", "contact.html") else "")
+            ld = jsonld(services) if name in ("index.html", "contact.html") else ""
+            if meta.get("parent"):
+                ld += breadcrumb_ld(name, lang, meta, metas)
+            html = html.replace("{{JSONLD}}", ld)
             html = html.replace("{{CONTENT}}", body)
 
             # active nav item

@@ -69,6 +69,8 @@ env var on Vercel.
 ## Maintenance
 - Edit content in `src/pages/*.html` (Hebrew in `data-he`, Arabic in `data-ar`).
 - Run `python tools/i18n_audit.py` after content changes — must stay CLEAN.
+- Service pages (`speech-therapy.html` … `adhd-moxo.html`) are GENERATED from `services.html`: edit the text there, then `python tools/gen_service_pages.py` and `python build.py`. Their team block comes from `team.html` at build time.
+- Arabic pages are built to `/ar/` (same source). Check hreflang with `python ~/.claude/skills/seo-lab/scripts/hreflang-check.py <origin>`.
 - New images: drop originals anywhere, run `python tools/optimize_images.py`
   (add an entry to JOBS), reference the `.webp`.
 - Every push to `main` auto-deploys.
