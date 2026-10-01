@@ -46,8 +46,11 @@ Vercel dashboard → Project → Analytics → Enable Web Analytics, then add to
   HTML file `build.py` writes; submit `sitemap.xml`.
 - IndexNow (Bing etc.): key in `build.py` (`INDEXNOW_KEY`); after content deploys, POST the
   changed URLs to `https://api.indexnow.org/indexnow`.
-- Still open: Resend → verify the domain, then change `From:` in `api/form.js` to
-  `forms@melimharozem.com` (removes the onboarding@resend.dev sender).
+- **Done 2026-10-01:** Resend account = Majd's (`majdtannous1234`); `melimharozem.com` verified in
+  region **eu-west-1 (Ireland)** via Auto configure (records in Vercel DNS: `resend._domainkey` TXT,
+  `send` MX + SPF TXT). `api/form.js` sends From `forms@melimharozem.com`. Vercel env:
+  `RESEND_API_KEY` + `FORM_TO_EMAIL=melimharozem@gmail.com` (Production). Before this, the project
+  had NO key, so every form failed with `config` from launch until 2026-10-01.
 
 ## 6. Private-preview gate (Aug–Sep 2026, removed at launch)
 To lock the site again, restore the gate from git — `git checkout b7ba8fe -- middleware.js`

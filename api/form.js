@@ -83,7 +83,9 @@ module.exports = async (req, res) => {
     }
 
     const payload = {
-      from: "אתר מילים וחרוזים <onboarding@resend.dev>", // switch to forms@<domain> after domain verify (see docs/launch.md)
+      // melimharozem.com is verified in Resend (region eu-west-1, Ireland). forms@ is a
+      // sender name only — no mailbox; replies go nowhere, the lead's phone is in the body.
+      from: "אתר מילים וחרוזים <forms@melimharozem.com>",
       to: [to],
       subject: SUBJECTS[formType](fields),
       html: renderHtml(formType, fields, lang),
